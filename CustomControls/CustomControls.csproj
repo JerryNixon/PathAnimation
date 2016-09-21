@@ -107,7 +107,16 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\LayoutPath.cs" />
     <Compile Include="Controls\PathAnimationWrapper.cs" />
+    <Compile Include="Internal\SegmentsHelper.cs" />
+    <Compile Include="ExtendedSegments\ExtendedArcSegment.cs" />
+    <Compile Include="ExtendedSegments\ExtendedBezierBase.cs" />
+    <Compile Include="ExtendedSegments\ExtendedBezierSegment.cs" />
+    <Compile Include="ExtendedSegments\ExtendedLineSegment.cs" />
+    <Compile Include="ExtendedSegments\ExtendedPolySegmentBase.cs" />
+    <Compile Include="ExtendedSegments\ExtendedQuadraticBezierSegment.cs" />
+    <Compile Include="ExtendedSegments\ExtendedSegmentBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\CustomControls.rd.xml" />
   </ItemGroup>
@@ -118,7 +127,7 @@
     </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
-    <VisualStudioVersion>15.0</VisualStudioVersion>
+    <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,6 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using SampleProject.Views;
 
 namespace SampleProject
 {
@@ -8,12 +9,12 @@ namespace SampleProject
         public MainPage()
         {
             this.InitializeComponent();
-            Loaded += MainPage_Loaded;
         }
 
-        private void MainPage_Loaded(object sender, RoutedEventArgs e)
+
+        private void LayoutPath_OnClick(object sender, RoutedEventArgs e)
         {
-            MyAnimationStoryboard.Begin();
+            this.Frame.Navigate(typeof(LayoutPathPage));
         }
     }
 }
