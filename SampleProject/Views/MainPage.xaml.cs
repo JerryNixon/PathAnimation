@@ -16,5 +16,10 @@ namespace SampleProject
         {
             this.Frame.Navigate(typeof(LayoutPathPage));
         }
+
+        private void MotionPath_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MotionPathPage));
+        }
     }
 }

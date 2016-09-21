@@ -1,0 +1,53 @@
+﻿<Page
+    x:Class="SampleProject.Views.MotionPathPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleProject.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:layoutPath="using:LayoutPath"
+    mc:Ignorable="d">
+    
+
+    <Grid Background="#FF1D1D1D">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
+
+            <Grid Width="500" Height="300" Background="Black">
+                <!--do not set AutoScale=True-->
+                <layoutPath:MotionPath  x:Name="TestMotion" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                                         Duration="0:0:2" ShowMotionPath="True" AutoRewind="True"
+                                         LineRelativeEnd="100,100">
+                    <Rectangle Width="25" Height="25" Fill="DarkSlateGray"></Rectangle>
+                </layoutPath:MotionPath>
+
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center" MinWidth="60" HorizontalAlignment="Center">
+                    <TextBlock FontSize="12" >
+                        <Run Text="X: "></Run>
+                        <Run Text="{Binding CurrentPoint.X, ElementName=TestMotion}" Foreground="LightBlue"></Run>
+                    </TextBlock>
+                    <TextBlock FontSize="12">
+                        <Run Text="Y: "></Run>
+                        <Run Text="{Binding CurrentPoint.Y, ElementName=TestMotion}" Foreground="LightBlue"></Run>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="{Binding State, ElementName=TestMotion}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="LightBlue"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                    <Button Content="play"  Click="ButtonBase_OnClick" BorderThickness="0"/>
+                    <Button Content="pause"  Click="ButtonBase_pause" BorderThickness="0"/>
+                    <Button Content="reset"  Click="ButtonReset_OnClick" BorderThickness="0"/>
+                    <Button Content="move"  Click="ButtonBaseMove_OnClick" BorderThickness="0"/>
+                </StackPanel>
+            </Grid>
+
+
+        </StackPanel>
+
+    </Grid>
+</Page>
