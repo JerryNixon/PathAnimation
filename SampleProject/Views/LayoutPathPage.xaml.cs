@@ -29,20 +29,20 @@ namespace SampleProject.Views
             this.InitializeComponent();
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void Back_OnClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainPage));
         }
 
         private void Add_OnClick(object sender, RoutedEventArgs e)
         {
-            layoutPath2.Children.Insert(0, new Rectangle() { Fill = new SolidColorBrush(Colors.DarkOrange), Width = 20, Height = 20, RadiusX = 20, RadiusY = 20 });
+            LayoutPath1.Children.Insert(0, new Rectangle() { Fill = new SolidColorBrush(Colors.DarkOrange), Width = 20, Height = 20, RadiusX = 20, RadiusY = 20 });
         }
 
         private void RemoveFirst_OnClick(object sender, RoutedEventArgs e)
         {
-            if (layoutPath2.Children.Any())
-                layoutPath2.Children.RemoveAt(0);
+            if (LayoutPath1.Children.Any())
+                LayoutPath1.Children.RemoveAt(0);
         }
     }
 }

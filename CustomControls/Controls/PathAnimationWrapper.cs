@@ -26,7 +26,7 @@ namespace CustomControls.Controls
             DependencyProperty.Register(nameof(Progress), typeof(double), typeof(PathAnimationWrapper), new PropertyMetadata(0, ProgressChanged));
         private static void ProgressChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            var point = (d as PathAnimationWrapper).CurrentPosition = 
+            var point = (d as PathAnimationWrapper).CurrentPosition =
                 GetPointAtFractionLength(d.GetValue(PathProperty) as PathGeometry, (double)e.NewValue);
             var transform = (d as ContentControl).RenderTransform as CompositeTransform;
             transform.TranslateX = point.X;
@@ -38,8 +38,7 @@ namespace CustomControls.Controls
             DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(PathAnimationWrapper), new PropertyMetadata(null));
 
         public PathGeometry Path { get { return (PathGeometry)GetValue(PathProperty); } set { SetValue(PathProperty, value); } }
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register(nameof(Path), typeof(PathGeometry), typeof(PathAnimationWrapper), new PropertyMetadata(null));
+        public static readonly DependencyProperty PathProperty = DependencyProperty.Register(nameof(Path), typeof(PathGeometry), typeof(PathAnimationWrapper), new PropertyMetadata(null));
 
         public Stretch Stretch { get { return PART_VIEWBOX.Stretch; } set { SetValue(StretchProperty, value); } }
         public static readonly DependencyProperty StretchProperty =

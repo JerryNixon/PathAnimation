@@ -2,10 +2,9 @@
     x:Class="SampleProject.Views.MotionPathPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SampleProject.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:layoutPath="using:LayoutPath"
+    xmlns:controls="using:CustomControls.Controls"
     mc:Ignorable="d">
     
 
@@ -14,11 +13,11 @@
 
             <Grid Width="500" Height="300" Background="Black">
                 <!--do not set AutoScale=True-->
-                <layoutPath:MotionPath  x:Name="TestMotion" HorizontalAlignment="Center" VerticalAlignment="Center"  
+                <controls:MotionPath  x:Name="TestMotion" HorizontalAlignment="Center" VerticalAlignment="Center"  
                                          Duration="0:0:2" ShowMotionPath="True" AutoRewind="True"
                                          LineRelativeEnd="100,100">
                     <Rectangle Width="25" Height="25" Fill="DarkSlateGray"></Rectangle>
-                </layoutPath:MotionPath>
+                </controls:MotionPath>
 
             </Grid>
             <Grid>
