@@ -7,6 +7,7 @@ using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
@@ -15,89 +16,89 @@ using LayoutPath.Enums;
 
 namespace CustomControls.Controls
 {
-    [ContentProperty(Name = "MotionContent")]
     public class MotionPath : ContentControl
     {
-        //used to initialize content child when it is set
-        public FrameworkElement MotionContent
-        {
-            get { return _motionContent; }
-            set
-            {
-                ContentControl wrapper = new ContentControl();
-                wrapper.Content = value;
-
-                _motionContent = wrapper;
-                if (_motionContent == null)
-                    return;
-
-                _motionContent.RenderTransform = new CompositeTransform();
-                if (DesignMode.DesignModeEnabled)
-                {
-                    _motionContent.Loaded += delegate
-                     {
-                         FillContent();
-                     };
-                    FillContent();
-                }
-                else
-                {
-                    FillContent();
-                }
-            }
-        }
-
         #region private members
+        private Border CONTENT_WRAPPER;
+        private LineGeometry LINE_GEOMETRY;
+        private Grid LAYOUT_ROOT;
+        private Viewbox VIEW_BOX;
+        private Path PATH;
+
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Viewbox _wrapViewBox = new Viewbox();
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Grid containerGrid = new Grid();
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Storyboard _storyboard = new Storyboard();
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Line _previewLine;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private FrameworkElement _motionContent;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private bool _autoScale;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Point _lineRelativeEnd = new Point(double.NaN, double.NaN);
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Point _lineAbsoluteStart = new Point(double.NaN, double.NaN);
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private Point _lineAbsoluteEnd = new Point(double.NaN, double.NaN);
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private bool _showMotionPath;
+        private readonly Storyboard _storyboard = new Storyboard();
         #endregion
 
-        #region constructor
+        protected override void OnApplyTemplate()
+        {
+            CONTENT_WRAPPER = GetTemplateChild(nameof(CONTENT_WRAPPER)) as Border;
+            LINE_GEOMETRY = GetTemplateChild(nameof(LINE_GEOMETRY)) as LineGeometry;
+            LAYOUT_ROOT = GetTemplateChild(nameof(LAYOUT_ROOT)) as Grid;
+            VIEW_BOX = GetTemplateChild(nameof(VIEW_BOX)) as Viewbox;
+            PATH = GetTemplateChild(nameof(PATH)) as Path;
+
+            PATH.SetBinding(VisibilityProperty, new Binding()
+            {
+                Path = new PropertyPath("PathVisibility"),
+                Source = this
+            });
+
+            base.OnApplyTemplate();
+        }
+
+        #region constructors
+
         public MotionPath()
         {
-            _previewLine = new Line();
-            _previewLine.RenderTransform = new CompositeTransform();
-            _previewLine.IsHitTestVisible = false;
-            _previewLine.StrokeThickness = 1;
-            _previewLine.Stroke = new SolidColorBrush(Colors.White);
-            _previewLine.Opacity = 0.25;
-            _previewLine.Visibility = ShowMotionPath ? Visibility.Visible : Visibility.Collapsed;
-
-            //prevent preview line from filling up space by specifying a negative margin equal to its size
-            _previewLine.SizeChanged += delegate (object sender, SizeChangedEventArgs args)
-            {
-                if (args.PreviousSize.Width == 0 && args.PreviousSize.Height == 0 || Math.Abs(-_previewLine.Margin.Right - args.PreviousSize.Width) > 0 || Math.Abs(-_previewLine.Margin.Bottom - args.PreviousSize.Height) > 0)
-                    _previewLine.Margin = new Thickness(0, 0, -_previewLine.ActualWidth, -_previewLine.ActualHeight);
-            };
-
             Loaded += delegate
-             {
-                 //find Current point related to parent
-                 var ttv = TransformToVisual((UIElement)Parent);
-                 CurrentPoint = ttv.TransformPoint(new Point(0, 0));
-
-                 if (ShowMotionPath)
-                     CalculateLineMovement();
-             };
+            {
+                CalculateLineMovement();
+            };
         }
+
+        static MotionPath()
+        {
+            CurrentPointProperty = DependencyProperty.Register("CurrentPoint", typeof(Point), typeof(MotionPath), new PropertyMetadata(new Point(double.NaN, double.NaN)));
+
+            AutoRewindProperty = DependencyProperty.Register("AutoRewind", typeof(bool), typeof(MotionPath), new PropertyMetadata(false));
+
+            DurationProperty = DependencyProperty.Register("Duration", typeof(TimeSpan), typeof(MotionPath), new PropertyMetadata(TimeSpan.FromSeconds(1)));
+
+            StateProperty = DependencyProperty.Register("State", typeof(AnimationState), typeof(MotionPath), new PropertyMetadata(AnimationState.Ready,
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    var sender = (MotionPath)o;
+                    var val = (AnimationState)e.NewValue;
+
+                    sender.StateChanged?.Invoke(sender, val);
+                    if (val == AnimationState.Complete)
+                        sender.Completed?.Invoke(sender);
+                }));
+
+            StretchProperty = DependencyProperty.Register(nameof(Stretch), typeof(Stretch), typeof(MotionPath), new PropertyMetadata(Stretch.None,
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    ((MotionPath)o).VIEW_BOX.Stretch = (Stretch)e.NewValue;
+                }));
+
+            LineAbsoluteStartProperty = DependencyProperty.Register("LineAbsoluteStart", typeof(Point), typeof(MotionPath),
+                new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
+
+            LineAbsoluteEndProperty = DependencyProperty.Register("LineAbsoluteEnd", typeof(Point), typeof(MotionPath),
+                new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
+
+            LineRelativeEndProperty = DependencyProperty.Register("LineRelativeEnd", typeof(Point), typeof(MotionPath),
+                  new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
+
+            PathVisibilityProperty = DependencyProperty.Register("PathVisibility", typeof(Visibility), typeof(MotionPath), new PropertyMetadata(default(Visibility)));
+        }
+
+        private static void RefreshCalculations(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var s = (MotionPath)o;
+            s.CalculateLineMovement();
+        }
+
         #endregion
 
         #region events
@@ -121,98 +122,37 @@ namespace CustomControls.Controls
 
         #region properties
 
-        public bool AutoScale
-        {
-            get { return _autoScale; }
-            set
-            {
-                _autoScale = value;
-                FillContent();
-            }
-        }
+        public bool AutoRewind { get { return (bool)GetValue(AutoRewindProperty); } set { SetValue(AutoRewindProperty, value); } }
+        public static readonly DependencyProperty AutoRewindProperty;
 
-        public bool AutoRewind { get; set; }
+        public Point CurrentPoint { get { return (Point)GetValue(CurrentPointProperty); } private set { SetValue(CurrentPointProperty, value); } }
+        public static readonly DependencyProperty CurrentPointProperty;
 
-        #region CurrentPoint dp
-        public static readonly DependencyProperty CurrentPointProperty = DependencyProperty.Register(
-            "CurrentPoint", typeof(Point), typeof(MotionPath), new PropertyMetadata(default(Point)));
+        public AnimationState State { get { return (AnimationState)GetValue(StateProperty); } private set { SetValue(StateProperty, value); } }
+        public static readonly DependencyProperty StateProperty;
 
-        public Point CurrentPoint
-        {
-            get { return (Point)GetValue(CurrentPointProperty); }
-            private set { SetValue(CurrentPointProperty, value); }
-        }
-        #endregion
+        public TimeSpan Duration { get { return (TimeSpan)GetValue(DurationProperty); } set { SetValue(DurationProperty, value); } }
+        public static readonly DependencyProperty DurationProperty;
 
-        #region State dp
-        public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(AnimationState), typeof(MotionPath), new PropertyMetadata(default(AnimationState), StatePropertyChangedCallback));
+        public Point LineAbsoluteStart { get { return (Point)GetValue(LineAbsoluteStartProperty); } set { SetValue(LineAbsoluteStartProperty, value); } }
+        public static readonly DependencyProperty LineAbsoluteStartProperty;
 
-        private static void StatePropertyChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs args)
-        {
-            if (args.NewValue == null)
-                return;
+        public Point LineAbsoluteEnd { get { return (Point)GetValue(LineAbsoluteEndProperty); } set { SetValue(LineAbsoluteEndProperty, value); } }
+        public static readonly DependencyProperty LineAbsoluteEndProperty;
 
-            var sender = (MotionPath)obj;
-            sender.StateChanged?.Invoke(sender, (AnimationState)args.NewValue);
-            if ((AnimationState)args.NewValue == AnimationState.Complete)
-                sender.Completed?.Invoke(sender);
-        }
+        public Point LineRelativeEnd { get { return (Point)GetValue(LineRelativeEndProperty); } set { SetValue(LineRelativeEndProperty, value); } }
+        public static readonly DependencyProperty LineRelativeEndProperty;
 
-        public AnimationState State
-        {
-            get { return (AnimationState)GetValue(StateProperty); }
-            private set { SetValue(StateProperty, value); }
-        }
-        #endregion
 
-        public TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(3);
+        public Visibility PathVisibility { get { return (Visibility)GetValue(PathVisibilityProperty); } set { SetValue(PathVisibilityProperty, value); } }
+        public static readonly DependencyProperty PathVisibilityProperty;
 
-        public Point LineAbsoluteStart
-        {
-            get { return _lineAbsoluteStart; }
-            set
-            {
-                _lineAbsoluteStart = value;
-                if (ShowMotionPath)
-                    CalculateLineMovement();
-            }
-        }
-
-        public Point LineAbsoluteEnd
-        {
-            get { return _lineAbsoluteEnd; }
-            set
-            {
-                _lineAbsoluteEnd = value;
-                if (ShowMotionPath)
-                    CalculateLineMovement();
-            }
-        }
-
-        public Point LineRelativeEnd
-        {
-            get { return _lineRelativeEnd; }
-            set
-            {
-                _lineRelativeEnd = value;
-                if (ShowMotionPath)
-                    CalculateLineMovement();
-            }
-        }
-
-        public bool ShowMotionPath
-        {
-            get { return _showMotionPath; }
-            set
-            {
-                _showMotionPath = value;
-                if (value)
-                    CalculateLineMovement();
-                _previewLine.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
-            }
-        }
+        public Stretch Stretch { get { return VIEW_BOX.Stretch; } set { SetValue(StretchProperty, value); } }
+        public static readonly DependencyProperty StretchProperty;
 
         #endregion
+
+        #region public methods
 
         public void Start()
         {
@@ -293,105 +233,75 @@ namespace CustomControls.Controls
             }
         }
 
-        private void FillContent()
+        #endregion
+
+        #region private methods
+
+        private void CalculateLineMovement()
         {
-            Content = null;
-            _wrapViewBox.Child = null;
-            containerGrid.Children.Clear();
-
-            if (MotionContent != null)
-            {
-                containerGrid.Children.Add(MotionContent);
-            }
-
-            if (AutoScale)
-            {
-                _wrapViewBox.Child = containerGrid;
-                Content = _wrapViewBox;
-            }
-            else
-            {
-                Content = containerGrid;
-            }
-
-            if (DesignMode.DesignModeEnabled || ShowMotionPath)
-            {
-                if (MotionContent == null)
-                    return;
-                //used for generating line in design mode
-                CalculateLineMovement();
-            }
-
-#if DEBUG
-            containerGrid.Children.Add(_previewLine);
-#endif
-        }
-
-        private Line CalculateLineMovement()
-        {
-            Point begin = new Point(0, 0);
+            if (LINE_GEOMETRY == null)
+                return;
 
             if (!HasValue(LineAbsoluteEnd) && !HasValue(LineRelativeEnd))
-                return _previewLine;
+                return;
 
-            _previewLine.X1 = 0;
-            _previewLine.Y1 = 0;
-            _previewLine.X2 = 0;
-            _previewLine.Y2 = 0;
+            var child = (UIElement)((ContentPresenter)CONTENT_WRAPPER.Child).Content;
+            var cont = CONTENT_WRAPPER;
+            var transform = cont.TransformToVisual(child);
+            Point screenCoords = transform.TransformPoint(new Point(0, 0));
+            var childX = -screenCoords.X;
+            var childY = -screenCoords.Y;
 
-
-            if (HasValue(LineAbsoluteStart) && Parent != null)
+            if (HasValue(LineAbsoluteStart))
             {
-                begin.X = LineAbsoluteStart.X;
-                begin.Y = LineAbsoluteStart.Y;
-
-                var ttv = TransformToVisual((UIElement)Parent);
-                Point screenCoords = ttv.TransformPoint(new Point(0, 0));
-                _previewLine.RenderTransform = new CompositeTransform()
-                {
-                    TranslateX = -screenCoords.X + LineAbsoluteStart.X,
-                    TranslateY = -screenCoords.Y + LineAbsoluteStart.Y,
-                };
+                LINE_GEOMETRY.StartPoint = new Point(LineAbsoluteStart.X, LineAbsoluteStart.Y);
 
                 if (HasValue(LineAbsoluteEnd))
                 {
-                    _previewLine.X2 = LineAbsoluteEnd.X - begin.X;
-                    _previewLine.Y2 = LineAbsoluteEnd.Y - begin.Y;
+                    LINE_GEOMETRY.EndPoint = new Point(LineAbsoluteEnd.X, LineAbsoluteEnd.Y);
                 }
                 else if (HasValue(LineRelativeEnd))
                 {
-                    _previewLine.X2 = LineRelativeEnd.X;
-                    _previewLine.Y2 = LineRelativeEnd.Y;
+                    LINE_GEOMETRY.EndPoint = new Point(LineAbsoluteStart.X + LineRelativeEnd.X, LineAbsoluteStart.Y + LineRelativeEnd.Y);
                 }
             }
-            else if (HasValue(LineAbsoluteEnd) && Parent != null)
+            else if (HasValue(LineAbsoluteEnd))
             {
-                var ttv = TransformToVisual((UIElement)Parent);
-                Point screenCoords = ttv.TransformPoint(new Point(0, 0));
-
-                _previewLine.X2 = -screenCoords.X + LineAbsoluteEnd.X;
-                _previewLine.Y2 = -screenCoords.Y + LineAbsoluteEnd.Y;
-
+                LINE_GEOMETRY.StartPoint = new Point(childX, childY);
+                LINE_GEOMETRY.EndPoint = new Point(LineAbsoluteEnd.X, LineAbsoluteEnd.Y);
             }
             else if (HasValue(LineRelativeEnd))
             {
-                _previewLine.X2 = LineRelativeEnd.X;
-                _previewLine.Y2 = LineRelativeEnd.Y;
+                LINE_GEOMETRY.StartPoint = new Point(childX, childY);
+                LINE_GEOMETRY.EndPoint = new Point(LineRelativeEnd.X + childX, LineRelativeEnd.Y + childY);
             }
 
-
-
-            return _previewLine;
+            //set minimum values for stretching efficiently control
+            var el = (FrameworkElement)((ContentPresenter)CONTENT_WRAPPER.Child).Content;
+            LAYOUT_ROOT.MinWidth = (LINE_GEOMETRY.StartPoint.X > LINE_GEOMETRY.EndPoint.X
+                                       ? LINE_GEOMETRY.StartPoint.X
+                                       : LINE_GEOMETRY.EndPoint.X) + el.ActualWidth;
+            LAYOUT_ROOT.MinHeight = (LINE_GEOMETRY.StartPoint.Y > LINE_GEOMETRY.EndPoint.Y
+                                       ? LINE_GEOMETRY.StartPoint.Y
+                                       : LINE_GEOMETRY.EndPoint.Y) + el.ActualHeight;
         }
 
         private void StartLinearMovement()
         {
-            var p = CalculateLineMovement();
-            var transform = (CompositeTransform)p.RenderTransform;
+            CalculateLineMovement();
+            var p = LINE_GEOMETRY;
+            //var transform = (CompositeTransform)p.RenderTransform;
             DoubleAnimationUsingKeyFrames xAn = new DoubleAnimationUsingKeyFrames();
             DoubleAnimationUsingKeyFrames yAn = new DoubleAnimationUsingKeyFrames();
             PointAnimationUsingKeyFrames pAn = new PointAnimationUsingKeyFrames();
             ObjectAnimationUsingKeyFrames stateAn = new ObjectAnimationUsingKeyFrames();
+
+            var child = (UIElement)((ContentPresenter)CONTENT_WRAPPER.Child).Content;
+            var cont = CONTENT_WRAPPER;
+            var transform = cont.TransformToVisual(child);
+            Point screenCoords = transform.TransformPoint(new Point(0, 0));
+            var TranslateX = -screenCoords.X;
+            var TranslateY = -screenCoords.Y;
 
             stateAn.KeyFrames.Add(new DiscreteObjectKeyFrame()
             {
@@ -400,45 +310,39 @@ namespace CustomControls.Controls
             });
 
             //Point animation
-
-            //for linear movement, we can pre-calculate the currnet point positions of our movement
-            //instead of getting position for each value change.
-            var ttv = TransformToVisual((UIElement)Parent);
-            Point screenCoords = ttv.TransformPoint(new Point(0, 0));
-
             pAn.KeyFrames.Add(new EasingPointKeyFrame()
             {
                 KeyTime = KeyTime.FromTimeSpan(TimeSpan.Zero),
-                Value = new Point(screenCoords.X + p.X1, screenCoords.Y + p.Y1)
+                Value = new Point(p.StartPoint.X - TranslateX, p.StartPoint.Y - TranslateY)
             });
             pAn.KeyFrames.Add(new EasingPointKeyFrame()
             {
                 KeyTime = KeyTime.FromTimeSpan(Duration),
-                Value = new Point(screenCoords.X + p.X2, screenCoords.Y + p.Y2)
+                Value = new Point(p.EndPoint.X - TranslateX, p.EndPoint.Y - TranslateY)
             });
 
             //x animation
             xAn.KeyFrames.Add(new EasingDoubleKeyFrame()
             {
                 KeyTime = KeyTime.FromTimeSpan(TimeSpan.Zero),
-                Value = p.X1 + transform.TranslateX
+                Value = p.StartPoint.X - TranslateX
             });
             xAn.KeyFrames.Add(new EasingDoubleKeyFrame()
             {
                 KeyTime = KeyTime.FromTimeSpan(Duration),
-                Value = p.X2 + transform.TranslateX
+                Value = p.EndPoint.X - TranslateX
             });
 
             //y animation
             yAn.KeyFrames.Add(new EasingDoubleKeyFrame()
             {
                 KeyTime = KeyTime.FromTimeSpan(TimeSpan.Zero),
-                Value = p.Y1 + transform.TranslateY
+                Value = p.StartPoint.Y - TranslateY
             });
             yAn.KeyFrames.Add(new EasingDoubleKeyFrame()
             {
                 KeyTime = KeyTime.FromTimeSpan(Duration),
-                Value = p.Y2 + transform.TranslateY
+                Value = p.EndPoint.Y - TranslateY
             });
 
             if (AutoRewind)
@@ -451,19 +355,19 @@ namespace CustomControls.Controls
                 pAn.KeyFrames.Add(new EasingPointKeyFrame()
                 {
                     KeyTime = TimeSpan.FromTicks(Duration.Ticks * 2),
-                    Value = new Point(screenCoords.X + p.X1, screenCoords.Y + p.Y1)
+                    Value = new Point(p.StartPoint.X - TranslateX, p.StartPoint.Y - TranslateY)
                 });
 
                 xAn.KeyFrames.Add(new EasingDoubleKeyFrame()
                 {
                     KeyTime = TimeSpan.FromTicks(Duration.Ticks * 2),
-                    Value = p.X1 + transform.TranslateX
+                    Value = p.StartPoint.X - TranslateX
                 });
 
                 yAn.KeyFrames.Add(new EasingDoubleKeyFrame()
                 {
                     KeyTime = TimeSpan.FromTicks(Duration.Ticks * 2),
-                    Value = p.Y1 + transform.TranslateY
+                    Value = p.StartPoint.Y - TranslateY
                 });
 
                 stateAn.KeyFrames.Add(new DiscreteObjectKeyFrame()
@@ -504,8 +408,8 @@ namespace CustomControls.Controls
 
             Storyboard.SetTarget(stateAn, this);
             Storyboard.SetTarget(pAn, this);
-            Storyboard.SetTarget(xAn, MotionContent);
-            Storyboard.SetTarget(yAn, MotionContent);
+            Storyboard.SetTarget(xAn, CONTENT_WRAPPER);
+            Storyboard.SetTarget(yAn, CONTENT_WRAPPER);
 
             _storyboard.Stop();
 
@@ -519,11 +423,11 @@ namespace CustomControls.Controls
             _storyboard.Begin();
         }
 
-        //because Point? is causing trouble to when setting point to xaml, double.Nan is used for finding out which points are set
+        //because Point? is buggy when setting point to XAML, double.Nan is used for finding out which points are set
         private bool HasValue(Point p)
         {
-
             return !(double.IsNaN(p.X) && double.IsNaN(p.Y));
         }
+        #endregion
     }
 }

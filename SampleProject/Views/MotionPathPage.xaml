@@ -6,19 +6,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
     mc:Ignorable="d">
-    
+
 
     <Grid Background="#FF1D1D1D">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
 
             <Grid Width="500" Height="300" Background="Black">
-                <!--do not set AutoScale=True-->
-                <controls:MotionPath  x:Name="TestMotion" HorizontalAlignment="Center" VerticalAlignment="Center"  
-                                         Duration="0:0:2" ShowMotionPath="True" AutoRewind="True"
-                                         LineRelativeEnd="100,100">
-                    <Rectangle Width="25" Height="25" Fill="DarkSlateGray"></Rectangle>
+                <controls:MotionPath  x:Name="TestMotion" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Duration="0:0:2" 
+                                     PathVisibility="Visible" AutoRewind="False" LineRelativeEnd="100,20" LineAbsoluteStart="0,50" >
+                    <Rectangle Width="25" Height="25" Fill="DarkSlateGray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </controls:MotionPath>
-
             </Grid>
             <Grid>
                 <Grid.ColumnDefinitions>
