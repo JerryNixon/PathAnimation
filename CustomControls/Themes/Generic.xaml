@@ -19,21 +19,21 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MotionPath">
-                    <Viewbox x:Name="VIEW_BOX" Stretch="None">
-                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LAYOUT_ROOT">
-                            <Border x:Name="CONTENT_WRAPPER" >
-                                <Border.RenderTransform>
-                                    <CompositeTransform/>
-                                </Border.RenderTransform>
-                                <ContentPresenter Content="{TemplateBinding Content}"  />
-                            </Border>
-                            <Path IsHitTestVisible="False" Stroke="White" StrokeThickness="1" x:Name="PATH">
-                                <Path.Data>
-                                    <LineGeometry x:Name="LINE_GEOMETRY" StartPoint="0,0" EndPoint="50,50"></LineGeometry>
-                                </Path.Data>
-                            </Path>
-                        </Grid>
-                    </Viewbox>
+                    <!--<Viewbox x:Name="VIEW_BOX" Stretch="None">-->
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LAYOUT_ROOT">
+                        <Border x:Name="CONTENT_WRAPPER" >
+                            <Border.RenderTransform>
+                                <CompositeTransform/>
+                            </Border.RenderTransform>
+                            <ContentPresenter Content="{TemplateBinding Content}"  />
+                        </Border>
+                        <Path IsHitTestVisible="False" Stroke="White" StrokeThickness="1" x:Name="PATH">
+                            <Path.Data>
+                                <LineGeometry x:Name="LINE_GEOMETRY" StartPoint="0,0" EndPoint="50,50"></LineGeometry>
+                            </Path.Data>
+                        </Path>
+                    </Grid>
+                    <!--</Viewbox>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -22,7 +22,7 @@ namespace CustomControls.Controls
         private Border CONTENT_WRAPPER;
         private LineGeometry LINE_GEOMETRY;
         private Grid LAYOUT_ROOT;
-        private Viewbox VIEW_BOX;
+        //private Viewbox VIEW_BOX;
         private Path PATH;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -34,7 +34,7 @@ namespace CustomControls.Controls
             CONTENT_WRAPPER = GetTemplateChild(nameof(CONTENT_WRAPPER)) as Border;
             LINE_GEOMETRY = GetTemplateChild(nameof(LINE_GEOMETRY)) as LineGeometry;
             LAYOUT_ROOT = GetTemplateChild(nameof(LAYOUT_ROOT)) as Grid;
-            VIEW_BOX = GetTemplateChild(nameof(VIEW_BOX)) as Viewbox;
+            //VIEW_BOX = GetTemplateChild(nameof(VIEW_BOX)) as Viewbox;
             PATH = GetTemplateChild(nameof(PATH)) as Path;
 
             PATH.SetBinding(VisibilityProperty, new Binding()
@@ -75,11 +75,11 @@ namespace CustomControls.Controls
                         sender.Completed?.Invoke(sender);
                 }));
 
-            StretchProperty = DependencyProperty.Register(nameof(Stretch), typeof(Stretch), typeof(MotionPath), new PropertyMetadata(Stretch.None,
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((MotionPath)o).VIEW_BOX.Stretch = (Stretch)e.NewValue;
-                }));
+            //StretchProperty = DependencyProperty.Register(nameof(Stretch), typeof(Stretch), typeof(MotionPath), new PropertyMetadata(Stretch.None,
+            //    delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+            //    {
+            //        ((MotionPath)o).VIEW_BOX.Stretch = (Stretch)e.NewValue;
+            //    }));
 
             LineAbsoluteStartProperty = DependencyProperty.Register("LineAbsoluteStart", typeof(Point), typeof(MotionPath),
                 new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
@@ -147,8 +147,8 @@ namespace CustomControls.Controls
         public Visibility PathVisibility { get { return (Visibility)GetValue(PathVisibilityProperty); } set { SetValue(PathVisibilityProperty, value); } }
         public static readonly DependencyProperty PathVisibilityProperty;
 
-        public Stretch Stretch { get { return VIEW_BOX.Stretch; } set { SetValue(StretchProperty, value); } }
-        public static readonly DependencyProperty StretchProperty;
+        //public Stretch Stretch { get { return VIEW_BOX.Stretch; } set { SetValue(StretchProperty, value); } }
+        //public static readonly DependencyProperty StretchProperty;
 
         #endregion
 
