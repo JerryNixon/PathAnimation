@@ -1,16 +1,24 @@
 ﻿<Page
-    x:Class="SampleProject.Views.LayoutPathPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
+    xmlns:Converters="using:CustomControls.Converters"
+    x:Class="SampleProject.Views.LayoutPathPage"
     mc:Ignorable="d">
     <Page.Resources>
+        <Converters:EnumStringConverter x:Key="StringFormatConverter"/>
         <Style TargetType="Button">
-            <Setter Property="MinWidth" Value="200"></Setter>
-            <Setter Property="Margin" Value="1"></Setter>
+            <Setter Property="MinWidth" Value="160"/>
+            <Setter Property="Margin" Value="1"/>
         </Style>
+        <Storyboard x:Name="PathStoryboard">
+            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.Progress)" Storyboard.TargetName="LayoutPath1" RepeatBehavior="Forever">
+                <EasingDoubleKeyFrame KeyTime="0" Value="100"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:8" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -20,63 +28,112 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Button Content="Back" Click="Back_OnClick"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <controls:LayoutPath Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-            Margin="20"  x:Name="LayoutPath1" Visibility="Visible" Progress="125" OrientToPath="False" Stretch="None"  PathVisible="True" ItemsPadding="2" >
-                <controls:LayoutPath.Path>
-                    <PathGeometry>
-                        <PathFigure IsClosed="True" StartPoint="0,50">
+                <Button Content="Back" Click="Back_OnClick"/>
 
-                            <LineSegment Point="150,0"/>
-                            <QuadraticBezierSegment Point1="280,60" Point2="400,0" />
-                            <ArcSegment Point="870,50" Size="9,3" RotationAngle="0" SweepDirection="Clockwise"/>
-                            <LineSegment Point="550,50"/>
-                            <PolyQuadraticBezierSegment Points="600,150 550,170 600,200 550,300"/>
-                            <BezierSegment Point1="450,300" Point2="500,150" Point3="400,200"/>
-                            <PolyBezierSegment Points="400,300 300,220 320,350 250,120 200,250 150,260" />
-                            <PolyLineSegment Points="130,160 40,150 80,100" />
-                        </PathFigure>
-                    </PathGeometry>
-                </controls:LayoutPath.Path>
-                <TextBlock Text="Go!"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="1" />
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.95"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.9"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.85"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.8"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.75"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.7"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.65"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.6"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.55"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.5"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.45"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.4"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.35"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.3"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.25"/>
-                <Rectangle Width="20" Height="20" Fill="Orange" RadiusX="20" RadiusY="20" Opacity="0.2"/>
-            </controls:LayoutPath>
+                <StackPanel Orientation="Horizontal"  Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <TextBlock Text=" Path Length:" FontWeight="SemiBold" Margin="5,0"/>
+                    <TextBlock Text="{Binding PathLength, ElementName=LayoutPath1, Mode=TwoWay}"/>
 
-            <StackPanel Grid.Row="2">
+                    <TextBlock Text="Current Length:" FontWeight="SemiBold"   Margin="5,0"/>
+                    <TextBlock Text="{Binding CurrentLength, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="100"/>
+
+                    <TextBlock Text="Current Point:" FontWeight="SemiBold"  Margin="5,0" />
+                    <TextBlock Text="{Binding CurrentPosition, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="150"/>
+
+
+                </StackPanel>
+
+
+
+            </Grid>
+
+
+            <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#FFF1F1F1">
+                <controls:LayoutPath Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"
+            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="21" OrientToPath="True" Stretch="Uniform"  PathVisible="True" 
+                                 ItemsPadding="0.9" Path="M0,50 L150,0 Q280,60 400,0 A9,3,0,0,1,870,50 L550,50 Q600,150 550,170 600,200 550,300 C450,300 500,150 400,200 C400,300 300,220 320,350 250,120 200,250 150,260 L130,160 40,150 80,100 z" >
+                    <TextBlock Text="GO"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="1" />
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.95"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.9"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.85"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.8"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.75"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.7"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.65"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.6"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.55"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.5"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.45"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.4"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.35"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.3"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.25"/>
+                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.2"/>
+                </controls:LayoutPath>
+            </Border>
+
+
+            <StackPanel Grid.Row="2" Margin="0,5">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Slider Header="Progress" Value="{Binding Progress,ElementName=LayoutPath1,Mode=TwoWay}"  Grid.Column="0"
+                    <Slider Grid.Column="0"
+                            Header="Progress" Value="{Binding Progress, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="200" StepFrequency="0.0001" SmallChange="0.01" Margin="5,0"/>
-                    <Slider Header="Step Distance" Value="{Binding ItemsPadding,ElementName=LayoutPath1,Mode=TwoWay}" Grid.Column="1"
+                    <Slider Grid.Column="1"
+                            Header="Items Padding" Value="{Binding ItemsPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="6" SmallChange="0.0001"  StepFrequency="0.01" Margin="5,0"/>
 
                 </Grid>
-                <VariableSizedWrapGrid Orientation="Horizontal">
-                    <Button Content="add a circle" Click="Add_OnClick"></Button>
-                    <Button Content="remove first element" Click="RemoveFirst_OnClick"></Button>
-                    <!--<CheckBox IsChecked="{Binding Stretch,ElementName=layoutPath2,Mode=TwoWay}" Content="Stretch" Margin="5,0"></CheckBox>-->
-                    <CheckBox IsChecked="{Binding OrientToPath,ElementName=LayoutPath1,Mode=TwoWay}" Content="Orient to path"></CheckBox>
-                </VariableSizedWrapGrid>
+                <Grid>
+                    <Button Content="Start / Stop storyboard" Click="StartPauseAnimation"/>
+                    <Grid HorizontalAlignment="Right">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox  SelectedValue="{Binding Stretch, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding Converter={StaticResource StringFormatConverter}}"  />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <Stretch>None</Stretch>
+                            <Stretch>Fill</Stretch>
+                            <Stretch>Uniform</Stretch>
+                            <Stretch>UniformToFill</Stretch>
+                        </ComboBox>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
+                               Margin="0,0,5,0"/>
+
+                        <CheckBox Grid.Column="2"  IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
+                               Margin="5,0"/>
+                    </Grid>
+                </Grid>
+
+
+
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Text="Control children" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <VariableSizedWrapGrid Orientation="Horizontal">
+                        <Button Content="add a circle" Click="Add_OnClick"/>
+                        <Button Content="remove first element" Click="RemoveFirst_OnClick"/>
+                        <!--<CheckBox IsChecked="{Binding Stretch,ElementName=layoutPath2,Mode=TwoWay}" Content="Stretch" Margin="5,0"></CheckBox>-->
+
+
+                    </VariableSizedWrapGrid>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

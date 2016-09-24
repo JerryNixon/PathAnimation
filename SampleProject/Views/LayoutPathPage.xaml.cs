@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
@@ -43,6 +44,14 @@ namespace SampleProject.Views
         {
             if (LayoutPath1.Children.Any())
                 LayoutPath1.Children.RemoveAt(0);
+        }
+
+        private void StartPauseAnimation(object sender, RoutedEventArgs e)
+        {
+            if (PathStoryboard.GetCurrentState() != ClockState.Active)
+                PathStoryboard.Begin();
+            else
+                PathStoryboard.Stop();
         }
     }
 }

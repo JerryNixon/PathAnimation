@@ -110,6 +110,7 @@
     <Compile Include="Controls\LayoutPath.cs" />
     <Compile Include="Controls\MotionPath.cs" />
     <Compile Include="Controls\PathAnimationWrapper.cs" />
+    <Compile Include="Converters\EnumStringConverter.cs" />
     <Compile Include="Enums\AnimationState.cs" />
     <Compile Include="Internal\SegmentsHelper.cs" />
     <Compile Include="ExtendedSegments\ExtendedArcSegment.cs" />
