@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using Windows.Foundation;
 using Windows.UI;
@@ -60,11 +61,11 @@ namespace CustomControls.Controls
 
             _children.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
             {
-
                 if (args.NewItems != null)
                 {
                     foreach (var child in args.NewItems)
                     {
+
                         ContentControl wrapper = new ContentControl();
                         if (child != Path)
                             wrapper.Content = child;
@@ -113,7 +114,7 @@ namespace CustomControls.Controls
                     ((LayoutPath)o)._viewbox.Stretch = (Stretch)e.NewValue;
                 }));
 
-            ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(LayoutPath), new PropertyMetadata(0,
+            ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
                     ((LayoutPath)o).TransformToProgress((double)e.NewValue);
@@ -311,6 +312,7 @@ namespace CustomControls.Controls
         {
             if (_allSegments == null)
                 return;
+
             var children = _containerGrid.Children.Where(x => x != _pathObject).ToArray();
 
             for (int i = 0; i < children.Count(); i++)

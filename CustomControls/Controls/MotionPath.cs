@@ -55,6 +55,7 @@ namespace CustomControls.Controls
 
         public MotionPath()
         {
+            DefaultStyleKey = typeof(MotionPath);
             _storyboard.Completed += delegate (object sender, object o)
             {
                 State = AnimationState.Complete;
