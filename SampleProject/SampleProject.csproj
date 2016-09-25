@@ -98,6 +98,9 @@
     <Compile Include="Views\LayoutPathPage.xaml.cs">
       <DependentUpon>LayoutPathPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LayoutPathSamples\CirclePathTextSample.xaml.cs">
+      <DependentUpon>CirclePathTextSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -128,6 +131,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Views\LayoutPathPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayoutPathSamples\CirclePathTextSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

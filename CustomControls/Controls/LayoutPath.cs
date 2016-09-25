@@ -10,6 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
+using CustomControls.Enums;
 using CustomControls.ExtendedSegments;
 
 namespace CustomControls.Controls
@@ -150,9 +151,23 @@ namespace CustomControls.Controls
                     ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
                 }));
 
+            ChildAlignmentProperty = DependencyProperty.Register("ChildAlignment", typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center,
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
+                }));
+
             PathLengthProperty = DependencyProperty.Register("PathLength", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
 
             CurrentLengthProperty = DependencyProperty.Register("CurrentLength", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
+
+            CurrentRotationProperty = DependencyProperty.Register("CurrentRotation", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
+
+            RotateVerticallyProperty = DependencyProperty.Register("RotateVertically", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+            {
+                ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
+            }));
         }
 
         #endregion
@@ -212,6 +227,16 @@ namespace CustomControls.Controls
         /// </summary>
         public double CurrentLength { get { return (double)GetValue(CurrentLengthProperty); } private set { SetValue(CurrentLengthProperty, value); } }
         public static readonly DependencyProperty CurrentLengthProperty;
+
+        public bool RotateVertically { get { return (bool)GetValue(RotateVerticallyProperty); } set { SetValue(RotateVerticallyProperty, value); } }
+        public static readonly DependencyProperty RotateVerticallyProperty;
+
+        public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
+        public static readonly DependencyProperty ChildAlignmentProperty;
+
+        public static readonly DependencyProperty CurrentRotationProperty;
+
+        public double CurrentRotation { get { return (double)GetValue(CurrentRotationProperty); } private set { SetValue(CurrentRotationProperty, value); } }
 
         #endregion
 
@@ -333,20 +358,68 @@ namespace CustomControls.Controls
                     CurrentPosition = childPoint;
 
                 var child = (ContentControl)children[i];
+                var childWidth = ((FrameworkElement)child.Content).ActualWidth;
+                var childHeight = ((FrameworkElement)child.Content).ActualHeight;
+
+
                 CompositeTransform transform = (CompositeTransform)child.RenderTransform;
-                transform.TranslateX = childPoint.X - ((FrameworkElement)child.Content).ActualWidth / 2.0 - _pathOffset.X;
-                transform.TranslateY = childPoint.Y - ((FrameworkElement)child.Content).ActualHeight / 2.0 - _pathOffset.Y;
-                transform.CenterX = child.RenderSize.Width / 2.0;
-                transform.CenterY = child.RenderSize.Height / 2.0;
+
+                if (RotateVertically)
+                    rotationTheta += 90;
 
                 if (OrientToPath)
                 {
+                    if (i == 0)
+                        CurrentRotation = rotationTheta;
                     transform.Rotation = rotationTheta;
                 }
                 else
                 {
-                    transform.Rotation = 0;
+                    CurrentRotation = transform.Rotation = 0;
                 }
+
+
+
+                double translateX = childPoint.X - _pathOffset.X;
+                double translateY = childPoint.Y - _pathOffset.Y;
+
+
+                if (ChildAlignment == ChildAlignment.Center)
+                {
+                    translateX -= childWidth / 2.0;
+                    translateY -= childHeight / 2.0;
+                    transform.CenterX = childWidth / 2.0;
+                    transform.CenterY = childHeight / 2.0;
+                }
+                else if (ChildAlignment == ChildAlignment.Outer)
+                {
+                    if (rotationTheta >= -45)
+                    {
+                        translateX -= childWidth / 2.0;
+                        translateY -= childHeight;
+                        transform.CenterX = childWidth / 2.0;
+                        transform.CenterY = childHeight;
+                    }
+                    else
+                    {
+                        translateX -= childWidth / 2.0;
+                        translateY -= childHeight / 2.0;
+                        transform.CenterX = childWidth / 2.0;
+                        transform.CenterY = childHeight / 2.0;
+                    }
+                }
+                else if (ChildAlignment == ChildAlignment.Inner)
+                {
+
+                }
+
+
+
+                transform.TranslateX = translateX;
+                transform.TranslateY = translateY;
+
+
+
             }
 
             if (!children.Any())
@@ -355,6 +428,7 @@ namespace CustomControls.Controls
                 double rotationTheta;
                 GetPointAtFractionLength(progress, out childPoint, out rotationTheta);
                 CurrentPosition = childPoint;
+                CurrentRotation = rotationTheta;
             }
 
             var p = progress / 100.0;
