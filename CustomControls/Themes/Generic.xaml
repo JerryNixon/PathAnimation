@@ -39,4 +39,19 @@
         </Setter>
     </Style>
 
+    <Style TargetType="local:LayoutPath">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:LayoutPath">
+                    <Viewbox x:Name="VIEW_BOX" Stretch="None">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Path IsHitTestVisible="False" x:Name="PATH" Fill="Gray" Opacity="0.5"></Path>
+                            <Grid x:Name="CHILDREN"/>
+                        </Grid>
+                    </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>
