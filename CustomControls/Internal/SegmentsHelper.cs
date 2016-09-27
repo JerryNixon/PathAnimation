@@ -130,7 +130,6 @@ namespace CustomControls.Internal
                 double q1y = e1y + alpha * ep1y;
                 double q2x = e2x - alpha * ep2x;
                 double q2y = e2y - alpha * ep2y;
-                Debug.WriteLine("{0:F2},{1:F2} {2:F2},{3:F2} {4:F2},{5:F2}", q1x, q1y, q2x, q2y, e2x, e2y);
                 res.Points.Add(new Point(q1x, q1y));
                 res.Points.Add(new Point(q2x, q2y));
                 res.Points.Add(new Point(e2x, e2y));

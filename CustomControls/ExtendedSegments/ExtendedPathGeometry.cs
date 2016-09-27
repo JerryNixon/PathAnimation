@@ -113,7 +113,7 @@ namespace CustomControls.ExtendedSegments
             progress = progress / range;//convert to local percent
 
             point = segment.GetPointAt(progress);//get point at percent for segment
-            rotationTheta = segment.GetDegreesAt(progress);
+            rotationTheta = segment.GetOrientedDegreesAt(progress);
         }
 
         /// <summary>

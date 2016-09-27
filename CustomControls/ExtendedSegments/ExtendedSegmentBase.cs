@@ -16,6 +16,7 @@ namespace CustomControls.ExtendedSegments
         protected abstract Point GetEndPoint();
         protected abstract double GetSegmentLength();
         public abstract double GetDegreesAt(double percent);
+        public abstract double GetOrientedDegreesAt(double percent);
         #endregion
 
         protected ExtendedSegmentBase(PathSegment segment, Point startPoint)

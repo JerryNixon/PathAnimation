@@ -4,9 +4,9 @@ using Windows.UI.Xaml.Media;
 
 namespace CustomControls.ExtendedSegments
 {
-    class ExtendedLineSegment: ExtendedSegmentBase
+    class ExtendedLineSegment : ExtendedSegmentBase
     {
-        public ExtendedLineSegment(PathSegment segment,Point startPoint) : base(segment, startPoint)
+        public ExtendedLineSegment(PathSegment segment, Point startPoint) : base(segment, startPoint)
         {
             if (!(segment is LineSegment))
                 throw new ArgumentException();
@@ -32,8 +32,13 @@ namespace CustomControls.ExtendedSegments
                     return -90;
 
             var dt = (EndPoint.Y - StartPoint.Y) / (EndPoint.X - StartPoint.X);
-            return  (Math.Atan(dt) * (180 / Math.PI));
-           
+            return (Math.Atan(dt) * (180 / Math.PI));
+
+        }
+
+        public override double GetOrientedDegreesAt(double percent)
+        {
+            return GetOrientedDegrees(StartPoint, EndPoint);
         }
 
         public override Point GetPointAt(double percent)
@@ -42,6 +47,38 @@ namespace CustomControls.ExtendedSegments
             indP.X = StartPoint.X + percent * (EndPoint.X - StartPoint.X);
             indP.Y = StartPoint.Y + percent * (EndPoint.Y - StartPoint.Y);
             return indP;
+        }
+
+        public static double GetOrientedDegrees(Point start, Point end)
+        {
+            end.X = end.X - start.X;
+            start.X = start.X - start.X;
+
+            end.Y = end.Y - start.Y;
+            start.Y = start.Y - start.Y;
+
+            double dt = 0;
+
+            if (end.Y != 0)
+            {
+                dt = end.Y / end.X;
+            }
+            else
+            {
+                if (end.X > 0)
+                    return 0;
+                return -180;
+            }
+
+            var res = (Math.Atan(dt) * (180 / Math.PI));
+            if (end.X >= 0)
+            {
+                return res;
+            }
+            else
+            {
+                return res - 180;
+            }
         }
     }
 }

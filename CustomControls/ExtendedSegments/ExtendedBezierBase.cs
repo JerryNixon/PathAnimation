@@ -25,9 +25,21 @@ namespace CustomControls.ExtendedSegments
 
         public sealed override double GetDegreesAt(double percent)
         {
-            var dt = BezierDerivative(percent);
+            var per = BezierNormalizedTable.First(bt => bt.Value >= percent);
+            var dt = BezierDerivative(per.Key);
             var res = (Math.Atan(dt) * (180 / Math.PI));
             return res;
+        }
+
+        public override double GetOrientedDegreesAt(double percent)
+        {
+            var per = BezierNormalizedTable.First(bt => bt.Value >= percent);
+            var point = BezierFormula(per.Key);
+            var nextPoint = BezierFormula(per.Key + 0.0001);
+
+            return ExtendedLineSegment.GetOrientedDegrees(point, nextPoint);
+
+           
         }
 
         public sealed override Point GetPointAt(double percent)

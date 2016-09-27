@@ -39,5 +39,9 @@ namespace CustomControls.ExtendedSegments
             return _approximateBezier.GetDegreesAt(percent);
         }
 
+        public override double GetOrientedDegreesAt(double percent)
+        {
+            return _approximateBezier.GetOrientedDegreesAt(percent);
+        }
     }
 }

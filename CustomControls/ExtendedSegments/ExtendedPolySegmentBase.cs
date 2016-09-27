@@ -28,7 +28,7 @@ namespace CustomControls.ExtendedSegments
             else if (segment is PolyQuadraticBezierSegment)
             {
                 var tmp = (PolyQuadraticBezierSegment)segment;
-                for (int i = 0; i < tmp.Points.Count ; i = i + 2)
+                for (int i = 0; i < tmp.Points.Count; i = i + 2)
                     segments.Add(new QuadraticBezierSegment() { Point1 = tmp.Points[i], Point2 = tmp.Points[i + 1] });
                 FillSegments(segments, startPoint);
             }
@@ -95,6 +95,15 @@ namespace CustomControls.ExtendedSegments
             percent = percent - s.StartsAtPercent; //tranfer to 0
             percent = percent / range;//convert to local percent
             return s.GetDegreesAt(percent);
+        }
+
+        public override double GetOrientedDegreesAt(double percent)
+        {
+            var s = _segments.First(c => c.EndsAtPercent >= percent);
+            double range = s.EndsAtPercent - s.StartsAtPercent;
+            percent = percent - s.StartsAtPercent; //tranfer to 0
+            percent = percent / range;//convert to local percent
+            return s.GetOrientedDegreesAt(percent);
         }
     }
 }
