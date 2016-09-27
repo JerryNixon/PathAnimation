@@ -4,7 +4,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
-    xmlns:Converters="using:CustomControls.Converters"
+    xmlns:Converters="using:CustomControls.Converters" 
+    xmlns:enums="using:CustomControls.Enums"
     x:Class="SampleProject.Views.LayoutPathPage"
     mc:Ignorable="d">
     <Page.Resources>
@@ -58,8 +59,8 @@
 
 
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#FFF1F1F1">
-                <controls:LayoutPath Grid.Column="1"  HorizontalAlignment="Center" VerticalAlignment="Center"
-                                     ChildAlignment="Center"
+                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                     ChildAlignment="Inner"
             Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="21" OrientToPath="True" Stretch="None"  PathVisible="True" 
                                  ItemsPadding="0.9" >
                     <controls:LayoutPath.Path>
@@ -84,6 +85,7 @@
                           Height="10.854" RenderTransformOrigin="0.5,0.5" Stretch="Fill" UseLayoutRounding="False" Width="20.222">
 
                     </Path>
+
                     <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="1" />
                     <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.95"/>
                     <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.9"/>
@@ -129,9 +131,11 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox  SelectedValue="{Binding Stretch, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox  SelectedValue="{Binding Stretch, ConverterParameter=Stretch, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
@@ -142,14 +146,27 @@
                             <Stretch>Uniform</Stretch>
                             <Stretch>UniformToFill</Stretch>
                         </ComboBox>
+
                         <CheckBox Grid.Column="1" IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
                                Margin="0,0,5,0"/>
 
                         <CheckBox Grid.Column="2"  IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
                                Margin="5,0"/>
 
-                        <CheckBox Grid.Column="3"  IsChecked="{Binding RotateVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="RotateVertically"
+                        <CheckBox Grid.Column="3"  IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
                                Margin="5,0"/>
+                        <CheckBox Grid.Column="4"  IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
+                               Margin="5,0"/>
+                        <ComboBox Grid.Column="5"  SelectedValue="{Binding ChildAlignment, ConverterParameter=ChildAlignment, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <enums:ChildAlignment>Inner</enums:ChildAlignment>
+                            <enums:ChildAlignment>Center</enums:ChildAlignment>
+                            <enums:ChildAlignment>Outer</enums:ChildAlignment>
+                        </ComboBox>
                     </Grid>
                 </Grid>
 

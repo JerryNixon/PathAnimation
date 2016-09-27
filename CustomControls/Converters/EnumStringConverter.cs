@@ -24,7 +24,10 @@ namespace CustomControls.Converters
         public object ConvertBack(object value, Type targetType, object parameter,
             string language)
         {
-            throw new NotImplementedException();
+
+            var res = Enum.ToObject(targetType, value);
+            return res;
+
         }
     }
 }

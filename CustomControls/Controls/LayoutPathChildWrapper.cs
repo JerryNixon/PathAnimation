@@ -19,18 +19,18 @@ namespace CustomControls.Controls
             ALINGMENT = GetTemplateChild(nameof(ALINGMENT)) as ContentControl;
         }
 
-        public LayoutPathChildWrapper(FrameworkElement child, ChildAlignment alingment, bool rotateVertically)
+        public LayoutPathChildWrapper(FrameworkElement child, ChildAlignment alingment, bool moveVertically, bool flip)
         {
             Content = child;
             DefaultStyleKey = typeof(LayoutPathChildWrapper);
             RenderTransform = new CompositeTransform();
             Loaded += delegate (object sender, RoutedEventArgs args)
-             {
-                 UpdateAlingment(alingment, rotateVertically);
-             };
+            {
+                UpdateAlingment(alingment, moveVertically, flip);
+            };
         }
 
-        public void UpdateAlingment(ChildAlignment alingment, bool rotateVertically)
+        public void UpdateAlingment(ChildAlignment alingment, bool moveVertically, bool flip)
         {
             var translate = (TranslateTransform)ALINGMENT.RenderTransform;
             if (alingment == ChildAlignment.Center)
@@ -40,10 +40,10 @@ namespace CustomControls.Controls
             else
             {
                 var child = (FrameworkElement)Content;
-                if (!rotateVertically)
+                if (!moveVertically)
                 {
                     translate.X = 0;
-                    if (alingment == ChildAlignment.Outer)
+                    if (alingment == ChildAlignment.Outer && !flip)
                     {
                         translate.Y = -child.ActualHeight / 2.0;
                     }
@@ -55,7 +55,7 @@ namespace CustomControls.Controls
                 else
                 {
                     translate.Y = 0;
-                    if (alingment == ChildAlignment.Outer)
+                    if (alingment == ChildAlignment.Outer && !flip)
                     {
                         translate.X = -child.ActualWidth / 2.0;
                     }

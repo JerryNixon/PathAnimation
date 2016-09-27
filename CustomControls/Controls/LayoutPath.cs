@@ -76,7 +76,7 @@ namespace CustomControls.Controls
 
             foreach (var child in _children)
             {
-                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, RotateVertically));
+                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically, FlipItems));
             }
 
             _children.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
@@ -85,7 +85,7 @@ namespace CustomControls.Controls
                 {
                     foreach (var child in args.NewItems)
                     {
-                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, RotateVertically));
+                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically, FlipItems));
                     }
                 }
 
@@ -155,7 +155,7 @@ namespace CustomControls.Controls
                    {
                        foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                        {
-                           child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.RotateVertically);
+                           child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.MoveVertically, sender.FlipItems);
                        }
                    }
                }));
@@ -167,7 +167,7 @@ namespace CustomControls.Controls
                 ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
             };
 
-            RotateVerticallyProperty = DependencyProperty.Register(nameof(RotateVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
+            MoveVerticallyProperty = DependencyProperty.Register(nameof(MoveVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
                  delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                  {
                      var sender = ((LayoutPath)o);
@@ -175,11 +175,25 @@ namespace CustomControls.Controls
                      {
                          foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                          {
-                             child.UpdateAlingment(sender.ChildAlignment, sender.RotateVertically);
+                             child.UpdateAlingment(sender.ChildAlignment, sender.MoveVertically, sender.FlipItems);
                          }
                      }
                      transformToProgress(o, e);
                  }));
+
+            FlipItemsProperty = DependencyProperty.Register("FlipItems", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    var sender = ((LayoutPath)o);
+                    if (sender.CHILDREN != null)
+                    {
+                        foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
+                        {
+                            child.UpdateAlingment(sender.ChildAlignment, sender.MoveVertically, sender.FlipItems);
+                        }
+                    }
+                    transformToProgress(o, e);
+                }));
 
 
             ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), (o, e) => transformToProgress(o, e)));
@@ -239,8 +253,8 @@ namespace CustomControls.Controls
         public double CurrentLength { get { return (double)GetValue(CurrentLengthProperty); } private set { SetValue(CurrentLengthProperty, value); } }
         public static readonly DependencyProperty CurrentLengthProperty;
 
-        public bool RotateVertically { get { return (bool)GetValue(RotateVerticallyProperty); } set { SetValue(RotateVerticallyProperty, value); } }
-        public static readonly DependencyProperty RotateVerticallyProperty;
+        public bool MoveVertically { get { return (bool)GetValue(MoveVerticallyProperty); } set { SetValue(MoveVerticallyProperty, value); } }
+        public static readonly DependencyProperty MoveVerticallyProperty;
 
         public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
         public static readonly DependencyProperty ChildAlignmentProperty;
@@ -248,6 +262,8 @@ namespace CustomControls.Controls
         public double CurrentRotation { get { return (double)GetValue(CurrentRotationProperty); } private set { SetValue(CurrentRotationProperty, value); } }
         public static readonly DependencyProperty CurrentRotationProperty;
 
+        public bool FlipItems { get { return (bool)GetValue(FlipItemsProperty); } set { SetValue(FlipItemsProperty, value); } }
+        public static readonly DependencyProperty FlipItemsProperty;
         #endregion
 
         #region methods
@@ -281,8 +297,11 @@ namespace CustomControls.Controls
                 if (!OrientToPath)
                     rotationTheta = 0;
 
-                if (RotateVertically)
+                if (MoveVertically)
                     rotationTheta += 90;
+
+                if (FlipItems)
+                    rotationTheta += 180;
 
                 if (i == 0)
                     CurrentRotation = rotationTheta;

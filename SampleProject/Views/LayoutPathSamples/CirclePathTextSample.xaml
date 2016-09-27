@@ -12,12 +12,12 @@
         <Grid>
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform>
-                    <CompositeTransform Rotation="-90"/>
+                    <CompositeTransform Rotation="0"/>
                 </Grid.RenderTransform>
                 <Path Data="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z" 
                       Fill="DarkCyan" Stretch="None" Stroke="Black"/>
 
-                <controls:LayoutPath ItemsPadding="14.5" Progress="139.45" OrientToPath="True" RotateVertically="False" PathVisible="False" ChildAlignment="Outer"
+                <controls:LayoutPath ItemsPadding="14.5" Progress="100" OrientToPath="True" MoveVertically="True" PathVisible="False" ChildAlignment="Outer" FlipItems="True"
                 Path="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z">
 
                     <TextBlock Text="Hello world!" ></TextBlock>
