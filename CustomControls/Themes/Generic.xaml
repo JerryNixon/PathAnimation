@@ -3,17 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:CustomControls.Controls">
 
-    <Style TargetType="local:PathAnimationWrapper">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="local:PathAnimationWrapper">
-                    <Viewbox x:Name="PART_VIEWBOX">
-                        <ContentPresenter Content="{TemplateBinding Content}" />
-                    </Viewbox>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style TargetType="local:MotionPath">
         <Setter Property="Template">
@@ -49,6 +38,22 @@
                             <Grid x:Name="CHILDREN"/>
                         </Grid>
                     </Viewbox>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:LayoutPathChildWrapper">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:LayoutPathChildWrapper">
+                    <!--Used for controlling child position (Middle, Outer, Inner)-->
+                    <ContentControl x:Name="ALINGMENT">
+                        <ContentControl.RenderTransform>
+                            <TranslateTransform/>
+                        </ContentControl.RenderTransform>
+                        <ContentPresenter Content="{TemplateBinding Content}"  />
+                    </ContentControl>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

@@ -14,9 +14,10 @@
                 <Grid.RenderTransform>
                     <CompositeTransform Rotation="-90"/>
                 </Grid.RenderTransform>
-                <Path Data="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z" Fill="#FFF4F4F5" Stretch="None" Stroke="Black"/>
+                <Path Data="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z" 
+                      Fill="DarkCyan" Stretch="None" Stroke="Black"/>
 
-                <controls:LayoutPath ItemsPadding="14.5" Progress="139.45" OrientToPath="True" RotateVertically="True" PathVisible="False"
+                <controls:LayoutPath ItemsPadding="14.5" Progress="139.45" OrientToPath="True" RotateVertically="False" PathVisible="False" ChildAlignment="Outer"
                 Path="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z">
 
                     <TextBlock Text="Hello world!" ></TextBlock>
@@ -27,7 +28,7 @@
                     <TextBlock Text="and fresh control."></TextBlock>
                     <TextBlock Text="I hope you like it!"></TextBlock>
                 </controls:LayoutPath>
-              </Grid>
+            </Grid>
             <Rectangle Height="30" Width="200" Margin="250,0,0,0" Stroke="Black" StrokeThickness="1" ></Rectangle>
         </Grid>
     </Grid>

@@ -76,7 +76,7 @@ namespace CustomControls.Controls
 
             foreach (var child in _children)
             {
-                CHILDREN.Children.Add(WrapChild(child as FrameworkElement));
+                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, RotateVertically));
             }
 
             _children.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
@@ -85,7 +85,7 @@ namespace CustomControls.Controls
                 {
                     foreach (var child in args.NewItems)
                     {
-                        CHILDREN.Children.Insert(args.NewStartingIndex, WrapChild(child as FrameworkElement));
+                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, RotateVertically));
                     }
                 }
 
@@ -93,7 +93,7 @@ namespace CustomControls.Controls
                 {
                     foreach (var child in args.OldItems)
                     {
-                        var wrapper = CHILDREN.Children.FirstOrDefault(x => GetWrapperChild(x) == child);
+                        var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
                         if (wrapper != null)
                             CHILDREN.Children.Remove(wrapper);
                     }
@@ -147,15 +147,43 @@ namespace CustomControls.Controls
                     sen.TransformToProgress(((LayoutPath)o).Progress);
                 }));
 
+            ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center,
+               delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+               {
+                   var sender = ((LayoutPath)o);
+                   if (sender.CHILDREN != null)
+                   {
+                       foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
+                       {
+                           child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.RotateVertically);
+                       }
+                   }
+               }));
+
+
+
             Action<DependencyObject, DependencyPropertyChangedEventArgs> transformToProgress = delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
             {
                 ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
             };
 
+            RotateVerticallyProperty = DependencyProperty.Register(nameof(RotateVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
+                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                 {
+                     var sender = ((LayoutPath)o);
+                     if (sender.CHILDREN != null)
+                     {
+                         foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
+                         {
+                             child.UpdateAlingment(sender.ChildAlignment, sender.RotateVertically);
+                         }
+                     }
+                     transformToProgress(o, e);
+                 }));
+
+
             ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), (o, e) => transformToProgress(o, e)));
             OrientToPathProperty = DependencyProperty.Register(nameof(OrientToPath), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
-            ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, (o, e) => transformToProgress(o, e)));
-            RotateVerticallyProperty = DependencyProperty.Register(nameof(RotateVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
         }
 
         #endregion
@@ -224,20 +252,7 @@ namespace CustomControls.Controls
 
         #region methods
 
-        private ContentControl WrapChild(FrameworkElement child)
-        {
-            ContentControl wrapper = new ContentControl();
-            wrapper.Content = child;
-            wrapper.HorizontalAlignment = HorizontalAlignment.Left;
-            wrapper.VerticalAlignment = VerticalAlignment.Top;
-            wrapper.RenderTransform = new CompositeTransform();
-            return wrapper;
-        }
 
-        private FrameworkElement GetWrapperChild(UIElement wrapper)
-        {
-            return (FrameworkElement)((ContentControl)wrapper).Content;
-        }
 
         private void TransformToProgress(double progress)
         {
@@ -256,8 +271,8 @@ namespace CustomControls.Controls
                 if (i == 0)
                     CurrentPosition = childPoint;
 
-                var wrapper = (ContentControl)children[i];
-                var wrappedChild = GetWrapperChild(wrapper);
+                var wrapper = (LayoutPathChildWrapper)children[i];
+                var wrappedChild = wrapper.Content as FrameworkElement;
                 var childWidth = wrappedChild.ActualWidth;
                 var childHeight = wrappedChild.ActualHeight;
 

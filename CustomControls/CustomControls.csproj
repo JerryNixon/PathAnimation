@@ -108,8 +108,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\LayoutPath.cs" />
+    <Compile Include="Controls\LayoutPathChildWrapper.cs" />
     <Compile Include="Controls\MotionPath.cs" />
-    <Compile Include="Controls\PathAnimationWrapper.cs" />
     <Compile Include="Converters\EnumStringConverter.cs" />
     <Compile Include="Enums\AnimationState.cs" />
     <Compile Include="Enums\ChildAlignment.cs" />
