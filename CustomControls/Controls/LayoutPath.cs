@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using Windows.ApplicationModel;
 using Windows.Foundation;
+using Windows.Security.Cryptography.Core;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -20,21 +23,10 @@ namespace CustomControls.Controls
     public class LayoutPath : ContentControl
     {
         #region variables
-
-        /// <summary>
-        /// Contains information about potential blank space on the left and top of our path
-        /// </summary>
-        private Point _pathOffset = new Point(double.MaxValue, double.MaxValue);
-
         /// <summary>
         /// A grid containing all items that are animated along path
         /// </summary>
         private Grid CHILDREN;
-
-        /// <summary>
-        /// contains all segments added by initial analysis
-        /// </summary>
-        private List<ExtendedSegmentBase> _allSegments;
 
         /// <summary>
         /// Top level container for this control
@@ -51,6 +43,8 @@ namespace CustomControls.Controls
         /// </summary>
         public IList<UIElement> Children => _children;
         private readonly ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
+
+        public ExtendedPathGeometry ExtendedGeometry { get; private set; }
 
         #endregion
 
@@ -76,6 +70,10 @@ namespace CustomControls.Controls
 
             PATH.Opacity = PathVisible ? 0.5 : 0;
 
+            if (ExtendedGeometry != null)
+                PATH.Margin = new Thickness(-ExtendedGeometry.PathOffset.X, -ExtendedGeometry.PathOffset.Y, 0, 0);
+
+
             foreach (var child in _children)
             {
                 CHILDREN.Children.Add(WrapChild(child as FrameworkElement));
@@ -100,6 +98,7 @@ namespace CustomControls.Controls
                             CHILDREN.Children.Remove(wrapper);
                     }
                 }
+                TransformToProgress(Progress);
             };
 
             base.OnApplyTemplate();
@@ -112,10 +111,6 @@ namespace CustomControls.Controls
 
             Loaded += delegate
             {
-
-
-                AnalyzeSegments();
-
                 TransformToProgress(Progress);
             };
         }
@@ -123,14 +118,17 @@ namespace CustomControls.Controls
         static LayoutPath()
         {
             StretchProperty = DependencyProperty.Register(nameof(Stretch), typeof(Stretch), typeof(LayoutPath), new PropertyMetadata(Stretch.None));
+            CurrentLengthProperty = DependencyProperty.Register(nameof(CurrentLength), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
+            CurrentRotationProperty = DependencyProperty.Register(nameof(CurrentRotation), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
+            CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
 
-            ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
+            ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
                     ((LayoutPath)o).TransformToProgress((double)e.NewValue);
                 }));
 
-            PathVisibleProperty = DependencyProperty.Register("PathVisible", typeof(bool), typeof(LayoutPath), new PropertyMetadata(true,
+            PathVisibleProperty = DependencyProperty.Register(nameof(PathVisible), typeof(bool), typeof(LayoutPath), new PropertyMetadata(true,
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
                     var path = ((LayoutPath)o).PATH;
@@ -138,43 +136,26 @@ namespace CustomControls.Controls
                         path.Opacity = (bool)e.NewValue ? 0.5 : 0;
                 }));
 
-            PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(LayoutPath), new PropertyMetadata(default(Geometry)));
-
-            CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(false,
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+            PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(LayoutPath), new PropertyMetadata(default(Geometry),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs args)
                 {
-                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
+                    var data = (Geometry)args.NewValue;
+                    var sen = ((LayoutPath)o);
+                    sen.ExtendedGeometry = new ExtendedPathGeometry(data as PathGeometry);
+                    if (sen.PATH != null)
+                        sen.PATH.Margin = new Thickness(-sen.ExtendedGeometry.PathOffset.X, -sen.ExtendedGeometry.PathOffset.Y, 0, 0);
+                    sen.TransformToProgress(((LayoutPath)o).Progress);
                 }));
 
-            ItemsPaddingProperty = DependencyProperty.Register("ItemsPadding", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
-                }));
+            Action<DependencyObject, DependencyPropertyChangedEventArgs> transformToProgress = delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+            {
+                ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
+            };
 
-            OrientToPathProperty = DependencyProperty.Register("OrientToPath", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
-                }));
-
-            ChildAlignmentProperty = DependencyProperty.Register("ChildAlignment", typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center,
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
-                }));
-
-            PathLengthProperty = DependencyProperty.Register("PathLength", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
-
-            CurrentLengthProperty = DependencyProperty.Register("CurrentLength", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
-
-            CurrentRotationProperty = DependencyProperty.Register("CurrentRotation", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
-
-            RotateVerticallyProperty = DependencyProperty.Register("RotateVertically", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
-                }));
+            ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), (o, e) => transformToProgress(o, e)));
+            OrientToPathProperty = DependencyProperty.Register(nameof(OrientToPath), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
+            ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, (o, e) => transformToProgress(o, e)));
+            RotateVerticallyProperty = DependencyProperty.Register(nameof(RotateVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
         }
 
         #endregion
@@ -217,11 +198,6 @@ namespace CustomControls.Controls
         public double ItemsPadding { get { return (double)GetValue(ItemsPaddingProperty); } set { SetValue(ItemsPaddingProperty, value); } }
         public static readonly DependencyProperty ItemsPaddingProperty;
 
-        /// <summary>
-        /// Total circumferential length of <see cref="Path"/>
-        /// </summary>
-        public double PathLength { get { return (double)GetValue(PathLengthProperty); } private set { SetValue(PathLengthProperty, value); } }
-        public static readonly DependencyProperty PathLengthProperty;
 
         /// <summary>
         /// Gets the <see cref="Point"/> at the perimeter of <see cref="Path"/> on current <see cref="Progress"/>
@@ -241,9 +217,8 @@ namespace CustomControls.Controls
         public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
         public static readonly DependencyProperty ChildAlignmentProperty;
 
-        public static readonly DependencyProperty CurrentRotationProperty;
-
         public double CurrentRotation { get { return (double)GetValue(CurrentRotationProperty); } private set { SetValue(CurrentRotationProperty, value); } }
+        public static readonly DependencyProperty CurrentRotationProperty;
 
         #endregion
 
@@ -264,90 +239,9 @@ namespace CustomControls.Controls
             return (FrameworkElement)((ContentControl)wrapper).Content;
         }
 
-        private void AnalyzeSegments()
-        {
-            _allSegments = new List<ExtendedSegmentBase>();
-            var pg = (PathGeometry)Path;
-            double pathLength = 0;
-
-            foreach (var figure in pg.Figures)
-            {
-                var figureSegments = new List<ExtendedSegmentBase>();
-                if (figure.IsClosed)
-                    figure.Segments.Add(new LineSegment() { Point = figure.StartPoint });//close path by adding again startPoint
-                for (int i = 0; i < figure.Segments.Count; i++)
-                {
-                    Point startPoint;
-                    //determine start point of segment
-                    startPoint = (i == 0 ? figure.StartPoint : figureSegments[i - 1].EndPoint);
-
-                    if (figure.Segments[i] is LineSegment)
-                        figureSegments.Add(new ExtendedLineSegment(figure.Segments[i], startPoint));
-                    else if (figure.Segments[i] is BezierSegment)
-                        figureSegments.Add(new ExtendedBezierSegment(figure.Segments[i], startPoint));
-                    else if (figure.Segments[i] is QuadraticBezierSegment)
-                        figureSegments.Add(new ExtendedQuadraticBezierSegment(figure.Segments[i], startPoint));
-                    else if (figure.Segments[i] is ArcSegment)
-                        figureSegments.Add(new ExtendedArcSegment(figure.Segments[i], startPoint));
-                    else if (figure.Segments[i] is PolyLineSegment || figure.Segments[i] is PolyBezierSegment || figure.Segments[i] is PolyQuadraticBezierSegment)
-                        figureSegments.Add(new ExtendedPolySegmentBase(figure.Segments[i], startPoint));
-                }
-
-                foreach (ExtendedSegmentBase t in figureSegments)
-                {
-                    t.DistanceFromStart = pathLength += t.SegmentLength;
-                }
-
-                _allSegments.AddRange(figureSegments);
-            }
-
-            for (int i = 0; i < _allSegments.Count; i++)
-            {
-                _allSegments[i].EndsAtPercent = _allSegments[i].DistanceFromStart / pathLength;
-            }
-            for (int i = 1; i < _allSegments.Count; i++)
-            {
-                _allSegments[i].StartsAtPercent = _allSegments[i - 1].EndsAtPercent;
-            }
-
-            foreach (var segment in _allSegments)
-            {
-                for (double i = 0; i < 1; i = i + 0.01)
-                {
-                    var point = segment.GetPointAt(i);
-                    if (point.X < _pathOffset.X)
-                        _pathOffset.X = point.X;
-                    if (point.Y < _pathOffset.Y)
-                        _pathOffset.Y = point.Y;
-                }
-            }
-
-            PATH.Margin = new Thickness(-_pathOffset.X, -_pathOffset.Y, 0, 0);
-
-            PathLength = pathLength;
-
-        }
-
-        private void GetPointAtFractionLength(double progress, out Point point, out double rotationTheta)
-        {
-            if (progress < 0)
-                progress = 0;
-            progress = (progress % 100) / 100.0;//make sure that 0 <= percent <= 1
-                                                //get segment that falls on this percent
-            var segment = _allSegments.First(c => c.EndsAtPercent >= progress);
-
-            //find range of segment
-            double range = segment.EndsAtPercent - segment.StartsAtPercent;
-            progress = progress - segment.StartsAtPercent; //tranfer to 0
-            progress = progress / range;//convert to local percent
-
-            point = segment.GetPointAt(progress);//get point at percent for segment
-            rotationTheta = segment.GetDegreesAt(progress);
-        }
-
         private void TransformToProgress(double progress)
         {
-            if (_allSegments == null)
+            if (ExtendedGeometry == null || CHILDREN == null)
                 return;
 
             var children = CHILDREN.Children.ToArray();
@@ -357,7 +251,7 @@ namespace CustomControls.Controls
                 double childPercent = progress - (i * ItemsPadding);
                 Point childPoint;
                 double rotationTheta;
-                GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
+                ExtendedGeometry.GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
 
                 if (i == 0)
                     CurrentPosition = childPoint;
@@ -369,22 +263,18 @@ namespace CustomControls.Controls
 
                 CompositeTransform wrapperTransform = (CompositeTransform)wrapper.RenderTransform;
 
+                if (!OrientToPath)
+                    rotationTheta = 0;
+
                 if (RotateVertically)
                     rotationTheta += 90;
 
-                if (OrientToPath)
-                {
-                    if (i == 0)
-                        CurrentRotation = rotationTheta;
-                    wrapperTransform.Rotation = rotationTheta;
-                }
-                else
-                {
-                    CurrentRotation = wrapperTransform.Rotation = 0;
-                }
+                if (i == 0)
+                    CurrentRotation = rotationTheta;
+                wrapperTransform.Rotation = rotationTheta;
 
-                double translateX = childPoint.X - _pathOffset.X;
-                double translateY = childPoint.Y - _pathOffset.Y;
+                double translateX = childPoint.X - ExtendedGeometry.PathOffset.X;
+                double translateY = childPoint.Y - ExtendedGeometry.PathOffset.Y;
 
                 //center align child
                 translateX -= childWidth / 2.0;
@@ -394,20 +284,16 @@ namespace CustomControls.Controls
 
                 wrapperTransform.TranslateX = translateX;
                 wrapperTransform.TranslateY = translateY;
-
             }
 
             if (!children.Any())
             {
-                Point childPoint;
-                double rotationTheta;
-                GetPointAtFractionLength(progress, out childPoint, out rotationTheta);
-                CurrentPosition = childPoint;
-                CurrentRotation = rotationTheta;
+                var tmp = ExtendedGeometry.GetPointAtFractionLength(progress);
+                CurrentPosition = tmp.Item1;
+                CurrentRotation = tmp.Item2;
             }
 
-            var p = progress / 100.0;
-            CurrentLength = PathLength * p;
+            CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
         }
 
         #endregion
