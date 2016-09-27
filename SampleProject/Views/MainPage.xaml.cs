@@ -1,6 +1,7 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using SampleProject.Views;
+using SampleProject.Views.LayoutPathSamples;
 
 namespace SampleProject
 {
@@ -20,6 +21,11 @@ namespace SampleProject
         private void MotionPath_OnClick(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MotionPathPage));
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(CirclePathTextSample));
         }
     }
 }

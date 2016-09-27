@@ -58,53 +58,41 @@
             </Grid>
 
 
-            <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#FFF1F1F1">
-                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                     ChildAlignment="Inner"
-            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="21" OrientToPath="True" Stretch="None"  PathVisible="True" 
-                                 ItemsPadding="0.9" >
+            <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
+                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" ChildAlignment="Center"
+            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="30" OrientToPath="True" Stretch="None"  PathVisible="True" 
+                                 ItemsPadding="3" >
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
-
                                 <LineSegment Point="150,0"/>
                                 <QuadraticBezierSegment Point1="280,60" Point2="400,0" />
                                 <ArcSegment Point="870,50" Size="9,3" RotationAngle="0" SweepDirection="Clockwise"/>
-                                <LineSegment Point="550,50"/>
-                                <PolyQuadraticBezierSegment Points="600,150 550,170 600,200 550,300"/>
+                                <LineSegment Point="750,50"/>
+                                <PolyQuadraticBezierSegment Points="690,150 590,170 600,200 550,300"/>
                                 <BezierSegment Point1="450,300" Point2="500,150" Point3="400,200"/>
-                                <BezierSegment Point1="400,300" Point2="300,220" Point3="320,350"/>
-                                <BezierSegment Point1="250,120" Point2="200,250" Point3="150,260"/>
-                                <!--<PolyBezierSegment Points="400,300 300,220 320,350 250,120 200,250 150,260" />-->
+                                <PolyBezierSegment Points="400,300 300,220 320,350 250,120 200,250 150,260" />
                                 <PolyLineSegment Points="130,160 40,150 80,100" />
                             </PathFigure>
                         </PathGeometry>
                     </controls:LayoutPath.Path>
-                    <!--<TextBlock Text="GO"/>-->
-                    <Path Data="M6.1377,5.50796 C7.28027,5.50796 8.23975,5.6935 9.01611,6.0646 L9.01611,7.4269 C8.1665,6.88979 7.16064,6.62124 5.99854,6.62124 C4.82178,6.62124 3.85742,7.02651 3.10547,7.83706 C2.35352,8.6476 1.97754,9.69741 1.97754,10.9865 C1.97754,12.3146 2.32666,13.3583 3.0249,14.1176 C3.72314,14.8769 4.67041,15.2565 5.8667,15.2565 C6.68701,15.2565 7.39746,15.0929 7.99805,14.7658 L7.99805,11.8214 L5.69824,11.8214 L5.69824,10.7082 L9.22852,10.7082 L9.22852,15.4689 C8.17383,16.0646 7.00195,16.3624 5.71289,16.3624 C4.21387,16.3624 3.00171,15.879 2.07642,14.9123 C1.15112,13.9455 0.688477,12.6662 0.688477,11.0744 C0.688477,9.44839 1.20239,8.11416 2.23022,7.07168 C3.25806,6.0292 4.56055,5.50796 6.1377,5.50796 z M15.9882,6.62124 C14.8847,6.62124 13.9887,7.01919 13.3003,7.81508 C12.6118,8.61098 12.2675,9.6559 12.2675,10.9499 C12.2675,12.2438 12.6032,13.2851 13.2746,14.0736 C13.946,14.8622 14.8212,15.2565 15.9004,15.2565 C17.0527,15.2565 17.9609,14.8805 18.625,14.1286 C19.289,13.3766 19.6211,12.3244 19.6211,10.9718 C19.6211,9.5851 19.2988,8.51333 18.6543,7.75649 C18.0097,6.99965 17.1211,6.62124 15.9882,6.62124 z M16.0761,5.50796 C17.5263,5.50796 18.6945,5.99624 19.5808,6.9728 C20.467,7.94936 20.9101,9.22622 20.9101,10.8034 C20.9101,12.5172 20.456,13.8722 19.5478,14.8683 C18.6396,15.8644 17.4238,16.3624 15.9004,16.3624 C14.4111,16.3624 13.2185,15.8717 12.3225,14.8903 C11.4265,13.9088 10.9785,12.632 10.9785,11.0597 C10.9785,9.37026 11.435,8.0226 12.3481,7.01674 C13.2612,6.01089 14.5039,5.50796 16.0761,5.50796 z" Fill="Black"
-                          Height="10.854" RenderTransformOrigin="0.5,0.5" Stretch="Fill" UseLayoutRounding="False" Width="20.222">
+                    <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+
+                    <TextBlock Text="Lets" FontSize="16"/>
+                    <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+
+                    <Path Data="M6.1377,5.50796 C7.28027,5.50796 8.23975,5.6935 9.01611,6.0646 L9.01611,7.4269 C8.1665,6.88979 7.16064,6.62124 5.99854,6.62124 C4.82178,6.62124 3.85742,7.02651 3.10547,7.83706 C2.35352,8.6476 1.97754,9.69741 1.97754,10.9865 C1.97754,12.3146 2.32666,13.3583 3.0249,14.1176 C3.72314,14.8769 4.67041,15.2565 5.8667,15.2565 C6.68701,15.2565 7.39746,15.0929 7.99805,14.7658 L7.99805,11.8214 L5.69824,11.8214 L5.69824,10.7082 L9.22852,10.7082 L9.22852,15.4689 C8.17383,16.0646 7.00195,16.3624 5.71289,16.3624 C4.21387,16.3624 3.00171,15.879 2.07642,14.9123 C1.15112,13.9455 0.688477,12.6662 0.688477,11.0744 C0.688477,9.44839 1.20239,8.11416 2.23022,7.07168 C3.25806,6.0292 4.56055,5.50796 6.1377,5.50796 z M15.9882,6.62124 C14.8847,6.62124 13.9887,7.01919 13.3003,7.81508 C12.6118,8.61098 12.2675,9.6559 12.2675,10.9499 C12.2675,12.2438 12.6032,13.2851 13.2746,14.0736 C13.946,14.8622 14.8212,15.2565 15.9004,15.2565 C17.0527,15.2565 17.9609,14.8805 18.625,14.1286 C19.289,13.3766 19.6211,12.3244 19.6211,10.9718 C19.6211,9.5851 19.2988,8.51333 18.6543,7.75649 C18.0097,6.99965 17.1211,6.62124 15.9882,6.62124 z M16.0761,5.50796 C17.5263,5.50796 18.6945,5.99624 19.5808,6.9728 C20.467,7.94936 20.9101,9.22622 20.9101,10.8034 C20.9101,12.5172 20.456,13.8722 19.5478,14.8683 C18.6396,15.8644 17.4238,16.3624 15.9004,16.3624 C14.4111,16.3624 13.2185,15.8717 12.3225,14.8903 C11.4265,13.9088 10.9785,12.632 10.9785,11.0597 C10.9785,9.37026 11.435,8.0226 12.3481,7.01674 C13.2612,6.01089 14.5039,5.50796 16.0761,5.50796 z" 
+                          Fill="{ThemeResource MediaTextThemeBrush}"
+                          Height="15.854" Stretch="Fill"  Width="30.222" >
 
                     </Path>
+                    <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="1" />
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.95"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.9"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.85"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.8"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.75"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.7"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.65"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.6"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.55"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.5"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.45"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.4"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.35"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.3"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.25"/>
-                    <Rectangle Width="20" Height="18" Fill="Orange" RadiusX="10" RadiusY="5" Opacity="0.2"/>
+                    <Button Content="Button" MinWidth="0"/>
+                    <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
-
+                    <TextBox Text="text box"/>
+                    <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
                 </controls:LayoutPath>
             </Border>
 

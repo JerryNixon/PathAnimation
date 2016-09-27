@@ -7,29 +7,68 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
     mc:Ignorable="d">
+    <Page.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FFF8BD75"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    </Page.Resources>
+
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF3C1F1A" Offset="0.43"/>
+                <GradientStop Color="#FF131211" Offset="0.017"/>
+                <GradientStop Color="#FF303030" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid>
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
                 <Grid.RenderTransform>
                     <CompositeTransform Rotation="0"/>
                 </Grid.RenderTransform>
-                <Path Data="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z" 
-                      Fill="DarkCyan" Stretch="None" Stroke="Black"/>
 
-                <controls:LayoutPath ItemsPadding="14.5" Progress="100" OrientToPath="True" MoveVertically="True" PathVisible="False" ChildAlignment="Outer" FlipItems="True"
+                <Image Source="../../Assets/Sun-PNG-HD.png" Width="255" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <CompositeTransform TranslateX="-47"/>
+                    </Image.RenderTransform>
+                </Image>
+                <Rectangle Width="386" Height="25" Fill="#7F000000" Margin="540,0,0,0" RadiusX="10" RadiusY="5"/>
+                <controls:LayoutPath x:Name="layoutPath" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    ItemsPadding="4.15" Progress="100" OrientToPath="True" MoveVertically="True" PathVisible="False" ChildAlignment="Outer" FlipItems="True"
                 Path="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z">
 
-                    <TextBlock Text="Hello world!" ></TextBlock>
-                    <TextBlock Text="This is an test case" ></TextBlock>
-                    <TextBlock Text="that can show you" ></TextBlock>
-                    <TextBlock Text="the possibilities" ></TextBlock>
-                    <TextBlock Text="of the this cool"></TextBlock>
-                    <TextBlock Text="and fresh control."></TextBlock>
-                    <TextBlock Text="I hope you like it!"></TextBlock>
+                    <TextBlock Text="Life has its shadows, as well as its sun;"  Foreground="LightGoldenrodYellow" FontWeight="SemiBold"></TextBlock>
+                    <TextBlock Text="Its lights and its shades, all twined together." ></TextBlock>
+                    <TextBlock Text="I tried to single them out, one by one," ></TextBlock>
+                    <TextBlock Text="Single and count them, determining whether" ></TextBlock>
+                    <TextBlock Text="There was less blue than there was grey,"></TextBlock>
+                    <TextBlock Text="And more of the deep night than of the day."></TextBlock>
+                    <TextBlock Text="But dear me, dear me, my task's but begun,"></TextBlock>
+                    <TextBlock Text="And I am not half way into the sun."></TextBlock>
+
+                    <TextBlock Text="For the longer I look on the bright side of earth," Foreground="LightGoldenrodYellow"></TextBlock>
+                    <TextBlock Text="The more of the beautiful do I discover;"></TextBlock>
+                    <TextBlock Text="And really, I never knew what life was worth"></TextBlock>
+                    <TextBlock Text="Till I searched the wide storehouse of happiness over."></TextBlock>
+                    <TextBlock Text="It is filled from the cellar well up to the skies, "></TextBlock>
+                    <TextBlock Text="With things meant to gladden the heart and the eyes."></TextBlock>
+                    <TextBlock Text="The doors are unlocked, you can enter each room,"></TextBlock>
+                    <TextBlock Text="That lies like a beautiful garden in bloom."></TextBlock>
+
+                    <TextBlock Text="Yet life has its shadow, as well as its sun;" Foreground="LightGoldenrodYellow"></TextBlock>
+                    <TextBlock Text="Earth has its storehouse of joy and sorrow."></TextBlock>
+                    <TextBlock Text="But the first is so wide – and my task's but begun –"></TextBlock>
+                    <TextBlock Text="That the last must be left for a far-distant morrow."></TextBlock>
+                    <TextBlock Text="I will count up the blessings God gave in a row, "></TextBlock>
+                    <TextBlock Text="But dear me! When I get through them, I know"></TextBlock>
+                    <TextBlock Text="I shall have little tine left for the rest, "></TextBlock>
+                    <TextBlock Text="For life is a swift-flowing river at best. "></TextBlock>
+
                 </controls:LayoutPath>
             </Grid>
-            <Rectangle Height="30" Width="200" Margin="250,0,0,0" Stroke="Black" StrokeThickness="1" ></Rectangle>
+            <Button Content="Back" Click="Back_OnClick" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10"/>
         </Grid>
     </Grid>
 </Page>

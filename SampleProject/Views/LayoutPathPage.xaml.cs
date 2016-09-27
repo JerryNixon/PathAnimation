@@ -28,6 +28,10 @@ namespace SampleProject.Views
         public LayoutPathPage()
         {
             this.InitializeComponent();
+            Loaded += delegate (object sender, RoutedEventArgs args)
+            {
+                PathStoryboard.Begin();
+            };
         }
 
         private void Back_OnClick(object sender, RoutedEventArgs e)

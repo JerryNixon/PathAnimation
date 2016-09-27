@@ -16,10 +16,20 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel MinWidth="300" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Content="LayoutPath samples" Click="LayoutPath_OnClick"/>
-            <Button Content="MotionPath samples" Click="MotionPath_OnClick"/>
-        </StackPanel>
+        <Grid Margin="30">
+            <StackPanel>
+                <TextBlock Text="LayoutPath samples" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
+                    <Button Content="Complete control" Click="LayoutPath_OnClick"/>
+                    <Button Content="Rotating sunshines" Click="ButtonBase_OnClick"/>
+                </StackPanel>
+                <TextBlock Text="LayoutPath samples" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
+                    <Button Content="MotionPath samples" Click="MotionPath_OnClick"/>
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 
 </Page>
