@@ -5,13 +5,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
     xmlns:Converters="using:CustomControls.Converters" 
-    xmlns:enums="using:CustomControls.Enums"
     x:Class="SampleProject.Views.LayoutPathPage"
     mc:Ignorable="d">
     <Page.Resources>
         <Converters:EnumStringConverter x:Key="EnumStringConverter"/>
         <Style TargetType="Button">
-            <Setter Property="MinWidth" Value="160"/>
             <Setter Property="Margin" Value="1"/>
         </Style>
         <Storyboard x:Name="PathStoryboard">
@@ -35,23 +33,31 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Back" Click="Back_OnClick"/>
+                <Button Content="Back" Click="Back_OnClick" Width="100"/>
 
-                <StackPanel Orientation="Horizontal"  Grid.Column="1"  HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                    <TextBlock Text=" Path Length:" FontWeight="SemiBold" Margin="5,0"/>
-                    <TextBlock Text="{Binding ExtendedGeometry.PathLength, ElementName=LayoutPath1, Mode=TwoWay}"/>
+                <VariableSizedWrapGrid Orientation="Horizontal"  Grid.Column="1" ItemWidth="210" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=" Path Length:" FontWeight="SemiBold" Margin="5,0"/>
+                        <TextBlock Text="{Binding ExtendedGeometry.PathLength, ElementName=LayoutPath1, Mode=TwoWay}"/>
+                    </StackPanel>
 
-                    <TextBlock Text="Current Length:" FontWeight="SemiBold"   Margin="5,0"/>
-                    <TextBlock Text="{Binding CurrentLength, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="100"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Cur. Length:" FontWeight="SemiBold"   Margin="5,0"/>
+                        <TextBlock Text="{Binding CurrentLength, ElementName=LayoutPath1, Mode=TwoWay}"/>
+                    </StackPanel>
 
-                    <TextBlock Text="Current Point:" FontWeight="SemiBold"  Margin="5,0" />
-                    <TextBlock Text="{Binding CurrentPosition, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="150"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Cur. Point:" FontWeight="SemiBold"  Margin="5,0" />
+                        <TextBlock Text="{Binding CurrentPosition, ElementName=LayoutPath1, Mode=TwoWay}" />
+                    </StackPanel>
 
-                    <TextBlock Text="Current Rotation:" FontWeight="SemiBold"  Margin="5,0" />
-                    <TextBlock Text="{Binding CurrentRotation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="80"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Cur. Rotation:" FontWeight="SemiBold"  Margin="5,0" />
+                        <TextBlock Text="{Binding CurrentRotation, ElementName=LayoutPath1, Mode=TwoWay}" />
+                    </StackPanel>
 
 
-                </StackPanel>
+                </VariableSizedWrapGrid>
 
 
 
@@ -59,9 +65,9 @@
 
 
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
-                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" ChildAlignment="Center"
+                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
             Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="30" OrientToPath="True" Stretch="None"  PathVisible="True" 
-                                 ItemsPadding="3" SmoothRotation="7">
+                                 ItemsPadding="3" SmoothRotation="4" SmoothTranslation="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -78,11 +84,11 @@
                     </controls:LayoutPath.Path>
                     <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
-                    <TextBlock Text="Lets" FontSize="16"/>
+                    <TextBlock Text="Lets" FontSize="16" CacheMode="BitmapCache" UseLayoutRounding="False"/>
                     <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
                     <Path Data="M6.1377,5.50796 C7.28027,5.50796 8.23975,5.6935 9.01611,6.0646 L9.01611,7.4269 C8.1665,6.88979 7.16064,6.62124 5.99854,6.62124 C4.82178,6.62124 3.85742,7.02651 3.10547,7.83706 C2.35352,8.6476 1.97754,9.69741 1.97754,10.9865 C1.97754,12.3146 2.32666,13.3583 3.0249,14.1176 C3.72314,14.8769 4.67041,15.2565 5.8667,15.2565 C6.68701,15.2565 7.39746,15.0929 7.99805,14.7658 L7.99805,11.8214 L5.69824,11.8214 L5.69824,10.7082 L9.22852,10.7082 L9.22852,15.4689 C8.17383,16.0646 7.00195,16.3624 5.71289,16.3624 C4.21387,16.3624 3.00171,15.879 2.07642,14.9123 C1.15112,13.9455 0.688477,12.6662 0.688477,11.0744 C0.688477,9.44839 1.20239,8.11416 2.23022,7.07168 C3.25806,6.0292 4.56055,5.50796 6.1377,5.50796 z M15.9882,6.62124 C14.8847,6.62124 13.9887,7.01919 13.3003,7.81508 C12.6118,8.61098 12.2675,9.6559 12.2675,10.9499 C12.2675,12.2438 12.6032,13.2851 13.2746,14.0736 C13.946,14.8622 14.8212,15.2565 15.9004,15.2565 C17.0527,15.2565 17.9609,14.8805 18.625,14.1286 C19.289,13.3766 19.6211,12.3244 19.6211,10.9718 C19.6211,9.5851 19.2988,8.51333 18.6543,7.75649 C18.0097,6.99965 17.1211,6.62124 15.9882,6.62124 z M16.0761,5.50796 C17.5263,5.50796 18.6945,5.99624 19.5808,6.9728 C20.467,7.94936 20.9101,9.22622 20.9101,10.8034 C20.9101,12.5172 20.456,13.8722 19.5478,14.8683 C18.6396,15.8644 17.4238,16.3624 15.9004,16.3624 C14.4111,16.3624 13.2185,15.8717 12.3225,14.8903 C11.4265,13.9088 10.9785,12.632 10.9785,11.0597 C10.9785,9.37026 11.435,8.0226 12.3481,7.01674 C13.2612,6.01089 14.5039,5.50796 16.0761,5.50796 z" 
-                          Fill="{ThemeResource MediaTextThemeBrush}"
+                          Fill="{ThemeResource DefaultTextForegroundThemeBrush}"
                           Height="15.854" Stretch="Fill"  Width="30.222" >
 
                     </Path>
@@ -99,8 +105,11 @@
 
             <StackPanel Grid.Row="2" Margin="0,5">
                 <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
@@ -110,63 +119,42 @@
                     <Slider Grid.Column="1"
                             Header="Items Padding" Value="{Binding ItemsPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="6" SmallChange="0.0001"  StepFrequency="0.01" Margin="5,0"/>
-                    <Slider Grid.Column="2"
+                    <Slider Grid.Column="0" Grid.Row="1"
                             Header="Smooth Rotation" Value="{Binding SmoothRotation, ElementName=LayoutPath1, Mode=TwoWay}" 
-                            Minimum="0" Maximum="30" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
+                            Minimum="0" Maximum="40" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
+                    <Slider Grid.Column="1" Grid.Row="1"
+                            Header="Smooth Translation" Value="{Binding SmoothTranslation, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Minimum="0" Maximum="40" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
 
                 </Grid>
                 <Grid>
-                    <Button Content="Start / Stop storyboard" Click="StartPauseAnimation"/>
-                    <Grid HorizontalAlignment="Right">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-
-
-                        <CheckBox Grid.Column="0" IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
+                    <VariableSizedWrapGrid Grid.Column="1" Orientation="Horizontal" ItemWidth="160" ItemHeight="60" >
+                        <Button Content="Start / Stop anim" Click="StartPauseAnimation"/>
+                        <CheckBox IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
                                Margin="0,0,5,0"/>
 
-                        <CheckBox Grid.Column="1"  IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
+                        <CheckBox IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
                                Margin="5,0"/>
 
-                        <CheckBox Grid.Column="2"  IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
+                        <CheckBox IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
                                Margin="5,0"/>
-                        <CheckBox Grid.Column="3"  IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
+                        <CheckBox IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
                                Margin="5,0"/>
 
-                        <CheckBox Grid.Column="4"  IsChecked="{Binding StackAtStart, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtStart" Margin="5,0"/>
-                        <CheckBox Grid.Column="5"  IsChecked="{Binding StackAtEnd, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtEnd" Margin="5,0"/>
+                        <CheckBox IsChecked="{Binding StackAtStart, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtStart" Margin="5,0"/>
+                        <CheckBox IsChecked="{Binding StackAtEnd, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtEnd" Margin="5,0"/>
+                        
+                        <ComboBox Header="Alignment" x:Name="childAlignmentCB"  SelectedValue="{Binding ChildAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        </ComboBox>
 
-                        <ComboBox Grid.Column="6" Header="Alignment"   SelectedValue="{Binding ChildAlignment, ConverterParameter=ChildAlignment, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="Stretch" x:Name="stretchCB"  SelectedValue="{Binding Stretch, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
-                            <enums:ChildAlignment>Inner</enums:ChildAlignment>
-                            <enums:ChildAlignment>Center</enums:ChildAlignment>
-                            <enums:ChildAlignment>Outer</enums:ChildAlignment>
                         </ComboBox>
-                        <ComboBox Grid.Column="7" Header="Stretch"  SelectedValue="{Binding Stretch, ConverterParameter=Stretch, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                            <Stretch>None</Stretch>
-                            <Stretch>Fill</Stretch>
-                            <Stretch>Uniform</Stretch>
-                            <Stretch>UniformToFill</Stretch>
-                        </ComboBox>
-                    </Grid>
+                    </VariableSizedWrapGrid>
                 </Grid>
 
 

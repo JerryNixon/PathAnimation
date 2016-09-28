@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using CustomControls.Enums;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -28,8 +29,11 @@ namespace SampleProject.Views
         public LayoutPathPage()
         {
             this.InitializeComponent();
+            childAlignmentCB.ItemsSource = Enum.GetValues(typeof(ChildAlignment));
+            stretchCB.ItemsSource = Enum.GetValues(typeof(Stretch));
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
+                childAlignmentCB.SelectedIndex = 1;
                 PathStoryboard.Begin();
             };
         }

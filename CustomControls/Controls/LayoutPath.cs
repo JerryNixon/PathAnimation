@@ -122,6 +122,7 @@ namespace CustomControls.Controls
             CurrentRotationProperty = DependencyProperty.Register(nameof(CurrentRotation), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
             SmoothRotationProperty = DependencyProperty.Register("SmoothRotation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
+            SmoothTranslationProperty = DependencyProperty.Register("SmoothTranslation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
 
             ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -275,8 +276,11 @@ namespace CustomControls.Controls
         public bool StackAtEnd { get { return (bool)GetValue(StackAtEndProperty); } set { SetValue(StackAtEndProperty, value); } }
         public static readonly DependencyProperty StackAtEndProperty;
 
-        public static readonly DependencyProperty SmoothRotationProperty;
         public int SmoothRotation { get { return (int)GetValue(SmoothRotationProperty); } set { SetValue(SmoothRotationProperty, value); } }
+        public static readonly DependencyProperty SmoothRotationProperty;
+
+        public int SmoothTranslation { get { return (int)GetValue(SmoothTranslationProperty); } set { SetValue(SmoothTranslationProperty, value); } }
+        public static readonly DependencyProperty SmoothTranslationProperty;
 
         #endregion
 
@@ -337,10 +341,10 @@ namespace CustomControls.Controls
                 if (transformedOnce && SmoothRotation > 0)
                 {
                     var degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
-                    while (degreesDistance >= 180)
+                    while (degreesDistance > 180)
                     {
-                        if (i == 0)
-                            Debug.WriteLine("Transforming");
+                        //if (i == 0)
+                        //    Debug.WriteLine("Transforming");
                         if (rotationTheta > wrapperTransform.Rotation)
                             wrapperTransform.Rotation = wrapperTransform.Rotation + 360;
                         else
@@ -363,8 +367,8 @@ namespace CustomControls.Controls
                 wrapperTransform.CenterX = childWidth / 2.0;
                 wrapperTransform.CenterY = childHeight / 2.0;
 
-                wrapperTransform.TranslateX = translateX;
-                wrapperTransform.TranslateY = translateY;
+                wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation + translateX) / (SmoothTranslation + 1);
+                wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation + translateY) / (SmoothTranslation + 1);
 
                 if (i == 0)
                     CurrentRotation = rotationTheta;

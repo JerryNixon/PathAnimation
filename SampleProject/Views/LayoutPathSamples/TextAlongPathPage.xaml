@@ -11,12 +11,13 @@
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="16"></Setter>
             <Setter Property="UseLayoutRounding" Value="False"></Setter>
-            <!--<Setter Property="Foreground" Value="DarkSlateGray"></Setter>-->
+            <Setter Property="FontWeight" Value="SemiBold"></Setter>
+            <Setter Property="CacheMode" Value="BitmapCache"></Setter>
         </Style>
         <Storyboard x:Name="Storyboard1">
             <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.Progress)" Storyboard.TargetName="layoutPath">
                 <EasingDoubleKeyFrame KeyTime="0" Value="150" x:Name="startKeyFrame"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:20" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:13" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
