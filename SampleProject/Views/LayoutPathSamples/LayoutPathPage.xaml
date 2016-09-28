@@ -48,7 +48,7 @@
                     <TextBlock Text="{Binding CurrentPosition, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="150"/>
 
                     <TextBlock Text="Current Rotation:" FontWeight="SemiBold"  Margin="5,0" />
-                    <TextBlock Text="{Binding CurrentRotation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="50"/>
+                    <TextBlock Text="{Binding CurrentRotation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="80"/>
 
 
                 </StackPanel>

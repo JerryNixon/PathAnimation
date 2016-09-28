@@ -332,24 +332,20 @@ namespace CustomControls.Controls
 
                 rotationTheta = rotationTheta % 360;
 
-                if (i == 0)
-                    Debug.WriteLine(rotationTheta);
+
 
                 if (transformedOnce && SmoothRotation > 0)
                 {
-                    var prevRot = wrapperTransform.Rotation;
-                    var alt = (rotationTheta + 360) % 360;
-                    if (Math.Abs(alt - prevRot) < Math.Abs(rotationTheta - prevRot))
+                    var degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
+                    while (degreesDistance >= 180)
                     {
-                        rotationTheta = alt;
-                    }
-                    else if (Math.Abs((360 + rotationTheta) - prevRot) < Math.Abs(rotationTheta - prevRot))
-                    {
-                        wrapperTransform.Rotation = prevRot % 360;
-                        if (prevRot > 180 && rotationTheta < 180)
-                        {
-                            wrapperTransform.Rotation = prevRot - 360;
-                        }
+                        if (i == 0)
+                            Debug.WriteLine("Transforming");
+                        if (rotationTheta > wrapperTransform.Rotation)
+                            wrapperTransform.Rotation = wrapperTransform.Rotation + 360;
+                        else
+                            wrapperTransform.Rotation = wrapperTransform.Rotation - 360;
+                        degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
                     }
                     wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation + rotationTheta) / (SmoothRotation + 1);
                 }

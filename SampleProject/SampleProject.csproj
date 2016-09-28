@@ -95,11 +95,14 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LayoutPathPage.xaml.cs">
+    <Compile Include="Views\LayoutPathSamples\LayoutPathPage.xaml.cs">
       <DependentUpon>LayoutPathPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LayoutPathSamples\CirclePathTextSample.xaml.cs">
       <DependentUpon>CirclePathTextSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LayoutPathSamples\TextAlongPathPage.xaml.cs">
+      <DependentUpon>TextAlongPathPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -131,13 +134,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\LayoutPathPage.xaml">
+    <Page Include="Views\LayoutPathSamples\LayoutPathPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LayoutPathSamples\CirclePathTextSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayoutPathSamples\TextAlongPathPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>

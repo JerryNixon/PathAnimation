@@ -22,8 +22,9 @@
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
                     <Button Content="Complete control" Click="LayoutPath_OnClick"/>
                     <Button Content="Rotating sunshines" Click="ButtonBase_OnClick"/>
+                    <Button Content="Text along path" Click="textAlongPath_click"/>
                 </StackPanel>
-                <TextBlock Text="LayoutPath samples" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <TextBlock Text="MotionPath samples" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
                     <Button Content="MotionPath samples" Click="MotionPath_OnClick"/>
                 </StackPanel>

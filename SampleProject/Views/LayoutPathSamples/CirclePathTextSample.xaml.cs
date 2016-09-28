@@ -91,7 +91,7 @@ namespace SampleProject.Views.LayoutPathSamples
 
         private void Back_OnClick(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.GoBack();
         }
     }
 }

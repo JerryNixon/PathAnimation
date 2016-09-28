@@ -36,7 +36,7 @@ namespace SampleProject.Views
 
         private void Back_OnClick(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainPage));
+            this.Frame.GoBack();
         }
 
         private void Add_OnClick(object sender, RoutedEventArgs e)

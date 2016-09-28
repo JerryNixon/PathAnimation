@@ -34,9 +34,13 @@
                         <CompositeTransform TranslateX="-47"/>
                     </Image.RenderTransform>
                 </Image>
-                <Rectangle Width="386" Height="25" Fill="#7F000000" Margin="540,0,0,0" RadiusX="10" RadiusY="5"/>
+                <Rectangle Width="386" Height="25" Fill="#7F000000"  RadiusX="10" RadiusY="5" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <CompositeTransform TranslateX="270"/>
+                    </Rectangle.RenderTransform>
+                </Rectangle>
                 <controls:LayoutPath x:Name="layoutPath" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    ItemsPadding="4.15" Progress="100" OrientToPath="True" MoveVertically="True" PathVisible="False" ChildAlignment="Outer" FlipItems="True"
+                    ItemsPadding="4.15" Progress="100" OrientToPath="True" MoveVertically="True" PathVisible="False" ChildAlignment="Outer" FlipItems="True" SmoothRotation="4"
                 Path="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z">
 
                     <TextBlock Text="Life has its shadows, as well as its sun;"  Foreground="LightGoldenrodYellow" FontWeight="SemiBold"></TextBlock>

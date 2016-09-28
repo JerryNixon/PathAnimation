@@ -27,5 +27,10 @@ namespace SampleProject
         {
             this.Frame.Navigate(typeof(CirclePathTextSample));
         }
+
+        private void textAlongPath_click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(TextAlongPathPage));
+        }
     }
 }
