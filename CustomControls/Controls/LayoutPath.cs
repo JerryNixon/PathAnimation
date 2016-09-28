@@ -121,6 +121,7 @@ namespace CustomControls.Controls
             CurrentLengthProperty = DependencyProperty.Register(nameof(CurrentLength), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
             CurrentRotationProperty = DependencyProperty.Register(nameof(CurrentRotation), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
+            SmoothRotationProperty = DependencyProperty.Register("SmoothRotation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
 
             ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -198,6 +199,9 @@ namespace CustomControls.Controls
 
             ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), (o, e) => transformToProgress(o, e)));
             OrientToPathProperty = DependencyProperty.Register(nameof(OrientToPath), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
+            StackAtStartProperty = DependencyProperty.Register("StackAtStart", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
+            StackAtEndProperty = DependencyProperty.Register("StackAtEnd", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
+
         }
 
         #endregion
@@ -264,12 +268,21 @@ namespace CustomControls.Controls
 
         public bool FlipItems { get { return (bool)GetValue(FlipItemsProperty); } set { SetValue(FlipItemsProperty, value); } }
         public static readonly DependencyProperty FlipItemsProperty;
+
+        public bool StackAtStart { get { return (bool)GetValue(StackAtStartProperty); } set { SetValue(StackAtStartProperty, value); } }
+        public static readonly DependencyProperty StackAtStartProperty;
+
+        public bool StackAtEnd { get { return (bool)GetValue(StackAtEndProperty); } set { SetValue(StackAtEndProperty, value); } }
+        public static readonly DependencyProperty StackAtEndProperty;
+
+        public static readonly DependencyProperty SmoothRotationProperty;
+        public int SmoothRotation { get { return (int)GetValue(SmoothRotationProperty); } set { SetValue(SmoothRotationProperty, value); } }
+
         #endregion
 
         #region methods
 
-
-
+        private bool transformedOnce = false;
         private void TransformToProgress(double progress)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
@@ -280,6 +293,20 @@ namespace CustomControls.Controls
             for (int i = 0; i < children.Count(); i++)
             {
                 double childPercent = progress - (i * ItemsPadding);
+
+                if (childPercent < 0)
+                {
+                    if (StackAtStart)
+                        childPercent = 0;
+                    else
+                        childPercent = 100 + childPercent;
+                }
+                else if (childPercent > 100)
+                {
+                    if (StackAtEnd)
+                        childPercent = 100;
+                }
+
                 Point childPoint;
                 double rotationTheta;
                 ExtendedGeometry.GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
@@ -303,9 +330,33 @@ namespace CustomControls.Controls
                 if (FlipItems)
                     rotationTheta += 180;
 
+                rotationTheta = rotationTheta % 360;
+
                 if (i == 0)
-                    CurrentRotation = rotationTheta;
-                wrapperTransform.Rotation = rotationTheta;
+                    Debug.WriteLine(rotationTheta);
+
+                if (transformedOnce && SmoothRotation > 0)
+                {
+                    var prevRot = wrapperTransform.Rotation;
+                    var alt = (rotationTheta + 360) % 360;
+                    if (Math.Abs(alt - prevRot) < Math.Abs(rotationTheta - prevRot))
+                    {
+                        rotationTheta = alt;
+                    }
+                    else if (Math.Abs((360 + rotationTheta) - prevRot) < Math.Abs(rotationTheta - prevRot))
+                    {
+                        wrapperTransform.Rotation = prevRot % 360;
+                        if (prevRot > 180 && rotationTheta < 180)
+                        {
+                            wrapperTransform.Rotation = prevRot - 360;
+                        }
+                    }
+                    wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation + rotationTheta) / (SmoothRotation + 1);
+                }
+                else
+                {
+                    wrapperTransform.Rotation = rotationTheta;
+                }
 
                 double translateX = childPoint.X - ExtendedGeometry.PathOffset.X;
                 double translateY = childPoint.Y - ExtendedGeometry.PathOffset.Y;
@@ -318,6 +369,9 @@ namespace CustomControls.Controls
 
                 wrapperTransform.TranslateX = translateX;
                 wrapperTransform.TranslateY = translateY;
+
+                if (i == 0)
+                    CurrentRotation = rotationTheta;
             }
 
             if (!children.Any())
@@ -328,6 +382,7 @@ namespace CustomControls.Controls
             }
 
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
+            transformedOnce = true;
         }
 
         #endregion

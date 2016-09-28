@@ -57,7 +57,7 @@ namespace CustomControls.ExtendedSegments
             end.Y = end.Y - start.Y;
             start.Y = start.Y - start.Y;
 
-            double dt = 0;
+            double dt;
 
             if (end.Y != 0)
             {
@@ -67,7 +67,7 @@ namespace CustomControls.ExtendedSegments
             {
                 if (end.X > 0)
                     return 0;
-                return -180;
+                return 180;
             }
 
             var res = (Math.Atan(dt) * (180 / Math.PI));
@@ -77,7 +77,7 @@ namespace CustomControls.ExtendedSegments
             }
             else
             {
-                return res - 180;
+                return res + 180;
             }
         }
     }

@@ -16,8 +16,8 @@
         </Style>
         <Storyboard x:Name="PathStoryboard">
             <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.Progress)" Storyboard.TargetName="LayoutPath1" RepeatBehavior="Forever">
-                <EasingDoubleKeyFrame KeyTime="0" Value="100"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:8" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:20" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
@@ -61,7 +61,7 @@
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" ChildAlignment="Center"
             Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="30" OrientToPath="True" Stretch="None"  PathVisible="True" 
-                                 ItemsPadding="3" >
+                                 ItemsPadding="3" SmoothRotation="7">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -102,6 +102,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Slider Grid.Column="0"
                             Header="Progress" Value="{Binding Progress, ElementName=LayoutPath1, Mode=TwoWay}" 
@@ -109,6 +110,9 @@
                     <Slider Grid.Column="1"
                             Header="Items Padding" Value="{Binding ItemsPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="6" SmallChange="0.0001"  StepFrequency="0.01" Margin="5,0"/>
+                    <Slider Grid.Column="2"
+                            Header="Smooth Rotation" Value="{Binding SmoothRotation, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Minimum="0" Maximum="30" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
 
                 </Grid>
                 <Grid>
@@ -121,9 +125,37 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <ComboBox  SelectedValue="{Binding Stretch, ConverterParameter=Stretch, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+
+
+                        <CheckBox Grid.Column="0" IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
+                               Margin="0,0,5,0"/>
+
+                        <CheckBox Grid.Column="1"  IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
+                               Margin="5,0"/>
+
+                        <CheckBox Grid.Column="2"  IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
+                               Margin="5,0"/>
+                        <CheckBox Grid.Column="3"  IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
+                               Margin="5,0"/>
+
+                        <CheckBox Grid.Column="4"  IsChecked="{Binding StackAtStart, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtStart" Margin="5,0"/>
+                        <CheckBox Grid.Column="5"  IsChecked="{Binding StackAtEnd, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtEnd" Margin="5,0"/>
+
+                        <ComboBox Grid.Column="6" Header="Alignment"   SelectedValue="{Binding ChildAlignment, ConverterParameter=ChildAlignment, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <enums:ChildAlignment>Inner</enums:ChildAlignment>
+                            <enums:ChildAlignment>Center</enums:ChildAlignment>
+                            <enums:ChildAlignment>Outer</enums:ChildAlignment>
+                        </ComboBox>
+                        <ComboBox Grid.Column="7" Header="Stretch"  SelectedValue="{Binding Stretch, ConverterParameter=Stretch, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
@@ -133,27 +165,6 @@
                             <Stretch>Fill</Stretch>
                             <Stretch>Uniform</Stretch>
                             <Stretch>UniformToFill</Stretch>
-                        </ComboBox>
-
-                        <CheckBox Grid.Column="1" IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
-                               Margin="0,0,5,0"/>
-
-                        <CheckBox Grid.Column="2"  IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
-                               Margin="5,0"/>
-
-                        <CheckBox Grid.Column="3"  IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
-                               Margin="5,0"/>
-                        <CheckBox Grid.Column="4"  IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
-                               Margin="5,0"/>
-                        <ComboBox Grid.Column="5"  SelectedValue="{Binding ChildAlignment, ConverterParameter=ChildAlignment, Converter={StaticResource EnumStringConverter}, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                            <enums:ChildAlignment>Inner</enums:ChildAlignment>
-                            <enums:ChildAlignment>Center</enums:ChildAlignment>
-                            <enums:ChildAlignment>Outer</enums:ChildAlignment>
                         </ComboBox>
                     </Grid>
                 </Grid>
@@ -165,19 +176,9 @@
                     <VariableSizedWrapGrid Orientation="Horizontal">
                         <Button Content="add a circle" Click="Add_OnClick"/>
                         <Button Content="remove first element" Click="RemoveFirst_OnClick"/>
-                        <!--<CheckBox IsChecked="{Binding Stretch,ElementName=layoutPath2,Mode=TwoWay}" Content="Stretch" Margin="5,0"></CheckBox>-->
-
-
                     </VariableSizedWrapGrid>
                 </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>
 </Page>
-
-
-
-
-
-
-
