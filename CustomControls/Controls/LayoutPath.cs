@@ -301,13 +301,16 @@ namespace CustomControls.Controls
         private bool transformedOnce = false;
         private double previousProgres = 0;
         private double progressDistanceAVG = 1;
+        private object progressLocker = new object();
         private void TransformToProgress(double progress)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
                 return;
 
+
+
             var progDist = Math.Abs(progress - previousProgres);
-            if (progDist > 50)
+            if (progDist > 50 || progDist == 0)
                 progDist = progressDistanceAVG;
 
             var children = CHILDREN.Children.ToArray();
@@ -356,7 +359,7 @@ namespace CustomControls.Controls
 
 
 
-                if (transformedOnce && SmoothRotation > 0)
+                if (transformedOnce && SmoothRotation > 0 && progDist > 0)
                 {
                     var degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
                     while (degreesDistance > 180)
@@ -383,7 +386,7 @@ namespace CustomControls.Controls
                 wrapperTransform.CenterX = childWidth / 2.0;
                 wrapperTransform.CenterY = childHeight / 2.0;
 
-                if (transformedOnce && SmoothTranslation > 0)
+                if (transformedOnce && SmoothTranslation > 0 && progDist > 0)
                 {
                     wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation * 0.2 / progDist + translateX) / (SmoothTranslation * 0.2 / progDist + 1);
                     wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation * 0.2 / progDist + translateY) / (SmoothTranslation * 0.2 / progDist + 1);
