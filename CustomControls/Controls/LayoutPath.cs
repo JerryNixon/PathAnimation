@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Security.Cryptography.Core;
@@ -24,7 +25,7 @@ namespace CustomControls.Controls
     {
         #region variables
         /// <summary>
-        /// A grid containing all items that are animated along path
+        /// Contains all items that are animated along path
         /// </summary>
         private Grid CHILDREN;
 
@@ -39,12 +40,14 @@ namespace CustomControls.Controls
         private Path PATH;
 
         /// <summary>
-        /// Children that will be animated along <see cref="Path"/>
+        /// Children that are animated along <see cref="Path"/>
         /// </summary>
         public IList<UIElement> Children => _children;
         private readonly ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
 
         public ExtendedPathGeometry ExtendedGeometry { get; private set; }
+
+        private readonly object _collectionChangedLocker = new object();
 
         #endregion
 
@@ -79,31 +82,40 @@ namespace CustomControls.Controls
                 CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically, FlipItems));
             }
 
-            _children.CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
+            _children.CollectionChanged += async delegate (object sender, NotifyCollectionChangedEventArgs args)
             {
-                if (args.NewItems != null)
+                lock (_collectionChangedLocker)
                 {
-                    foreach (var child in args.NewItems)
+                    if (args.NewItems != null)
                     {
-                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically, FlipItems));
+                        foreach (var child in args.NewItems)
+                        {
+                            var wrapper =
+                                CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
+                            if (wrapper == null)
+                                CHILDREN.Children.Insert(args.NewStartingIndex,
+                                    new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically,
+                                        FlipItems));
+                        }
                     }
-                }
 
-                if (args.OldItems != null)
-                {
-                    foreach (var child in args.OldItems)
+                    if (args.OldItems != null)
                     {
-                        var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
-                        if (wrapper != null)
-                            CHILDREN.Children.Remove(wrapper);
+                        foreach (var child in args.OldItems)
+                        {
+                            var wrapper =
+                                CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
+                            if (wrapper != null)
+                                CHILDREN.Children.Remove(wrapper);
+                        }
                     }
                 }
+                await Task.Delay(1);
                 TransformToProgress(Progress);
             };
 
             base.OnApplyTemplate();
         }
-
 
         public LayoutPath()
         {
@@ -287,10 +299,16 @@ namespace CustomControls.Controls
         #region methods
 
         private bool transformedOnce = false;
+        private double previousProgres = 0;
+        private double progressDistanceAVG = 1;
         private void TransformToProgress(double progress)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
                 return;
+
+            var progDist = Math.Abs(progress - previousProgres);
+            if (progDist > 50)
+                progDist = progressDistanceAVG;
 
             var children = CHILDREN.Children.ToArray();
 
@@ -343,15 +361,13 @@ namespace CustomControls.Controls
                     var degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
                     while (degreesDistance > 180)
                     {
-                        //if (i == 0)
-                        //    Debug.WriteLine("Transforming");
                         if (rotationTheta > wrapperTransform.Rotation)
                             wrapperTransform.Rotation = wrapperTransform.Rotation + 360;
                         else
                             wrapperTransform.Rotation = wrapperTransform.Rotation - 360;
                         degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
                     }
-                    wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation + rotationTheta) / (SmoothRotation + 1);
+                    wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation * 0.2 + rotationTheta * progDist) / (SmoothRotation * 0.2 + progDist);
                 }
                 else
                 {
@@ -367,10 +383,10 @@ namespace CustomControls.Controls
                 wrapperTransform.CenterX = childWidth / 2.0;
                 wrapperTransform.CenterY = childHeight / 2.0;
 
-                if (SmoothTranslation > 0)
+                if (transformedOnce && SmoothTranslation > 0)
                 {
-                    wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation + translateX) / (SmoothTranslation + 1);
-                    wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation + translateY) / (SmoothTranslation + 1);
+                    wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation * 0.2 / progDist + translateX) / (SmoothTranslation * 0.2 / progDist + 1);
+                    wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation * 0.2 / progDist + translateY) / (SmoothTranslation * 0.2 / progDist + 1);
                 }
                 else
                 {
@@ -391,6 +407,8 @@ namespace CustomControls.Controls
 
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
             transformedOnce = true;
+            previousProgres = progress;
+            progressDistanceAVG = (progressDistanceAVG + progDist) / 2.0;
         }
 
         #endregion

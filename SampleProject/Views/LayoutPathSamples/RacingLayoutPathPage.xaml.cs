@@ -37,11 +37,11 @@ namespace SampleProject.Views.LayoutPathSamples
 
 
             Loaded += delegate (object sender, RoutedEventArgs args)
-             {
-                 layoutPath.SmoothRotation = 12;
-                 layoutPath.SmoothTranslation = 14;
-                 timer = new Timer(Callback, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000 / 60.0));
-             };
+            {
+                layoutPath.SmoothRotation = 25;
+                mapPath.SmoothTranslation = layoutPath.SmoothTranslation = 28;
+                timer = new Timer(Callback, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000 / 60.0));
+            };
 
         }
 
@@ -57,12 +57,9 @@ namespace SampleProject.Views.LayoutPathSamples
 
         private void speedUp(object sender, RoutedEventArgs e)
         {
-            if (layoutPath.SmoothTranslation == 6)
+            if (progressChange > 1)
                 return;
-
             progressChange = progressChange + 0.05;
-            layoutPath.SmoothTranslation--;
-            layoutPath.SmoothRotation--;
         }
 
         private void speedDown(object sender, RoutedEventArgs e)
@@ -71,8 +68,6 @@ namespace SampleProject.Views.LayoutPathSamples
                 return;
 
             progressChange = progressChange - 0.05;
-            layoutPath.SmoothTranslation++;
-            layoutPath.SmoothRotation++;
         }
 
         private void Back_OnClick(object sender, RoutedEventArgs e)

@@ -54,12 +54,14 @@ namespace SampleProject.Views
                 LayoutPath1.Children.RemoveAt(0);
         }
 
+        private bool paused = false;
         private void StartPauseAnimation(object sender, RoutedEventArgs e)
         {
-            if (PathStoryboard.GetCurrentState() != ClockState.Active)
-                PathStoryboard.Begin();
+            if (paused)
+                PathStoryboard.Resume();
             else
-                PathStoryboard.Stop();
+                PathStoryboard.Pause();
+            paused = !paused;
         }
     }
 }
