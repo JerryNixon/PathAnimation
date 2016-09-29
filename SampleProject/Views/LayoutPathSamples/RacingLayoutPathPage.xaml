@@ -1,0 +1,305 @@
+﻿<Page
+    x:Class="SampleProject.Views.LayoutPathSamples.RacingLayoutPathPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleProject.Views.LayoutPathSamples"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CustomControls.Controls"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <x:String x:Key="RoadGeometry">M100.937,247.878 C132.794,165.049 190.565,126.614 260.863,103.768 C331.16,80.9216 471.755,145.947 557.87,172.308 C643.983,198.669 716.802,132.015 853.12,89.7092 C904.085,73.8921 993.711,63.3465 1055.22,175.822 C1116.73,288.299 1071.04,332.235 1053.47,362.111 C1017.43,423.394 933.963,437.681 860.148,402.533 C786.336,367.384 724.826,420.107 714.282,464.043 C703.737,507.979 714.282,573.005 658.044,608.152 C601.806,643.302 515.691,655.603 408.488,632.757 C301.286,609.91 104.997,564.217 90.3915,444.711 C84.1193,393.385 65.7874,339.265 100.937,247.878 z</x:String>
+    </Page.Resources>
+
+    <Grid Background="#FF395339">
+        <Viewbox>
+            <Border Background="DimGray" BorderThickness="1" BorderBrush="#7F000000" Margin="40">
+                <Border.Projection>
+                    <PlaneProjection RotationX="-20"/>
+                </Border.Projection>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="1166" Height="724" Margin="25">
+
+
+                    <Path Data="{Binding Source={StaticResource RoadGeometry}}" Fill="#FF664D37" 
+               Stroke="DarkGray" UseLayoutRounding="False" StrokeThickness="160"/>
+                    <Path Data="{Binding Source={StaticResource RoadGeometry}}" 
+               Stroke="#FF5F5F5F" UseLayoutRounding="False" StrokeThickness="140"/>
+                    <Path Data="{Binding Source={StaticResource RoadGeometry}}" 
+               Stroke="#FF9C9C9C" UseLayoutRounding="False" StrokeThickness="2"/>
+
+                    <controls:LayoutPath x:Name="layoutPath" Path="{Binding Source={StaticResource RoadGeometry}}" 
+                                         OrientToPath="True" MoveVertically="True" ChildAlignment="Center">
+                        <Viewbox Width="40">
+                            <!-- car taken from http://www.codeproject.com/Articles/132437/WPF-Grand-Prix-->
+                            <Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20"/>
+                                        <ColumnDefinition Width="14" />
+                                        <ColumnDefinition Width="32" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="15" />
+                                        <ColumnDefinition Width="8" />
+                                        <ColumnDefinition Width="33" />
+                                        <ColumnDefinition Width="14"/>
+                                        <ColumnDefinition Width="20" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="18"/>
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="24" />
+                                        <RowDefinition Height="11" />
+                                        <RowDefinition Height="60*" />
+                                        <RowDefinition Height="59" />
+                                        <RowDefinition Height="64" />
+                                        <RowDefinition Height="86" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="26" />
+                                        <RowDefinition Height="31"/>
+                                        <RowDefinition Height="29" />
+                                    </Grid.RowDefinitions>
+                                    <Rectangle Grid.Row="9" Grid.ColumnSpan="2" Grid.RowSpan="2" RadiusX="10" RadiusY="10" Margin="0,10,0,-10">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="Black"/>
+                                                <GradientStop Offset="0.2" Color="Gray"/>
+                                                <GradientStop Offset="0.5" Color="Gray"/>
+                                                <GradientStop Offset="1.0" Color="Black"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <Rectangle Grid.Column="7" Grid.Row="9" Grid.ColumnSpan="2" Grid.RowSpan="2" RadiusX="10" RadiusY="10" Margin="0,10,0,-10">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="Black"/>
+                                                <GradientStop Offset="0.2" Color="Gray"/>
+                                                <GradientStop Offset="0.5" Color="Gray"/>
+                                                <GradientStop Offset="1.0" Color="Black"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <!--FRONT AXIS 1-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Stroke="Gray" StrokeThickness="1" Data="M35,99 L69,92 95,92 129,99 129,106 95,106 69,106 35,105 35,99 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--FRONT AXIS 2-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Stroke="Gray" StrokeThickness="1" Data="M35,99 L35,108 68,109 129,108 129,116 68,116 35,113 35,108 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--FRONT AXIS 3-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Stroke="Gray" StrokeThickness="1" Data="M35,99 L35,107 67,128 97,128 129,107 129,115 98,140 66,140 35,115 35,107 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--BODY FRAMEWORK-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Data="M38,390 L37,357 31,348 L20,346 19,231 30,219 52,212 62,184 75,4 L89,4 102,184 112,212 134,219 145,231 144,346 133,348 126,357 126,390 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop Offset="0.5" Color="#FFFFFF"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--REAR AXIS-->
+                                    <Rectangle Grid.Column="2" Grid.Row="10" Grid.ColumnSpan="5" Margin="5,3,5,22">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#000000"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <Rectangle Grid.Column="2" Grid.Row="10" Grid.ColumnSpan="5" Margin="5,3,30,22">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform Angle="-20"/>
+                                        </Rectangle.RenderTransform>
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#000000"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <Rectangle Grid.Column="2" Grid.Row="10" Grid.ColumnSpan="5" Margin="30,13,8,12">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform CenterX="85" Angle="20"/>
+                                        </Rectangle.RenderTransform>
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#000000"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <Rectangle Grid.Column="2" Grid.Row="10" Grid.ColumnSpan="5" Margin="5,3,5,22">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform Angle="-45"/>
+                                        </Rectangle.RenderTransform>
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#000000"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <Rectangle Grid.Column="2" Grid.Row="10" Grid.ColumnSpan="5" Margin="5,3,5,22">
+                                        <Rectangle.RenderTransform>
+                                            <RotateTransform CenterX="85" Angle="45"/>
+                                        </Rectangle.RenderTransform>
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#000000"/>
+                                                <GradientStop Offset="0.5" Color="#808080"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <!--FRONT WING-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Stroke="DarkGray" StrokeThickness="2" Data="M2,18 L160,18 160,66 120,66 105,40 58,40 44,66 2,66 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop Offset="1.0" Color="#808080"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--MIRRORS-->
+                                    <Path x:Name="mirrors" Grid.ColumnSpan="9" Grid.RowSpan="12" Data="M36,195 55,193 55,199 108,199 108,193 126,195 126,205 108,205 55,205 36,205" Fill="Red"/>
+
+                                    <!--BODY-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Data="M71,380 L20,253 19,231 30,219 52,212 56,201 47,203 48,200 57,198 62,184 75,4 L89,4 102,184 107,198 116,200 117,203 108,201 112,212 134,219 145,231 144,253 93,380 71,380 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop x:Name="bodyColorGradient1" Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop x:Name="bodyColorGradient2" Offset="0.2" Color="#FF0000"/>
+                                                <GradientStop x:Name="bodyColorGradient3" Offset="0.5" Color="#800000"/>
+                                                <GradientStop x:Name="bodyColorGradient4" Offset="0.8" Color="#FF0000"/>
+                                                <GradientStop x:Name="bodyColorGradient5" Offset="1.0" Color="#FFFFFF"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--REAR WING-->
+                                    <Path Grid.ColumnSpan="9" Grid.RowSpan="12" Stroke="DarkGray" StrokeThickness="2" Data="M49,430 L49,380 114,380 114,430 114,410 49,410 49,430 z">
+                                        <Path.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Offset="0.0" Color="#FFFFFF"/>
+                                                <GradientStop Offset="1.0" Color="#808080"/>
+                                            </LinearGradientBrush>
+                                        </Path.Fill>
+                                    </Path>
+
+                                    <!--Cockpit-->
+                                    <Rectangle Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="1" RadiusX="30" RadiusY="30">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush>
+                                                <GradientStop Offset="0.0" Color="#000000"/>
+                                                <GradientStop Offset="0.5" Color="#000000"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                    <!--Helmet-->
+                                    <Rectangle Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="1" RadiusX="30" RadiusY="30" Margin="-5,10,-5,10">
+                                        <Rectangle.Fill>
+                                            <SolidColorBrush Color="#D0D000"></SolidColorBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+                                    <!--Visor-->
+                                    <Rectangle Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="1" RadiusX="3" RadiusY="3" Margin="-0,15,0,30">
+                                        <Rectangle.Fill>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Offset="0.0" Color="#808080"/>
+                                                <GradientStop Offset="0.5" Color="#202020"/>
+                                                <GradientStop Offset="1.0" Color="#000000"/>
+                                            </LinearGradientBrush>
+                                        </Rectangle.Fill>
+                                    </Rectangle>
+
+                                </Grid>
+
+                                <Rectangle Width="29" Height="50" RadiusX="10" RadiusY="10" Margin="2,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Rectangle.RenderTransform>
+                                        <RotateTransform x:Name="LeftWheelRotation" CenterX="36" CenterY="29" Angle="0"/>
+                                    </Rectangle.RenderTransform>
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Offset="0.0" Color="Black"/>
+                                            <GradientStop Offset="0.2" Color="Gray"/>
+                                            <GradientStop Offset="0.5" Color="Gray"/>
+                                            <GradientStop Offset="1.0" Color="Black"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                                <Rectangle Width="29" Height="50" RadiusX="10" RadiusY="10" Margin="133,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <Rectangle.RenderTransform>
+                                        <RotateTransform x:Name="RightWheelRotation" CenterX="0" CenterY="29" Angle="0"/>
+                                    </Rectangle.RenderTransform>
+                                    <Rectangle.Fill>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Offset="0.0" Color="Black"/>
+                                            <GradientStop Offset="0.2" Color="Gray"/>
+                                            <GradientStop Offset="0.5" Color="Gray"/>
+                                            <GradientStop Offset="1.0" Color="Black"/>
+                                        </LinearGradientBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Grid>
+                        </Viewbox>
+                    </controls:LayoutPath>
+                  
+                </Grid>
+            </Border>
+        </Viewbox>
+        <Border Width="250" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="20" Background="#7F000000" Padding="20" BorderThickness="1" BorderBrush="#7FFFFFFF">
+            <Grid >
+                <Path Data="{Binding Source={StaticResource RoadGeometry}}" Stretch="Uniform" Stroke="#FF9C9C9C" UseLayoutRounding="False" StrokeThickness="3" Fill="#4C8D6849"/>
+                <controls:LayoutPath 
+                Path="{Binding Source={StaticResource RoadGeometry}}" Stretch="Uniform" Progress="{Binding Progress, ElementName=layoutPath}" PathVisible="False">
+                    <Rectangle Width="50" Height="50" Fill="#FFD64444" RadiusY="50" RadiusX="50"></Rectangle>
+                </controls:LayoutPath>
+            </Grid>
+        </Border>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
+            <TextBlock Text="Speed" Foreground="White"/>
+            <Button Content="+" Width="100"  Foreground="White" Click="speedUp"/>
+            <Button Content="-" Width="100"  Foreground="White"  Click="speedDown"/>
+        </StackPanel>
+        <Button Content="Back" Click="Back_OnClick" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Foreground="Wheat"/>
+    </Grid>
+</Page>

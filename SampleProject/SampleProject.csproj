@@ -101,6 +101,9 @@
     <Compile Include="Views\LayoutPathSamples\CirclePathTextSample.xaml.cs">
       <DependentUpon>CirclePathTextSample.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LayoutPathSamples\RacingLayoutPathPage.xaml.cs">
+      <DependentUpon>RacingLayoutPathPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LayoutPathSamples\TextAlongPathPage.xaml.cs">
       <DependentUpon>TextAlongPathPage.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
     <Page Include="Views\LayoutPathSamples\CirclePathTextSample.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LayoutPathSamples\RacingLayoutPathPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\LayoutPathSamples\TextAlongPathPage.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -32,5 +32,10 @@ namespace SampleProject
         {
             this.Frame.Navigate(typeof(TextAlongPathPage));
         }
+
+        private void racingPath_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(RacingLayoutPathPage));
+        }
     }
 }

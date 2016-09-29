@@ -367,8 +367,16 @@ namespace CustomControls.Controls
                 wrapperTransform.CenterX = childWidth / 2.0;
                 wrapperTransform.CenterY = childHeight / 2.0;
 
-                wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation + translateX) / (SmoothTranslation + 1);
-                wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation + translateY) / (SmoothTranslation + 1);
+                if (SmoothTranslation > 0)
+                {
+                    wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation + translateX) / (SmoothTranslation + 1);
+                    wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation + translateY) / (SmoothTranslation + 1);
+                }
+                else
+                {
+                    wrapperTransform.TranslateX = translateX;
+                    wrapperTransform.TranslateY = translateY;
+                }
 
                 if (i == 0)
                     CurrentRotation = rotationTheta;
