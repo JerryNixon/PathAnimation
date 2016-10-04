@@ -39,29 +39,32 @@ namespace CustomControls.Controls
             }
             else
             {
+                int flipValue = 1;
+                if (flip)
+                    flipValue = -1;
                 var child = (FrameworkElement)Content;
                 if (!moveVertically)
                 {
                     translate.X = 0;
-                    if (alingment == ChildAlignment.Outer && !flip)
+                    if (alingment == ChildAlignment.Outer)
                     {
-                        translate.Y = -child.ActualHeight / 2.0;
+                        translate.Y = child.ActualHeight * flipValue * -1 / 2.0;
                     }
                     else
                     {
-                        translate.Y = +child.ActualHeight / 2.0;
+                        translate.Y = child.ActualHeight * flipValue / 2.0;
                     }
                 }
                 else
                 {
                     translate.Y = 0;
-                    if (alingment == ChildAlignment.Outer && !flip)
+                    if (alingment == ChildAlignment.Outer)
                     {
-                        translate.X = -child.ActualWidth / 2.0;
+                        translate.X = child.ActualWidth * flipValue * -1 / 2.0;
                     }
                     else
                     {
-                        translate.X = +child.ActualWidth / 2.0;
+                        translate.X = child.ActualWidth * flipValue / 2.0;
                     }
                 }
 
