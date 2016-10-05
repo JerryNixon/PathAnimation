@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 using CustomControls.Enums;
 using CustomControls.ExtendedSegments;
@@ -138,6 +139,7 @@ namespace CustomControls.Controls
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
             SmoothRotationProperty = DependencyProperty.Register("SmoothRotation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
             SmoothTranslationProperty = DependencyProperty.Register("SmoothTranslation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
+            ChildEasingFunctionProperty = DependencyProperty.Register("EasingFunctionBase", typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase)));
 
             ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -176,8 +178,6 @@ namespace CustomControls.Controls
                        }
                    }
                }));
-
-
 
             Action<DependencyObject, DependencyPropertyChangedEventArgs> transformToProgress = delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
             {
@@ -297,23 +297,18 @@ namespace CustomControls.Controls
         public int SmoothTranslation { get { return (int)GetValue(SmoothTranslationProperty); } set { SetValue(SmoothTranslationProperty, value); } }
         public static readonly DependencyProperty SmoothTranslationProperty;
 
+        public EasingFunctionBase ChildEasingFunction { get { return (EasingFunctionBase)GetValue(ChildEasingFunctionProperty); } set { SetValue(ChildEasingFunctionProperty, value); } }
+        public static readonly DependencyProperty ChildEasingFunctionProperty;
+
         #endregion
 
         #region methods
 
-        private bool transformedOnce = false;
-        private double previousProgres = 0;
-        private double progressDistanceAVG = 1;
+
         private void TransformToProgress(double progress)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
                 return;
-
-
-
-            var progDist = Math.Abs(progress - previousProgres);
-            if (progDist > 50 || progDist == 0)
-                progDist = progressDistanceAVG;
 
             var children = CHILDREN.Children.ToArray();
 
@@ -332,6 +327,14 @@ namespace CustomControls.Controls
                 {
                     if (StackAtEnd)
                         childPercent = 100;
+                    else
+                        childPercent = childPercent - 100;
+                }
+
+
+                if (ChildEasingFunction != null)
+                {
+                    childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
                 }
 
                 Point childPoint;
@@ -343,7 +346,7 @@ namespace CustomControls.Controls
 
                 var wrapper = (LayoutPathChildWrapper)children[i];
                 var wrappedChild = wrapper.Content as FrameworkElement;
-               
+
                 var childWidth = wrappedChild.ActualWidth;
                 var childHeight = wrappedChild.ActualHeight;
 
@@ -360,9 +363,13 @@ namespace CustomControls.Controls
 
                 rotationTheta = rotationTheta % 360;
 
+                wrapper.SetProgress(childPercent);
 
 
-                if (transformedOnce && SmoothRotation > 0 && progDist > 0)
+
+
+
+                if (!double.IsNaN(wrapper.ProgressDistance) && SmoothRotation > 0 && wrapper.ProgressDistance > 0)
                 {
                     var degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
                     while (degreesDistance > 180)
@@ -373,7 +380,7 @@ namespace CustomControls.Controls
                             wrapperTransform.Rotation = wrapperTransform.Rotation - 360;
                         degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
                     }
-                    wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation * 0.2 + rotationTheta * progDist) / (SmoothRotation * 0.2 + progDist);
+                    wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation * 0.2 + rotationTheta * wrapper.ProgressDistance) / (SmoothRotation * 0.2 + wrapper.ProgressDistance);
                 }
                 else
                 {
@@ -389,10 +396,10 @@ namespace CustomControls.Controls
                 wrapperTransform.CenterX = childWidth / 2.0;
                 wrapperTransform.CenterY = childHeight / 2.0;
 
-                if (transformedOnce && SmoothTranslation > 0 && progDist > 0)
+                if (!double.IsNaN(wrapper.ProgressDistance) && SmoothTranslation > 0 && wrapper.ProgressDistance > 0)
                 {
-                    wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation * 0.2 / progDist + translateX) / (SmoothTranslation * 0.2 / progDist + 1);
-                    wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation * 0.2 / progDist + translateY) / (SmoothTranslation * 0.2 / progDist + 1);
+                    wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateX) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
+                    wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateY) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
                 }
                 else
                 {
@@ -412,9 +419,6 @@ namespace CustomControls.Controls
             }
 
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
-            transformedOnce = true;
-            previousProgres = progress;
-            progressDistanceAVG = (progressDistanceAVG + progDist) / 2.0;
         }
 
         #endregion

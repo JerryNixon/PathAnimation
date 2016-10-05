@@ -14,6 +14,23 @@ namespace CustomControls.Controls
     {
         public ContentControl ALINGMENT { get; set; }
 
+        public double CurrentProgress { get; private set; } = double.NaN;
+        public double ProgressDistance { get; private set; } = double.NaN;
+        public double ProgressDistanceAVG { get; private set; } 
+
+        public void SetProgress(double value)
+        {
+            if (!double.IsNaN(CurrentProgress))
+            {
+                ProgressDistance = Math.Abs(value - CurrentProgress);
+                if (ProgressDistance > 50 || ProgressDistance == 0)
+                    ProgressDistance = ProgressDistanceAVG;
+                else
+                    ProgressDistanceAVG = (ProgressDistanceAVG + ProgressDistance) / 2.0;
+            }
+            CurrentProgress = value;
+        }
+
         protected override void OnApplyTemplate()
         {
             ALINGMENT = GetTemplateChild(nameof(ALINGMENT)) as ContentControl;
@@ -73,6 +90,7 @@ namespace CustomControls.Controls
 
             }
         }
+
 
     }
 }

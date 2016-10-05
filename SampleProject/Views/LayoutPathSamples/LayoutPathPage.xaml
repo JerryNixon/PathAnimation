@@ -68,6 +68,9 @@
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
             Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="0" OrientToPath="True" Stretch="None"  PathVisible="True" 
                                  ItemsPadding="3" SmoothRotation="4" SmoothTranslation="4">
+                    <controls:LayoutPath.ChildEasingFunction>
+                        <CubicEase EasingMode="EaseInOut"/>
+                    </controls:LayoutPath.ChildEasingFunction>
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
