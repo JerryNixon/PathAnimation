@@ -42,10 +42,15 @@ namespace SampleProject.Views
             TestMotion.Reset();
         }
 
-        private void ButtonBaseMove_OnClick(object sender, RoutedEventArgs e)
+        private void RangeBase_OnValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            TestMotion.Margin = new Thickness(200, 0, 0, 0);
+            if (TestMotion != null && e.OldValue != 0)
+                TestMotion.Duration = TimeSpan.FromSeconds(e.NewValue);
         }
 
+        private void Back_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
     }
 }

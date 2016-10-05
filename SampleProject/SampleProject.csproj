@@ -95,6 +95,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolVisibilityConverter.cs" />
+    <Compile Include="Converters\EnumStringConverter.cs" />
+    <Compile Include="Converters\PointStringConverter.cs" />
     <Compile Include="Views\LayoutPathSamples\LayoutPathPage.xaml.cs">
       <DependentUpon>LayoutPathPage.xaml</DependentUpon>
     </Compile>

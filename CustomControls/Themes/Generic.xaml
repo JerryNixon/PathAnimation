@@ -8,21 +8,27 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:MotionPath">
-                    <!--<Viewbox x:Name="VIEW_BOX" Stretch="None">-->
-                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="LAYOUT_ROOT">
-                        <Border x:Name="CONTENT_WRAPPER" >
-                            <Border.RenderTransform>
-                                <CompositeTransform/>
-                            </Border.RenderTransform>
-                            <ContentPresenter Content="{TemplateBinding Content}"  />
-                        </Border>
-                        <Path IsHitTestVisible="False" Stroke="White" StrokeThickness="1" x:Name="PATH">
-                            <Path.Data>
-                                <LineGeometry x:Name="LINE_GEOMETRY" StartPoint="0,0" EndPoint="50,50"></LineGeometry>
-                            </Path.Data>
-                        </Path>
+                    <Grid>
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="POINT_GRID" >
+                            <Border x:Name="CONTENT_WRAPPER">
+                                <Border.RenderTransform>
+                                    <CompositeTransform/>
+                                </Border.RenderTransform>
+                                <ContentPresenter x:Name="CONTENT_PRESENTER" Content="{TemplateBinding Content}"  />
+                            </Border>
+                            <Path IsHitTestVisible="False" Stroke="White" StrokeThickness="1" x:Name="PATH">
+                                <Path.Data>
+                                    <LineGeometry x:Name="LINE_GEOMETRY" StartPoint="0,0" EndPoint="50,50"></LineGeometry>
+                                </Path.Data>
+                            </Path>
+                            <Border Background="#7F000000" VerticalAlignment="Center" x:Name="VIEWBOX_WARNING" Visibility="Collapsed">
+                                <TextBlock Text="ViewBox detected. Please specify control width and height." Foreground="Crimson" />
+                            </Border>
+                        </Grid>
+                        <local:LayoutPath x:Name="LAYOUT_PATH" Visibility="Collapsed" PathVisible="True">
+                            <!--<ContentPresenter Content="{TemplateBinding Content}"  />-->
+                        </local:LayoutPath>
                     </Grid>
-                    <!--</Viewbox>-->
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

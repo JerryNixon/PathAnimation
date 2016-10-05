@@ -1,5 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.Foundation;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using SampleProject.Views;
 using SampleProject.Views.LayoutPathSamples;
 
@@ -37,5 +39,7 @@ namespace SampleProject
         {
             this.Frame.Navigate(typeof(RacingLayoutPathPage));
         }
+
+       
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation;
@@ -12,6 +13,7 @@ using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
+using CustomControls.Converters;
 using CustomControls.ExtendedSegments;
 using LayoutPath.Enums;
 
@@ -21,9 +23,12 @@ namespace CustomControls.Controls
     {
         #region private members
         private Border CONTENT_WRAPPER;
+        private Border VIEWBOX_WARNING;
         private LineGeometry LINE_GEOMETRY;
-        private Grid LAYOUT_ROOT;
+        private Grid POINT_GRID;
         private Path PATH;
+        private LayoutPath LAYOUT_PATH;
+        private ContentPresenter CONTENT_PRESENTER;
 
         private ExtendedLineSegment _movementLine;
         private CompositeTransform _contentTransform;
@@ -31,14 +36,61 @@ namespace CustomControls.Controls
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly Storyboard _storyboard = new Storyboard();
+
         #endregion
+
+        public new double Width
+        {
+            get { return base.Width; }
+            set
+            {
+                base.Width = value;
+                ValidateWidthHeight();
+            }
+        }
+
+        public new double Height
+        {
+            get { return base.Height; }
+            set
+            {
+                base.Height = value;
+                ValidateWidthHeight();
+            }
+        }
+
+        private void ValidateWidthHeight()
+        {
+            if (VIEWBOX_WARNING == null)
+                return;
+
+            bool found = false;
+            if (double.IsNaN(Width) || double.IsNaN(Height))
+            {
+                var parent = VisualTreeHelper.GetParent(this);
+
+                while (parent != null)
+                {
+                    if (parent is Viewbox)
+                    {
+                        found = true;
+                        break;
+                    }
+                    parent = VisualTreeHelper.GetParent(parent);
+                }
+            }
+            VIEWBOX_WARNING.Visibility = found ? Visibility.Visible : Visibility.Collapsed;
+        }
 
         protected override void OnApplyTemplate()
         {
             CONTENT_WRAPPER = GetTemplateChild(nameof(CONTENT_WRAPPER)) as Border;
+            VIEWBOX_WARNING = GetTemplateChild(nameof(VIEWBOX_WARNING)) as Border;
             LINE_GEOMETRY = GetTemplateChild(nameof(LINE_GEOMETRY)) as LineGeometry;
-            LAYOUT_ROOT = GetTemplateChild(nameof(LAYOUT_ROOT)) as Grid;
+            POINT_GRID = GetTemplateChild(nameof(POINT_GRID)) as Grid;
             PATH = GetTemplateChild(nameof(PATH)) as Path;
+            LAYOUT_PATH = GetTemplateChild(nameof(LAYOUT_PATH)) as LayoutPath;
+            CONTENT_PRESENTER = GetTemplateChild(nameof(CONTENT_PRESENTER)) as ContentPresenter;
 
             _contentTransform = (CompositeTransform)CONTENT_WRAPPER.RenderTransform;
 
@@ -47,6 +99,23 @@ namespace CustomControls.Controls
                 Path = new PropertyPath("PathVisibility"),
                 Source = this
             });
+
+            LAYOUT_PATH.SetBinding(LayoutPath.PathVisibleProperty, new Binding()
+            {
+                Path = new PropertyPath("PathVisibility"),
+                Source = this,
+                Converter = new InstanceConverter(o => o as Visibility? == Visibility.Visible)
+            });
+
+            LAYOUT_PATH.SetBinding(LayoutPath.OrientToPathProperty, new Binding()
+            {
+                Path = new PropertyPath("OrientToPath"),
+                Source = this,
+            });
+
+            ValidateWidthHeight();
+
+            UpdatePathData(Path);
 
             base.OnApplyTemplate();
         }
@@ -92,6 +161,14 @@ namespace CustomControls.Controls
                     ((MotionPath)o).ProgressChanged((double)e.NewValue);
                 }));
 
+            PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(MotionPath), new PropertyMetadata(default(Geometry),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs args)
+                {
+                    var sender = (MotionPath)o;
+                    var data = (Geometry)args.NewValue;
+                    sender.UpdatePathData(data);
+                }));
+
             LineAbsoluteStartProperty = DependencyProperty.Register("LineAbsoluteStart", typeof(Point), typeof(MotionPath),
                 new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
 
@@ -104,6 +181,10 @@ namespace CustomControls.Controls
             PathVisibilityProperty = DependencyProperty.Register("PathVisibility", typeof(Visibility), typeof(MotionPath), new PropertyMetadata(default(Visibility)));
 
             CurrentTimeProperty = DependencyProperty.Register("CurrentTime", typeof(TimeSpan), typeof(MotionPath), new PropertyMetadata(default(TimeSpan)));
+
+            OrientToPathProperty = DependencyProperty.Register("OrientToPath", typeof(bool), typeof(MotionPath), new PropertyMetadata(default(bool)));
+
+            EasingFunctionProperty = DependencyProperty.Register("EasingFunction", typeof(EasingFunctionBase), typeof(MotionPath), new PropertyMetadata(default(EasingFunctionBase)));
         }
 
         private static void RefreshCalculations(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -168,6 +249,15 @@ namespace CustomControls.Controls
         public TimeSpan CurrentTime { get { return (TimeSpan)GetValue(CurrentTimeProperty); } private set { SetValue(CurrentTimeProperty, value); } }
         public static readonly DependencyProperty CurrentTimeProperty;
 
+        public Geometry Path { get { return (Geometry)GetValue(PathProperty); } set { SetValue(PathProperty, value); } }
+        public static readonly DependencyProperty PathProperty;
+
+        public bool OrientToPath { get { return (bool)GetValue(OrientToPathProperty); } set { SetValue(OrientToPathProperty, value); } }
+        public static readonly DependencyProperty OrientToPathProperty;
+
+        public EasingFunctionBase EasingFunction { get { return (EasingFunctionBase)GetValue(EasingFunctionProperty); } set { SetValue(EasingFunctionProperty, value); } }
+        public static readonly DependencyProperty EasingFunctionProperty;
+
         #endregion
 
         #region public methods
@@ -208,9 +298,6 @@ namespace CustomControls.Controls
             if (cancelArgs.Cancel)
                 return;
 
-            CalculateLineMovement();
-            _initialContentPoint = GetChildAbsolutePoint();
-            _movementLine = new ExtendedLineSegment(new LineSegment() { Point = LINE_GEOMETRY.EndPoint }, LINE_GEOMETRY.StartPoint);
             StartProgressAnimation();
         }
 
@@ -226,18 +313,47 @@ namespace CustomControls.Controls
                 KeyTime = TimeSpan.Zero,
                 Value = 0
             });
-            an.KeyFrames.Add(new EasingDoubleKeyFrame()
-            {
-                KeyTime = Duration,
-                Value = AutoRewind ? 200 : 100
-            });
 
+            if (!AutoRewind)
+            {
+                an.KeyFrames.Add(new EasingDoubleKeyFrame()
+                {
+                    KeyTime = Duration,
+                    Value = 100,
+                    EasingFunction = EasingFunction
+                });
+            }
+            else
+            {
+                an.KeyFrames.Add(new EasingDoubleKeyFrame()
+                {
+                    KeyTime = TimeSpan.FromTicks(Duration.Ticks / 2),
+                    Value = 100,
+                    EasingFunction = EasingFunction
+                });
+
+                an.KeyFrames.Add(new EasingDoubleKeyFrame()
+                {
+                    KeyTime = Duration,
+                    Value = 200,
+                    EasingFunction = EasingFunction
+                });
+            }
+
+            if (Path == null || true)
+            {
+                CalculateLineMovement();
+                _initialContentPoint = GetChildAbsolutePoint();
+                _movementLine = new ExtendedLineSegment(new LineSegment() { Point = LINE_GEOMETRY.EndPoint }, LINE_GEOMETRY.StartPoint);
+                _contentTransform.CenterX = _initialContentPoint.X;
+                _contentTransform.CenterY = _initialContentPoint.Y;
+
+            }
             Storyboard.SetTargetProperty(an, "(MotionPath.Progress)");
             Storyboard.SetTarget(an, this);
 
             _storyboard.Children.Add(an);
             _storyboard.Begin();
-
         }
 
         public void Reset()
@@ -248,8 +364,10 @@ namespace CustomControls.Controls
                 State = AnimationState.Ready;
                 _contentTransform.TranslateY = 0;
                 _contentTransform.TranslateX = 0;
+                _contentTransform.Rotation = 0;
             }
-            CalculateLineMovement();
+            if (Path == null)
+                CalculateLineMovement();
         }
 
         public void Pause()
@@ -302,15 +420,6 @@ namespace CustomControls.Controls
                 LINE_GEOMETRY.EndPoint = new Point(LineRelativeEnd.X + childX, LineRelativeEnd.Y + childY);
             }
 
-            //set minimum values for stretching efficiently control
-            //var el = (FrameworkElement)((ContentPresenter)CONTENT_WRAPPER.Child).Content;
-            //LAYOUT_ROOT.MinWidth = (LINE_GEOMETRY.StartPoint.X > LINE_GEOMETRY.EndPoint.X
-            //                           ? LINE_GEOMETRY.StartPoint.X
-            //                           : LINE_GEOMETRY.EndPoint.X) + el.ActualWidth;
-            //LAYOUT_ROOT.MinHeight = (LINE_GEOMETRY.StartPoint.Y > LINE_GEOMETRY.EndPoint.Y
-            //                           ? LINE_GEOMETRY.StartPoint.Y
-            //                           : LINE_GEOMETRY.EndPoint.Y) + el.ActualHeight;
-
             CurrentPoint = new Point(childX, childY);
         }
 
@@ -324,24 +433,64 @@ namespace CustomControls.Controls
             if (progress > 100)
                 progress = 200 - progress;
 
-            var p = _movementLine.GetPointAt(progress / 100.0);
-            _contentTransform.TranslateX = p.X - _initialContentPoint.X;
-            _contentTransform.TranslateY = p.Y - _initialContentPoint.Y;
-
-            CurrentPoint = new Point(p.X, p.Y);
+            if (Path == null)
+            {
+                if (_movementLine == null)
+                    return;
+                var p = _movementLine.GetPointAt(progress / 100.0);
+                _contentTransform.TranslateX = p.X - _initialContentPoint.X;
+                _contentTransform.TranslateY = p.Y - _initialContentPoint.Y;
+                if (OrientToPath)
+                {
+                    _contentTransform.Rotation = _movementLine.GetOrientedDegreesAt(progress / 100.0);
+                }
+                CurrentPoint = new Point(p.X, p.Y);
+            }
+            else
+            {
+                if (progress >= 100)
+                    progress = 99.9999999999;//avoid going to beginning of path
+                LAYOUT_PATH.Progress = progress;
+                CurrentPoint = LAYOUT_PATH.CurrentPosition;
+            }
 
             CurrentTime = _storyboard.GetCurrentTime();
         }
 
         private Point GetChildAbsolutePoint()
         {
-            var child = (UIElement)((ContentPresenter)CONTENT_WRAPPER.Child).Content;
+            var child = (UIElement)CONTENT_PRESENTER.Content;
             var cont = CONTENT_WRAPPER;
             var transform = cont.TransformToVisual(child);
             Point screenCoords = transform.TransformPoint(new Point(0, 0));
             var childX = -screenCoords.X;
             var childY = -screenCoords.Y;
             return new Point(childX, childY);
+        }
+
+        private void UpdatePathData(Geometry data)
+        {
+            if (PATH == null)
+                return;
+
+            if (data != null)
+            {
+                CONTENT_WRAPPER.Child = null;
+
+                LAYOUT_PATH.Path = data;
+                POINT_GRID.Visibility = Visibility.Collapsed;
+                LAYOUT_PATH.Visibility = Visibility.Visible;
+                LAYOUT_PATH.Children.Add(CONTENT_PRESENTER);
+            }
+            else
+            {
+                if (LAYOUT_PATH.Children.Any())
+                    LAYOUT_PATH.Children.RemoveAt(0);
+                POINT_GRID.Visibility = Visibility.Visible;
+                LAYOUT_PATH.Visibility = Visibility.Collapsed;
+                CONTENT_WRAPPER.Child = CONTENT_PRESENTER;
+
+            }
         }
 
         //because Point? is buggy when setting point to XAML, double.Nan is used for finding out which points are set

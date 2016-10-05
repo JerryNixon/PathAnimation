@@ -32,6 +32,9 @@ namespace CustomControls.Controls
 
         public void UpdateAlingment(ChildAlignment alingment, bool moveVertically, bool flip)
         {
+            if (ALINGMENT == null)
+                return;
+
             var translate = (TranslateTransform)ALINGMENT.RenderTransform;
             if (alingment == ChildAlignment.Center)
             {

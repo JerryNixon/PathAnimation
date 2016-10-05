@@ -4,46 +4,104 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:controls="using:CustomControls.Controls"
+    xmlns:controls="using:CustomControls.Controls" 
+    xmlns:converters="using:CustomControls.Converters" 
+    xmlns:converters1="using:SampleProject.Converters"
     mc:Ignorable="d">
 
-
-    <Grid Background="#FF1D1D1D">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                <Setter Property="Margin" Value="5,5,5,0"></Setter>
+            </Style>
+            <Style TargetType="TextBox">
+                <Setter Property="Margin" Value="5"></Setter>
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Margin" Value="5"></Setter>
+            </Style>
+            <converters1:PointStringConverter x:Key="PointStringConverter"/>
+            <converters:StringToPathGeometryConverter x:Key="StringToPathGeometryConverter"/>
+            <converters1:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
+        </Grid.Resources>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
+            <StackPanel VerticalAlignment="Center" MinWidth="60" HorizontalAlignment="Left" Orientation="Horizontal">
+                <TextBlock FontSize="12" Width="50">
+                        <Run Text="X: "></Run>
+                        <Run Text="{Binding CurrentPoint.X, ElementName=TestMotion}"></Run>
+                </TextBlock>
+                <TextBlock FontSize="12" Width="50">
+                        <Run Text="Y: "></Run>
+                        <Run Text="{Binding CurrentPoint.Y, ElementName=TestMotion}"></Run>
+                </TextBlock>
+                <TextBlock  Text="{Binding State, ElementName=TestMotion}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Width="80"/>
+                <TextBlock  Text="{Binding CurrentTime, ElementName=TestMotion}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <Grid Width="500" Height="300" Background="Black">
-                <controls:MotionPath  x:Name="TestMotion" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Duration="0:0:2" 
-                                     PathVisibility="Visible" AutoRewind="False" LineRelativeEnd="100,20" LineAbsoluteStart="0,50" >
-                    <Rectangle Width="25" Height="25" Fill="DarkSlateGray" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </StackPanel>
+            <Border  Width="500" Height="300" Background="{ThemeResource SettingsFlyoutHeaderBackgroundThemeBrush}" BorderBrush="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" BorderThickness="1"  >
+
+                <controls:MotionPath OrientToPath="True" x:Name="TestMotion" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Duration="0:0:4" 
+                                     PathVisibility="Visible" AutoRewind="True" LineRelativeEnd="50,70"  Path="M 10,100 C 10,300 300,-200 300,100" >
+                    <controls:MotionPath.EasingFunction>
+                        <SineEase/>
+                    </controls:MotionPath.EasingFunction>
+                    <Rectangle Width="25" Height="25" Fill="{ThemeResource SettingsFlyoutHeaderForegroundThemeBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </controls:MotionPath>
-            </Grid>
+
+            </Border>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel VerticalAlignment="Center" MinWidth="60" HorizontalAlignment="Center">
-                    <TextBlock FontSize="12" >
-                        <Run Text="X: "></Run>
-                        <Run Text="{Binding CurrentPoint.X, ElementName=TestMotion}" Foreground="LightBlue"></Run>
-                    </TextBlock>
-                    <TextBlock FontSize="12">
-                        <Run Text="Y: "></Run>
-                        <Run Text="{Binding CurrentPoint.Y, ElementName=TestMotion}" Foreground="LightBlue"></Run>
-                    </TextBlock>
-                </StackPanel>
-                <TextBlock Grid.Column="1" Text="{Binding State, ElementName=TestMotion}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="LightBlue"/>
+
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                     <Button Content="play"  Click="ButtonBase_OnClick" BorderThickness="0"/>
                     <Button Content="pause"  Click="ButtonBase_pause" BorderThickness="0"/>
                     <Button Content="reset"  Click="ButtonReset_OnClick" BorderThickness="0"/>
-                    <Button Content="move"  Click="ButtonBaseMove_OnClick" BorderThickness="0"/>
                 </StackPanel>
             </Grid>
+            <Border BorderThickness="1" BorderBrush="{ThemeResource FlyoutBorderThemeBrush}" Background="{ThemeResource FlyoutBackgroundThemeBrush}" CornerRadius="10" Padding="5" Margin="0,15,0,0">
 
+
+                <StackPanel>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Relative End"/>
+                            <TextBox Text="{Binding LineRelativeEnd, Converter={StaticResource PointStringConverter}, ElementName=TestMotion, Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Absolute End"/>
+                            <TextBox Text="{Binding LineAbsoluteEnd, Converter={StaticResource PointStringConverter},ElementName=TestMotion,Mode=TwoWay}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Absolute Start"/>
+                            <TextBox Text="{Binding LineAbsoluteStart,Converter={StaticResource PointStringConverter}, ElementName=TestMotion,Mode=TwoWay}"/>
+                        </StackPanel>
+
+                    </Grid>
+                    <StackPanel>
+                        <TextBlock Text="Path"/>
+                        <TextBox Text="{Binding Path, Converter={StaticResource StringToPathGeometryConverter}, ElementName=TestMotion, Mode=TwoWay}"/>
+                    </StackPanel>
+                    <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="150">
+                        <CheckBox Content="Path Visible" IsChecked="{Binding PathVisibility,Converter={StaticResource BoolVisibilityConverter}, ElementName=TestMotion,Mode=TwoWay}"/>
+                        <CheckBox Content="Orient to Path" IsChecked="{Binding OrientToPath, ElementName=TestMotion,Mode=TwoWay}"/>
+                        <CheckBox Content="Auto Rewind" IsChecked="{Binding AutoRewind, ElementName=TestMotion, Mode=TwoWay}"/>
+                    </VariableSizedWrapGrid>
+                    <Slider Header="Duration (secs)" Value="{Binding Duration.Seconds, ElementName=TestMotion, Mode=TwoWay}" Maximum="10" Minimum="1"  ValueChanged="RangeBase_OnValueChanged"></Slider>
+                </StackPanel>
+            </Border>
 
         </StackPanel>
-
+        <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="Back_OnClick"/>
     </Grid>
 </Page>

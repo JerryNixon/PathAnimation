@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
-namespace CustomControls.Converters
+namespace SampleProject.Converters
 {
-    public sealed class EnumStringConverter : IValueConverter
+    internal sealed class EnumStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

@@ -95,6 +95,11 @@ namespace CustomControls.ExtendedSegments
                 }
             }
 
+            if (double.IsInfinity(PathOffset.X))
+                PathOffset.X = 0;
+            if (double.IsInfinity(PathOffset.Y))
+                PathOffset.Y = 0;
+
             PathLength = pathLength;
 
         }

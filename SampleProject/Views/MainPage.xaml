@@ -18,17 +18,17 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid Margin="30">
             <StackPanel>
-                <TextBlock Text="LayoutPath samples" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <TextBlock Text="LayoutPath" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
-                    <Button Content="Complete control" Click="LayoutPath_OnClick"/>
-                    <Button Content="Rotating sunshines" Click="ButtonBase_OnClick"/>
-                    <Button Content="Text along path" Click="textAlongPath_click"/>
-                    <Button Content="Racing path" Click="racingPath_OnClick"/>
+                    <Button Content="LayoutPath controller" Click="LayoutPath_OnClick"/>
+                    <Button Content="Rotating sunshines example" Click="ButtonBase_OnClick"/>
+                    <Button Content="Text along path example" Click="textAlongPath_click"/>
+                    <Button Content="Racing car example" Click="racingPath_OnClick"/>
                 </StackPanel>
-                <!--<TextBlock Text="MotionPath samples" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <TextBlock Text="MotionPath" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
-                    <Button Content="MotionPath samples" Click="MotionPath_OnClick"/>
-                </StackPanel>-->
+                    <Button Content="MotionPath controller" Click="MotionPath_OnClick"/>
+                </StackPanel>
             </StackPanel>
 
         </Grid>

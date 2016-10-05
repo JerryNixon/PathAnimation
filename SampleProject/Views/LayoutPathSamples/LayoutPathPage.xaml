@@ -4,11 +4,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
-    xmlns:Converters="using:CustomControls.Converters" 
+    xmlns:converters="using:SampleProject.Converters"
     x:Class="SampleProject.Views.LayoutPathPage"
     mc:Ignorable="d">
     <Page.Resources>
-        <Converters:EnumStringConverter x:Key="EnumStringConverter"/>
+        <converters:EnumStringConverter x:Key="EnumStringConverter"/>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
         </Style>

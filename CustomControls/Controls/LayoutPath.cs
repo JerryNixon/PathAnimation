@@ -82,6 +82,7 @@ namespace CustomControls.Controls
                 CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically, FlipItems));
             }
 
+            //TODO: _children.Clear does not invoke this event.
             _children.CollectionChanged += async delegate (object sender, NotifyCollectionChangedEventArgs args)
             {
                 lock (_collectionChangedLocker)
@@ -103,10 +104,12 @@ namespace CustomControls.Controls
                     {
                         foreach (var child in args.OldItems)
                         {
-                            var wrapper =
-                                CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
+                            var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
                             if (wrapper != null)
+                            {
                                 CHILDREN.Children.Remove(wrapper);
+                                ((LayoutPathChildWrapper)wrapper).Content = null;
+                            }
                         }
                     }
                 }
@@ -301,7 +304,6 @@ namespace CustomControls.Controls
         private bool transformedOnce = false;
         private double previousProgres = 0;
         private double progressDistanceAVG = 1;
-        private object progressLocker = new object();
         private void TransformToProgress(double progress)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
@@ -341,6 +343,7 @@ namespace CustomControls.Controls
 
                 var wrapper = (LayoutPathChildWrapper)children[i];
                 var wrappedChild = wrapper.Content as FrameworkElement;
+               
                 var childWidth = wrappedChild.ActualWidth;
                 var childHeight = wrappedChild.ActualHeight;
 
