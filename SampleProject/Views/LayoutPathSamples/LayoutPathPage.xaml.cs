@@ -63,5 +63,18 @@ namespace SampleProject.Views
                 PathStoryboard.Pause();
             paused = !paused;
         }
+
+        private void ToggleSine_Changed(object sender, RoutedEventArgs e)
+        {
+            var cb = (CheckBox)sender;
+            if (cb.IsChecked == true)
+            {
+                LayoutPath1.ChildEasingFunction = new SineEase() { EasingMode = EasingMode.EaseInOut };
+            }
+            else
+            {
+                LayoutPath1.ChildEasingFunction = null;
+            }
+        }
     }
 }

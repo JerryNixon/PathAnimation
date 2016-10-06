@@ -56,11 +56,7 @@
                         <TextBlock Text="{Binding CurrentRotation, ElementName=LayoutPath1, Mode=TwoWay}" />
                     </StackPanel>
 
-
                 </VariableSizedWrapGrid>
-
-
-
             </Grid>
 
 
@@ -68,9 +64,6 @@
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
             Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="0" OrientToPath="True" Stretch="None"  PathVisible="True" 
                                  ItemsPadding="3" SmoothRotation="4" SmoothTranslation="4">
-                    <controls:LayoutPath.ChildEasingFunction>
-                        <CubicEase EasingMode="EaseInOut"/>
-                    </controls:LayoutPath.ChildEasingFunction>
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -131,7 +124,7 @@
 
                 </Grid>
                 <Grid>
-                    <VariableSizedWrapGrid Grid.Column="1" Orientation="Horizontal" ItemWidth="160" ItemHeight="60" >
+                    <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="160" ItemHeight="60" >
                         <Button Content="Start / Stop anim" Click="StartPauseAnimation"/>
                         <CheckBox IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
                                Margin="0,0,5,0"/>
@@ -147,6 +140,8 @@
                         <CheckBox IsChecked="{Binding StackAtStart, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtStart" Margin="5,0"/>
                         <CheckBox IsChecked="{Binding StackAtEnd, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtEnd" Margin="5,0"/>
 
+                        <CheckBox Content="Use child SineEase" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
+
                         <ComboBox Header="Alignment" x:Name="childAlignmentCB"  SelectedValue="{Binding ChildAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
 
@@ -157,6 +152,8 @@
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
                         </ComboBox>
+
+
                     </VariableSizedWrapGrid>
                 </Grid>
 
