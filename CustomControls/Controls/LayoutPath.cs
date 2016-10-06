@@ -139,8 +139,7 @@ namespace CustomControls.Controls
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
             SmoothRotationProperty = DependencyProperty.Register("SmoothRotation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
             SmoothTranslationProperty = DependencyProperty.Register("SmoothTranslation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
-            ChildEasingFunctionProperty = DependencyProperty.Register("EasingFunctionBase", typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase)));
-
+           
             ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
@@ -217,6 +216,8 @@ namespace CustomControls.Controls
             OrientToPathProperty = DependencyProperty.Register(nameof(OrientToPath), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
             StackAtStartProperty = DependencyProperty.Register("StackAtStart", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
             StackAtEndProperty = DependencyProperty.Register("StackAtEnd", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
+            ChildEasingFunctionProperty = DependencyProperty.Register("EasingFunctionBase", typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), (o, e) => transformToProgress(o, e)));
+
 
         }
 
