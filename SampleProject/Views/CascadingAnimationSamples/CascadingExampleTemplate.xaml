@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="SampleProject.Views.CascadingAnimationSamples.CascadingExampleTemplate"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleProject.Views.CascadingAnimationSamples"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid>
+            <StackPanel  Margin="48,48,0,0" >
+                <TextBlock Style="{ThemeResource HeaderTextBlockStyle}" Text="CascadingText animation example" />
+                <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}" Margin="0,10,0,0" Text="...for an enhanced user experience!" FontFamily="Segoe Print" />
+                <StackPanel Margin="0,50,0,0" Width="450" HorizontalAlignment="Left">
+                    <TextBlock  TextWrapping="Wrap" Text="CascadingText can be used for creating cool text type like effects." FontSize="18" FontFamily="Lucida Sans Unicode"/>
+                    <TextBlock Margin="0,10,0,0" TextWrapping="Wrap" Text="To achieve this, you can go to expression blend, write your desired text, right click it and choose 'Path->Convert to path' option. After that, you can set the CascadingAnimation.CascadingText property to animate your text!" FontSize="14" TextAlignment="Justify"/>
+                </StackPanel>
+                <StackPanel Margin="70,20,0,0" Width="460" HorizontalAlignment="Left">
+                    <TextBlock Margin="0,10,0,0" TextWrapping="Wrap" Text="Analysis is made on path data to create each letter as an independent path that will be used for creating the animation. This is an operation that may take some time. You can take the outcome and directly set children for avoiding analysis. For this reason a method GetGeneratedXaml has been created." FontSize="14" TextAlignment="Justify"/>
+                    <TextBlock Text="(Maybe a visual studio extension can be created for that)" HorizontalAlignment="Right"/>
+                </StackPanel>
+
+                <TextBlock Margin="0,10,0,0" Text="The cool thing about specifying children, is that you can add any type of UIElement inside!" FontWeight="SemiBold" FontSize="16"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <TextBlock  Text="So you can cascade any control!"/>
+                    <TextBlock Margin="5,0,0,0" Text="For example:"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,20">
+                    <Button Content="test button"/>
+                    <Rectangle Width="100" Height="50" Fill="Gray"/>
+                </StackPanel>
+
+                <TextBlock Width="500" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Attached properties may can be used for controlling specifically how a control will appear. So imagine, a power point like system for showing controls in xaml!"/>
+
+                <Button Content="Repeat Animation" Margin="0,10,0,0"/>
+            </StackPanel>
+
+
+        </Grid>
+    </Grid>
+</Page>

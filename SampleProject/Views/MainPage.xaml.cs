@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using SampleProject.Views;
+using SampleProject.Views.CascadingAnimationSamples;
 using SampleProject.Views.LayoutPathSamples;
 
 namespace SampleProject
@@ -40,6 +41,10 @@ namespace SampleProject
             this.Frame.Navigate(typeof(RacingLayoutPathPage));
         }
 
-       
+
+        private void cascadingAnimationRealtimeExample(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(CascadingAnimationControllerPage));
+        }
     }
 }
