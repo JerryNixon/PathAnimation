@@ -25,7 +25,7 @@
             <converters:StringToPathGeometryConverter x:Key="StringToPathGeometryConverter"/>
             <converters1:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
         </Grid.Resources>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" Width="500">
             <StackPanel VerticalAlignment="Center" MinWidth="60" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock FontSize="12" Width="50">
                         <Run Text="X: "></Run>
@@ -43,9 +43,7 @@
 
                 <controls:MotionPath OrientToPath="True" x:Name="TestMotion" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Duration="0:0:4" 
                                      PathVisibility="Visible" AutoRewind="True" LineRelativeEnd="50,70"  Path="M 10,100 C 10,300 300,-200 300,100" >
-                    <controls:MotionPath.EasingFunction>
-                        <SineEase/>
-                    </controls:MotionPath.EasingFunction>
+
                     <Rectangle Width="25" Height="25" Fill="{ThemeResource SettingsFlyoutHeaderForegroundThemeBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </controls:MotionPath>
 
@@ -58,6 +56,12 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                    <StackPanel.Resources>
+                        <Style TargetType="Button">
+                            <Setter Property="Width" Value="70"></Setter>
+                            <Setter Property="Margin" Value="5,2.5,0,0"></Setter>
+                        </Style>
+                    </StackPanel.Resources>
                     <Button Content="play"  Click="ButtonBase_OnClick" BorderThickness="0"/>
                     <Button Content="pause"  Click="ButtonBase_pause" BorderThickness="0"/>
                     <Button Content="reset"  Click="ButtonReset_OnClick" BorderThickness="0"/>
@@ -92,10 +96,11 @@
                         <TextBlock Text="Path"/>
                         <TextBox Text="{Binding Path, Converter={StaticResource StringToPathGeometryConverter}, ElementName=TestMotion, Mode=TwoWay}"/>
                     </StackPanel>
-                    <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="150">
+                    <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="160">
                         <CheckBox Content="Path Visible" IsChecked="{Binding PathVisibility,Converter={StaticResource BoolVisibilityConverter}, ElementName=TestMotion,Mode=TwoWay}"/>
                         <CheckBox Content="Orient to Path" IsChecked="{Binding OrientToPath, ElementName=TestMotion,Mode=TwoWay}"/>
                         <CheckBox Content="Auto Rewind" IsChecked="{Binding AutoRewind, ElementName=TestMotion, Mode=TwoWay}"/>
+                        <CheckBox Content="Use sine easing" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
                     </VariableSizedWrapGrid>
                     <Slider Header="Duration (secs)" Value="{Binding Duration.Seconds, ElementName=TestMotion, Mode=TwoWay}" Maximum="10" Minimum="1"  ValueChanged="RangeBase_OnValueChanged"></Slider>
                 </StackPanel>

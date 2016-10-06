@@ -16,7 +16,7 @@
                                 </Border.RenderTransform>
                                 <ContentPresenter x:Name="CONTENT_PRESENTER" Content="{TemplateBinding Content}"  />
                             </Border>
-                            <Path IsHitTestVisible="False" Stroke="White" StrokeThickness="1" x:Name="PATH">
+                            <Path IsHitTestVisible="False" Stroke="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" StrokeThickness="1" x:Name="PATH">
                                 <Path.Data>
                                     <LineGeometry x:Name="LINE_GEOMETRY" StartPoint="0,0" EndPoint="50,50"></LineGeometry>
                                 </Path.Data>

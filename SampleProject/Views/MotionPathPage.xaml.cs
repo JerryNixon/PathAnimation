@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -46,6 +47,19 @@ namespace SampleProject.Views
         {
             if (TestMotion != null && e.OldValue != 0)
                 TestMotion.Duration = TimeSpan.FromSeconds(e.NewValue);
+        }
+
+        private void ToggleSine_Changed(object sender, RoutedEventArgs e)
+        {
+            var cb = (CheckBox)sender;
+            if (cb.IsChecked == true)
+            {
+                TestMotion.EasingFunction = new SineEase() { EasingMode = EasingMode.EaseInOut };
+            }
+            else
+            {
+                TestMotion.EasingFunction = null;
+            }
         }
 
         private void Back_OnClick(object sender, RoutedEventArgs e)
