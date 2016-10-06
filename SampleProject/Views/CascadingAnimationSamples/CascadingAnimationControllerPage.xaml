@@ -103,7 +103,7 @@
             </StackPanel>
 
             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="loadingGrid" d:IsHidden="True" >
-                <TextBlock Text="Analyzing data... Please wait. It will worth it!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="Analyzing data... Please wait!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Grid>
     </Grid>

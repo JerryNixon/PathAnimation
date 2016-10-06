@@ -155,6 +155,9 @@ namespace CustomControls.Controls
                      }
                  }
              };
+
+            CacheMode = new BitmapCache();
+            UseLayoutRounding = false;
         }
 
         private void AnalyzeSegments()
@@ -248,8 +251,6 @@ namespace CustomControls.Controls
                 };
                 _children.Add(path);
                 path.Opacity = FromOpacity;
-                path.CacheMode = new BitmapCache();
-                path.UseLayoutRounding = false;
                 container.Children.Add(path);
             }
 
