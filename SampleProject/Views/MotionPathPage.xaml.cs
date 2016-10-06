@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using CustomControls.Converters;
+using CustomControls.Extensions;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -65,6 +67,43 @@ namespace SampleProject.Views
         private void Back_OnClick(object sender, RoutedEventArgs e)
         {
             this.Frame.GoBack();
+        }
+
+        private void quickSetPath(object sender, RoutedEventArgs e)
+        {
+            TestMotion.Path = new StringToPathGeometryConverter().Convert("M 10,100 C 10,300 300,-200 300,100");
+        }
+
+        private void quickRelativeEnd(object sender, RoutedEventArgs e)
+        {
+            TestMotion.Path = null;
+            TestMotion.LineAbsoluteEnd = new Point(double.NaN, double.NaN);
+            TestMotion.LineAbsoluteStart = new Point(double.NaN, double.NaN);
+            TestMotion.LineRelativeEnd = new Point(100, 100);
+        }
+
+        private void quickAbsEnd(object sender, RoutedEventArgs e)
+        {
+            TestMotion.Path = null;
+            TestMotion.LineAbsoluteEnd = new Point(20, 30);
+            TestMotion.LineAbsoluteStart = new Point(double.NaN, double.NaN);
+            TestMotion.LineRelativeEnd = new Point(double.NaN, double.NaN);
+        }
+
+        private void quickAbsStartRelEnd(object sender, RoutedEventArgs e)
+        {
+            TestMotion.Path = null;
+            TestMotion.LineAbsoluteEnd = new Point(double.NaN, double.NaN);
+            TestMotion.LineAbsoluteStart = new Point(50, 50);
+            TestMotion.LineRelativeEnd = new Point(10, 150);
+        }
+
+        private void quickAbsStartAbsEnd(object sender, RoutedEventArgs e)
+        {
+            TestMotion.Path = null;
+            TestMotion.LineAbsoluteEnd = new Point(300, 20);
+            TestMotion.LineAbsoluteStart = new Point(50, 50);
+            TestMotion.LineRelativeEnd = new Point(double.NaN, double.NaN);
         }
     }
 }

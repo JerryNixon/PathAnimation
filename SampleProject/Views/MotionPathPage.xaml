@@ -10,6 +10,10 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.Resources>
             <Style TargetType="TextBlock">
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>
@@ -25,8 +29,8 @@
             <converters:StringToPathGeometryConverter x:Key="StringToPathGeometryConverter"/>
             <converters1:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
         </Grid.Resources>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" Width="500">
-            <StackPanel VerticalAlignment="Center" MinWidth="60" HorizontalAlignment="Left" Orientation="Horizontal">
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50" Width="500">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Orientation="Horizontal">
                 <TextBlock FontSize="12" Width="50">
                         <Run Text="X: "></Run>
                         <Run Text="{Binding CurrentPoint.X, ElementName=TestMotion}"></Run>
@@ -39,7 +43,7 @@
                 <TextBlock  Text="{Binding CurrentTime, ElementName=TestMotion}" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
             </StackPanel>
-            <Border  Width="500" Height="300" Background="{ThemeResource SettingsFlyoutHeaderBackgroundThemeBrush}" BorderBrush="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" BorderThickness="1"  >
+            <Border Height="300" Background="{ThemeResource SettingsFlyoutHeaderBackgroundThemeBrush}" BorderBrush="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" BorderThickness="1"  >
 
                 <controls:MotionPath OrientToPath="True" x:Name="TestMotion" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Duration="0:0:4" 
                                      PathVisibility="Visible" AutoRewind="True" LineRelativeEnd="50,70"  Path="M 10,100 C 10,300 300,-200 300,100" >
@@ -68,10 +72,7 @@
                 </StackPanel>
             </Grid>
             <Border BorderThickness="1" BorderBrush="{ThemeResource FlyoutBorderThemeBrush}" Background="{ThemeResource FlyoutBackgroundThemeBrush}" CornerRadius="10" Padding="5" Margin="0,15,0,0">
-
-
                 <StackPanel>
-
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -106,7 +107,25 @@
                 </StackPanel>
             </Border>
 
+
         </StackPanel>
-        <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="Back_OnClick"/>
+        <Border Grid.Column="0" Background="{ThemeResource FlyoutBackgroundThemeBrush}" BorderBrush="{ThemeResource FlyoutBorderThemeBrush}" BorderThickness="0,0,1,0">
+
+            <VariableSizedWrapGrid  ItemWidth="200" ItemHeight="40" Margin="10">
+                <VariableSizedWrapGrid.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Width" Value="200"></Setter>
+                    </Style>
+                </VariableSizedWrapGrid.Resources>
+                <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top"  Click="Back_OnClick"/>
+
+                <TextBlock Text="Quick setters" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <Button Content="Path" Click="quickSetPath"/>
+                <Button Content="Rel End" Click="quickRelativeEnd"/>
+                <Button Content="Abs End" Click="quickAbsEnd"/>
+                <Button Content="Abs start, Rel end" Click="quickAbsStartRelEnd"/>
+                <Button Content="Abs start, Abs end" Click="quickAbsStartAbsEnd"/>
+            </VariableSizedWrapGrid>
+        </Border>
     </Grid>
 </Page>

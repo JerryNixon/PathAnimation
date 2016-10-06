@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 using CustomControls.Converters;
 using CustomControls.ExtendedSegments;
+using CustomControls.Extensions;
 using LayoutPath.Enums;
 
 namespace CustomControls.Controls
@@ -389,32 +390,32 @@ namespace CustomControls.Controls
             if (LINE_GEOMETRY == null)
                 return;
 
-            if (!HasValue(LineAbsoluteEnd) && !HasValue(LineRelativeEnd))
+            if (LineAbsoluteEnd.IsNan() && LineRelativeEnd.IsNan())
                 return;
 
             var tmp = GetChildAbsolutePoint();
             var childX = tmp.X;
             var childY = tmp.Y;
 
-            if (HasValue(LineAbsoluteStart))
+            if (!LineAbsoluteStart.IsNan())
             {
                 LINE_GEOMETRY.StartPoint = new Point(LineAbsoluteStart.X, LineAbsoluteStart.Y);
 
-                if (HasValue(LineAbsoluteEnd))
+                if (!LineAbsoluteEnd.IsNan())
                 {
                     LINE_GEOMETRY.EndPoint = new Point(LineAbsoluteEnd.X, LineAbsoluteEnd.Y);
                 }
-                else if (HasValue(LineRelativeEnd))
+                else if (!LineRelativeEnd.IsNan())
                 {
                     LINE_GEOMETRY.EndPoint = new Point(LineAbsoluteStart.X + LineRelativeEnd.X, LineAbsoluteStart.Y + LineRelativeEnd.Y);
                 }
             }
-            else if (HasValue(LineAbsoluteEnd))
+            else if (!LineAbsoluteEnd.IsNan())
             {
                 LINE_GEOMETRY.StartPoint = new Point(childX, childY);
                 LINE_GEOMETRY.EndPoint = new Point(LineAbsoluteEnd.X, LineAbsoluteEnd.Y);
             }
-            else if (HasValue(LineRelativeEnd))
+            else if (!LineRelativeEnd.IsNan())
             {
                 LINE_GEOMETRY.StartPoint = new Point(childX, childY);
                 LINE_GEOMETRY.EndPoint = new Point(LineRelativeEnd.X + childX, LineRelativeEnd.Y + childY);
@@ -493,11 +494,7 @@ namespace CustomControls.Controls
             }
         }
 
-        //because Point? is buggy when setting point to XAML, double.Nan is used for finding out which points are set
-        private bool HasValue(Point p)
-        {
-            return !(double.IsNaN(p.X) && double.IsNaN(p.Y));
-        }
+
         #endregion
     }
 }
