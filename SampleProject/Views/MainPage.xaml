@@ -32,7 +32,8 @@
 
                 <TextBlock Text="CascadingAnimation" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
-                    <Button Content="CascadingAnimation example" Click="cascadingAnimationRealtimeExample"/>
+                    <Button Content="CascadingAnimation real-time example" Click="cascadingAnimationRealtimeExample"/>
+                    <Button Content="CascadingAnimation cached example" Click="cascadingAnimationCachedExample"/>
                 </StackPanel>
             </StackPanel>
 

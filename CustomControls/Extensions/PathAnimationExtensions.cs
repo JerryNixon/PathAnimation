@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
+using CustomControls.Converters;
 using CustomControls.ExtendedSegments;
 
 namespace CustomControls.Extensions
@@ -25,6 +26,13 @@ namespace CustomControls.Extensions
         public static Controls.LayoutPath ToLayoutPath(this PathGeometry geometry)
         {
             return new Controls.LayoutPath() { Path = geometry };
+        }
+
+        public static string ToPathGeometryString(this Geometry geometry)
+        {
+            if (geometry is PathGeometry)
+                return new StringToPathGeometryConverter().ConvertBack((PathGeometry)geometry);
+            return null;
         }
     }
 }

@@ -46,5 +46,10 @@ namespace SampleProject
         {
             this.Frame.Navigate(typeof(CascadingAnimationControllerPage));
         }
+
+        private void cascadingAnimationCachedExample(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(CascadingAnimationCachedExamplePage));
+        }
     }
 }

@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 using CustomControls.ExtendedSegments;
+using CustomControls.Extensions;
 
 namespace CustomControls.Controls
 {
@@ -29,18 +30,18 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty StartAfterProperty = DependencyProperty.Register(
             "StartAfter", typeof(CascadingAnimation), typeof(CascadingAnimation), new PropertyMetadata(default(CascadingAnimation),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-            {
-                var sender = (CascadingAnimation)o;
-                var whenCompleted = (CascadingAnimation)e.NewValue;
-
-                if (sender._startAfter != null)
                 {
-                    sender._startAfter.Completed -= sender.AutoStart;
-                }
-                sender._startAfter = whenCompleted;
-                sender._startAfter.Completed += sender.AutoStart;
-                whenCompleted._nextAnimation = sender;
-            }));
+                    var sender = (CascadingAnimation)o;
+                    var whenCompleted = (CascadingAnimation)e.NewValue;
+
+                    if (sender._startAfter != null)
+                    {
+                        sender._startAfter.Completed -= sender.AutoStart;
+                    }
+                    sender._startAfter = whenCompleted;
+                    sender._startAfter.Completed += sender.AutoStart;
+                    whenCompleted._nextAnimation = sender;
+                }));
 
         public CascadingAnimation StartAfter
         {
@@ -57,6 +58,7 @@ namespace CustomControls.Controls
 
         Storyboard _storyboard = new Storyboard();
         List<UIElement> _children = new List<UIElement>();
+        List<UIElement> _childrenToAnimate = new List<UIElement>();
         private Geometry _cascadingText;
 
         /// <summary>
@@ -143,18 +145,18 @@ namespace CustomControls.Controls
             _storyboard.Completed += (sender, args) => Completed?.Invoke();
 
             Loaded += delegate (object sender, RoutedEventArgs args)
-             {
-                 if (DesignMode.DesignModeEnabled)
-                 {
-                     if (_children.Any())
-                     {
-                         Grid container = new Grid();
-                         foreach (var child in _children)
-                             container.Children.Add(child);
-                         Content = container;
-                     }
-                 }
-             };
+            {
+                if (DesignMode.DesignModeEnabled)
+                {
+                    if (_children.Any())
+                    {
+                        Grid container = new Grid();
+                        foreach (var child in _children)
+                            container.Children.Add(child);
+                        Content = container;
+                    }
+                }
+            };
 
             CacheMode = new BitmapCache();
             UseLayoutRounding = false;
@@ -196,7 +198,6 @@ namespace CustomControls.Controls
                     t.DistanceFromStart = TotalLength += t.SegmentLength;
                 }
 
-
                 Matrix range = new Matrix(double.MaxValue, double.MinValue, double.MaxValue, double.MinValue, 0, 0);
                 foreach (var segment in figureSegments)
                 {
@@ -214,7 +215,6 @@ namespace CustomControls.Controls
                             range.M22 = point.Y;
                     }
                 }
-                //Debug.WriteLine(range);
                 ranges.Add(new KeyValuePair<Matrix, PathFigure>(range, figure));
             }
 
@@ -252,6 +252,7 @@ namespace CustomControls.Controls
                 _children.Add(path);
                 path.Opacity = FromOpacity;
                 container.Children.Add(path);
+                _childrenToAnimate.Add(path);
             }
 
             Content = container;
@@ -262,24 +263,55 @@ namespace CustomControls.Controls
             Grid container = new Grid();
             foreach (FrameworkElement child in _children)
             {
-                child.Opacity = FromOpacity;
-                child.RenderTransform = new CompositeTransform()
-                {
-                    CenterX = child.ActualWidth == 0 ? child.Width / 2.0 : child.ActualWidth / 2.0,
-                    CenterY = child.ActualHeight == 0 ? child.Height / 2.0 : child.ActualHeight / 2.0
-                };
                 container.Children.Add(child);
+                if (child is Panel)
+                {
+                    AnalyzePanelChildren(child as Panel);
+                }
+                else
+                {
+                    child.Opacity = FromOpacity;
+                    child.RenderTransform = new CompositeTransform()
+                    {
+                        CenterX = child.ActualWidth == 0 ? child.Width / 2.0 : child.ActualWidth / 2.0,
+                        CenterY = child.ActualHeight == 0 ? child.Height / 2.0 : child.ActualHeight / 2.0
+                    };
+                    _childrenToAnimate.Add(child);
+                }
             }
             Content = container;
+        }
+
+
+
+        private void AnalyzePanelChildren(Panel p)
+        {
+            foreach (FrameworkElement child in p.Children)
+            {
+                if (child is Panel)
+                {
+                    AnalyzePanelChildren(child as Panel);
+                }
+                else
+                {
+                    child.Opacity = FromOpacity;
+                    child.RenderTransform = new CompositeTransform()
+                    {
+                        CenterX = child.ActualWidth == 0 ? child.Width / 2.0 : child.ActualWidth / 2.0,
+                        CenterY = child.ActualHeight == 0 ? child.Height / 2.0 : child.ActualHeight / 2.0
+                    };
+                    _childrenToAnimate.Add(child);
+                }
+            }
         }
 
         public void PlayAnimation()
         {
             _storyboard.Stop();
             _storyboard.Children.Clear();
-            for (int index = 0; index < _children.Count; index++)
+            for (int index = 0; index < _childrenToAnimate.Count; index++)
             {
-                var letterPath = _children[index];
+                var letterPath = _childrenToAnimate[index];
 
                 AddAnimationToStoryboard(index, letterPath, FromOpacity, FromOpacityDuration, "(UIElement.Opacity)");
                 if (FromLetterOffsetDuration.TotalMilliseconds > 0)
@@ -328,5 +360,24 @@ namespace CustomControls.Controls
             _storyboard.Children.Add(animation);
         }
 
+        public string ToXamlDeclaration()
+        {
+            string color = "{ThemeResource ApplicationForegroundThemeBrush}";
+            if (this.Foreground != null)
+            {
+                if (Foreground is SolidColorBrush)
+                {
+                    color = ((SolidColorBrush)Foreground).Color.ToString();
+                }
+            }
+
+            string xaml = "";
+            foreach (Path path in _childrenToAnimate.Where(x => x is Path))
+            {
+                xaml += $"<Path Fill=\"{color}\" Data=\"{path.Data.ToPathGeometryString()}\"/>" + Environment.NewLine;
+            }
+
+            return xaml;
+        }
     }
 }

@@ -12,7 +12,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using CustomControls;
 using CustomControls.Controls;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
@@ -22,16 +21,18 @@ namespace SampleProject.Views.CascadingAnimationSamples
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class CascadingAnimationControllerPage : Page
+    public sealed partial class CascadingAnimationCachedExamplePage : Page
     {
         CascadingAnimation x;
-        public CascadingAnimationControllerPage()
+        public CascadingAnimationCachedExamplePage()
         {
             this.InitializeComponent();
             Loaded += async delegate (object sender, RoutedEventArgs args)
             {
                 x = ct1;
+
                 await x.InitialiseAsync();
+
                 loadingGrid.Visibility = Visibility.Collapsed;
                 x.PlayAnimation();
             };

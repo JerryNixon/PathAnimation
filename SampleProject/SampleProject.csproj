@@ -98,6 +98,9 @@
     <Compile Include="Converters\BoolVisibilityConverter.cs" />
     <Compile Include="Converters\EnumStringConverter.cs" />
     <Compile Include="Converters\PointStringConverter.cs" />
+    <Compile Include="Views\CascadingAnimationSamples\CascadingAnimationCachedExamplePage.xaml.cs">
+      <DependentUpon>CascadingAnimationCachedExamplePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CascadingAnimationSamples\CascadingAnimationControllerPage.xaml.cs">
       <DependentUpon>CascadingAnimationControllerPage.xaml</DependentUpon>
     </Compile>
@@ -146,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\CascadingAnimationSamples\CascadingAnimationCachedExamplePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CascadingAnimationSamples\CascadingAnimationControllerPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
