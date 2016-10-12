@@ -21,6 +21,9 @@ using CustomControls.ExtendedSegments;
 
 namespace CustomControls.Controls
 {
+    /// <summary>
+    /// A control used to animate children along a path
+    /// </summary>
     [ContentProperty(Name = "Children")]
     public class LayoutPath : ContentControl
     {
@@ -46,8 +49,14 @@ namespace CustomControls.Controls
         public IList<object> Children => _children;
         private readonly ObservableCollection<object> _children = new ObservableCollection<object>();
 
+        /// <summary>
+        /// The extended geometry, mainly used for getting point at fraction length
+        /// </summary>
         public ExtendedPathGeometry ExtendedGeometry { get; private set; }
-
+        
+        /// <summary>
+        /// Used for providing better designer support, when adding or removing items
+        /// </summary>
         private readonly object _collectionChangedLocker = new object();
 
         #endregion
@@ -114,7 +123,11 @@ namespace CustomControls.Controls
                         }
                     }
                 }
+
+                //Force UI to render elements. If not, width and height are giving 0 values. 
+                //Dimensions are needed for correctly aligning items.
                 await Task.Delay(1);
+
                 TransformToProgress(Progress);
             };
 
@@ -131,6 +144,9 @@ namespace CustomControls.Controls
             };
         }
 
+        /// <summary>
+        /// Initializes dependency properties
+        /// </summary>
         static LayoutPath()
         {
             StretchProperty = DependencyProperty.Register(nameof(Stretch), typeof(Stretch), typeof(LayoutPath), new PropertyMetadata(Stretch.None));
@@ -150,6 +166,7 @@ namespace CustomControls.Controls
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
                     var path = ((LayoutPath)o).PATH;
+                    //we don't collapse path because we need it's space for stretching control.
                     if (path != null)
                         path.Opacity = (bool)e.NewValue ? 0.5 : 0;
                 }));
@@ -217,8 +234,6 @@ namespace CustomControls.Controls
             StackAtStartProperty = DependencyProperty.Register("StackAtStart", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
             StackAtEndProperty = DependencyProperty.Register("StackAtEnd", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), (o, e) => transformToProgress(o, e)));
             ChildEasingFunctionProperty = DependencyProperty.Register("EasingFunctionBase", typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), (o, e) => transformToProgress(o, e)));
-
-
         }
 
         #endregion
@@ -226,7 +241,7 @@ namespace CustomControls.Controls
         #region dependency properties
 
         /// <summary>
-        /// Set the distance from the start, where <see cref="Children"/> will be transformed (value in Percent 0-100)
+        /// Set the distance from start, where <see cref="Children"/> will be transformed (value in Percent 0-100)
         /// </summary>
         public double Progress { get { return (double)GetValue(ProgressProperty); } set { SetValue(ProgressProperty, value); } }
         public static readonly DependencyProperty ProgressProperty;
@@ -238,13 +253,13 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty StretchProperty;
 
         /// <summary>
-        /// Sets the visibility of the <see cref="Path"/>
+        /// Sets the visibility of <see cref="Path"/>
         /// </summary>
         public bool PathVisible { get { return (bool)GetValue(PathVisibleProperty); } set { SetValue(PathVisibleProperty, value); } }
         public static readonly DependencyProperty PathVisibleProperty;
 
         /// <summary>
-        /// Set the geometry that it will be used for the translation of <see cref="Children"/>
+        /// Sets the geometry that will be used for translating <see cref="Children"/>
         /// </summary>
         public Geometry Path { get { return (Geometry)GetValue(PathProperty); } set { SetValue(PathProperty, value); } }
         public static readonly DependencyProperty PathProperty;
@@ -256,17 +271,27 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty OrientToPathProperty;
 
         /// <summary>
-        /// Sets the distance in percent of <see cref="PathLength"/> that items will have along <see cref="Path"/>
+        /// Sets the distance that <see cref="Children"/> will keep between each other (in percent of total length).
+        /// 
+        /// Example: setting ItemsPadding to 20 and progress being to 50, first element will be at progress=50, second at progress=30, third at progress=10 etc..
         /// </summary>
         public double ItemsPadding { get { return (double)GetValue(ItemsPaddingProperty); } set { SetValue(ItemsPaddingProperty, value); } }
         public static readonly DependencyProperty ItemsPaddingProperty;
 
 
         /// <summary>
-        /// Gets the <see cref="Point"/> at the perimeter of <see cref="Path"/> on current <see cref="Progress"/>
+        /// Gets the <see cref="Point"/> at fraction length of <see cref="Path"/> on current <see cref="Progress"/>
+        /// Smoothness does not affect CurrentPosition
         /// </summary>
         public Point CurrentPosition { get { return (Point)GetValue(CurrentPositionProperty); } private set { SetValue(CurrentPositionProperty, value); } }
         public static readonly DependencyProperty CurrentPositionProperty;
+
+        /// <summary>
+        ///  Gets the degrees at fraction length of <see cref="Path"/> on current <see cref="Progress"/>
+        ///  Smoothness does not affect CurrentRotation
+        /// </summary>
+        public double CurrentRotation { get { return (double)GetValue(CurrentRotationProperty); } private set { SetValue(CurrentRotationProperty, value); } }
+        public static readonly DependencyProperty CurrentRotationProperty;
 
         /// <summary>
         /// Gets the length distance for <see cref="CurrentPosition"/>
@@ -274,30 +299,53 @@ namespace CustomControls.Controls
         public double CurrentLength { get { return (double)GetValue(CurrentLengthProperty); } private set { SetValue(CurrentLengthProperty, value); } }
         public static readonly DependencyProperty CurrentLengthProperty;
 
+        /// <summary>
+        /// Set true to rotate children by 90 degrees, 
+        /// </summary>
         public bool MoveVertically { get { return (bool)GetValue(MoveVerticallyProperty); } set { SetValue(MoveVerticallyProperty, value); } }
         public static readonly DependencyProperty MoveVerticallyProperty;
 
+        /// <summary>
+        /// Sets the position of items along path
+        /// </summary>
         public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
         public static readonly DependencyProperty ChildAlignmentProperty;
 
-        public double CurrentRotation { get { return (double)GetValue(CurrentRotationProperty); } private set { SetValue(CurrentRotationProperty, value); } }
-        public static readonly DependencyProperty CurrentRotationProperty;
-
+        /// <summary>
+       /// Set true to rotate items by 180 degrees
+       /// </summary>
         public bool FlipItems { get { return (bool)GetValue(FlipItemsProperty); } set { SetValue(FlipItemsProperty, value); } }
         public static readonly DependencyProperty FlipItemsProperty;
 
+        /// <summary>
+        /// Sets child progress to 0 if it is lower than 0. 
+        /// This results items to be stacked at the beginning of path if <see cref="ItemsPadding"/> is specified and progress values are near 0. 
+        /// </summary>
         public bool StackAtStart { get { return (bool)GetValue(StackAtStartProperty); } set { SetValue(StackAtStartProperty, value); } }
         public static readonly DependencyProperty StackAtStartProperty;
 
+        /// <summary>
+        /// Sets child progress to 100 if it is greater than 100. 
+        /// This results items to be stacked at the end of path for progress values greater than 100. 
+        /// </summary>
         public bool StackAtEnd { get { return (bool)GetValue(StackAtEndProperty); } set { SetValue(StackAtEndProperty, value); } }
         public static readonly DependencyProperty StackAtEndProperty;
 
+        /// <summary>
+        /// Smooths children rotation.
+        /// </summary>
         public int SmoothRotation { get { return (int)GetValue(SmoothRotationProperty); } set { SetValue(SmoothRotationProperty, value); } }
         public static readonly DependencyProperty SmoothRotationProperty;
 
+        /// <summary>
+        /// Smooths children translation
+        /// </summary>
         public int SmoothTranslation { get { return (int)GetValue(SmoothTranslationProperty); } set { SetValue(SmoothTranslationProperty, value); } }
         public static readonly DependencyProperty SmoothTranslationProperty;
 
+        /// <summary>
+        /// Sets the easing function each children will have when moving along path.
+        /// </summary>
         public EasingFunctionBase ChildEasingFunction { get { return (EasingFunctionBase)GetValue(ChildEasingFunctionProperty); } set { SetValue(ChildEasingFunctionProperty, value); } }
         public static readonly DependencyProperty ChildEasingFunctionProperty;
 
@@ -365,10 +413,6 @@ namespace CustomControls.Controls
                 rotationTheta = rotationTheta % 360;
 
                 wrapper.SetProgress(childPercent);
-
-
-
-
 
                 if (!double.IsNaN(wrapper.ProgressDistance) && SmoothRotation > 0 && wrapper.ProgressDistance > 0)
                 {
