@@ -43,8 +43,8 @@ namespace CustomControls.Controls
         /// <summary>
         /// Children that are animated along <see cref="Path"/>
         /// </summary>
-        public IList<UIElement> Children => _children;
-        private readonly ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
+        public IList<object> Children => _children;
+        private readonly ObservableCollection<object> _children = new ObservableCollection<object>();
 
         public ExtendedPathGeometry ExtendedGeometry { get; private set; }
 

@@ -54,11 +54,11 @@ namespace CustomControls.Controls
             PlayAnimation();
         }
 
-        public IList<UIElement> Children => _children;
+        public IList<object> Children => _children;
 
         Storyboard _storyboard = new Storyboard();
-        List<UIElement> _children = new List<UIElement>();
-        List<UIElement> _childrenToAnimate = new List<UIElement>();
+        List<object> _children = new List<object>();
+        List<object> _childrenToAnimate = new List<object>();
         private Geometry _cascadingText;
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace CustomControls.Controls
             {
                 await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, delegate
                 {
-                    foreach (var child in _children)
+                    foreach (FrameworkElement child in _children)
                     {
                         child.Opacity = FromOpacity;
                     }
@@ -151,7 +151,7 @@ namespace CustomControls.Controls
                     if (_children.Any())
                     {
                         Grid container = new Grid();
-                        foreach (var child in _children)
+                        foreach (FrameworkElement child in _children)
                             container.Children.Add(child);
                         Content = container;
                     }
@@ -311,7 +311,7 @@ namespace CustomControls.Controls
             _storyboard.Children.Clear();
             for (int index = 0; index < _childrenToAnimate.Count; index++)
             {
-                var letterPath = _childrenToAnimate[index];
+                var letterPath = (FrameworkElement)_childrenToAnimate[index];
 
                 AddAnimationToStoryboard(index, letterPath, FromOpacity, FromOpacityDuration, "(UIElement.Opacity)");
                 if (FromLetterOffsetDuration.TotalMilliseconds > 0)
