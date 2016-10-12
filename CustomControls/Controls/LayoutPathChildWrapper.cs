@@ -12,24 +12,63 @@ namespace CustomControls.Controls
 {
     public class LayoutPathChildWrapper : ContentControl
     {
-        public ContentControl ALINGMENT { get; set; }
+        internal ContentControl ALINGMENT { get; set; }
 
-        public double CurrentProgress { get; private set; } = double.NaN;
-        public double ProgressDistance { get; private set; } = double.NaN;
-        public double ProgressDistanceAVG { get; private set; } 
+        private CompositeTransform Transform { get; set; }
 
-        public void SetProgress(double value)
+        internal double ProgressDistance { get; private set; } = double.NaN;
+        internal double ProgressDistanceAVG { get; private set; }
+
+        static LayoutPathChildWrapper()
         {
-            if (!double.IsNaN(CurrentProgress))
-            {
-                ProgressDistance = Math.Abs(value - CurrentProgress);
-                if (ProgressDistance > 50 || ProgressDistance == 0)
-                    ProgressDistance = ProgressDistanceAVG;
-                else
-                    ProgressDistanceAVG = (ProgressDistanceAVG + ProgressDistance) / 2.0;
-            }
-            CurrentProgress = value;
+            ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    var s = ((LayoutPathChildWrapper)o);
+                    double oldV = (double)e.OldValue;
+                    double newV = (double)e.NewValue;
+
+                    if (!double.IsNaN(newV))
+                    {
+                        s.ProgressDistance = Math.Abs(newV - oldV);
+                        if (s.ProgressDistance > 50 || s.ProgressDistance == 0)
+                            s.ProgressDistance = s.ProgressDistanceAVG;
+                        else
+                            s.ProgressDistanceAVG = (s.ProgressDistanceAVG + s.ProgressDistance) / 2.0;
+                    }
+                }));
+            RotationProperty = DependencyProperty.Register("Rotation", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    ((LayoutPathChildWrapper)o).Transform.Rotation = (double)e.NewValue;
+                }));
+            TranslateXProperty = DependencyProperty.Register("TranslateX", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    ((LayoutPathChildWrapper)o).Transform.TranslateX = (double)e.NewValue;
+                }));
+            TranslateYProperty = DependencyProperty.Register("TranslateY", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
+                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+                {
+                    ((LayoutPathChildWrapper)o).Transform.TranslateY = (double)e.NewValue;
+                }));
         }
+        
+        #region depedency properties
+
+        public double Progress { get { return (double)GetValue(ProgressProperty); } internal set { SetValue(ProgressProperty, value); } }
+        public static readonly DependencyProperty ProgressProperty;
+
+        public double Rotation { get { return (double)GetValue(RotationProperty); } internal set { SetValue(RotationProperty, value); } }
+        public static readonly DependencyProperty RotationProperty;
+
+        public double TranslateX { get { return (double)GetValue(TranslateXProperty); } internal set { SetValue(TranslateXProperty, value); } }
+        public static readonly DependencyProperty TranslateXProperty;
+
+        public double TranslateY { get { return (double)GetValue(TranslateYProperty); } internal set { SetValue(TranslateYProperty, value); } }
+        public static readonly DependencyProperty TranslateYProperty;
+
+        #endregion
 
         protected override void OnApplyTemplate()
         {
@@ -40,14 +79,14 @@ namespace CustomControls.Controls
         {
             Content = child;
             DefaultStyleKey = typeof(LayoutPathChildWrapper);
-            RenderTransform = new CompositeTransform();
+            RenderTransform = Transform = new CompositeTransform();
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 UpdateAlingment(alingment, moveVertically, flip);
             };
         }
 
-        public void UpdateAlingment(ChildAlignment alingment, bool moveVertically, bool flip)
+        internal void UpdateAlingment(ChildAlignment alingment, bool moveVertically, bool flip)
         {
             if (ALINGMENT == null)
                 return;
@@ -91,6 +130,10 @@ namespace CustomControls.Controls
             }
         }
 
-
+        internal void SetTransformCenter(double x, double y)
+        {
+            Transform.CenterX = x;
+            Transform.CenterY = y;
+        }
     }
 }

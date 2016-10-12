@@ -383,7 +383,7 @@ namespace CustomControls.Controls
 
                 var wrapper = (LayoutPathChildWrapper)children[i];
 
-                wrapper.SetProgress(childPercent);
+                wrapper.Progress=childPercent;
 
                 Rotate(wrapper, rotationTheta);
                 Translate(wrapper, childPoint);
@@ -447,8 +447,8 @@ namespace CustomControls.Controls
             //try smooth rotation
             if (!double.IsNaN(wrapper.ProgressDistance) && SmoothRotation > 0 && wrapper.ProgressDistance > 0)
             {
-                var degreesDistance = Math.Max(rotationTheta, wrapper.Transform.Rotation) - Math.Min(rotationTheta, wrapper.Transform.Rotation);
-                var rotation = wrapper.Transform.Rotation;
+                var degreesDistance = Math.Max(rotationTheta, wrapper.Rotation) - Math.Min(rotationTheta, wrapper.Rotation);
+                var rotation = wrapper.Rotation;
                 while (degreesDistance > 180)
                 {
                     if (rotationTheta > rotation)
@@ -457,11 +457,11 @@ namespace CustomControls.Controls
                         rotation = rotation - 360;
                     degreesDistance = Math.Max(rotationTheta, rotation) - Math.Min(rotationTheta, rotation);
                 }
-                wrapper.Transform.Rotation = (rotation * SmoothRotation * 0.2 + rotationTheta * wrapper.ProgressDistance) / (SmoothRotation * 0.2 + wrapper.ProgressDistance);
+                wrapper.Rotation = wrapper.Rotation = (rotation * SmoothRotation * 0.2 + rotationTheta * wrapper.ProgressDistance) / (SmoothRotation * 0.2 + wrapper.ProgressDistance);
             }
             else
             {
-                wrapper.Transform.Rotation = rotationTheta;
+                wrapper.Rotation = wrapper.Rotation = rotationTheta;
             }
         }
 
@@ -478,18 +478,17 @@ namespace CustomControls.Controls
             translateX -= childWidth / 2.0;
             translateY -= childHeight / 2.0;
 
-            wrapper.Transform.CenterX = childWidth / 2.0;
-            wrapper.Transform.CenterY = childHeight / 2.0;
+            wrapper.SetTransformCenter(childWidth / 2.0, childHeight / 2.0);
 
             if (!double.IsNaN(wrapper.ProgressDistance) && SmoothTranslation > 0 && wrapper.ProgressDistance > 0)
             {
-                wrapper.Transform.TranslateX = (wrapper.Transform.TranslateX * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateX) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
-                wrapper.Transform.TranslateY = (wrapper.Transform.TranslateY * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateY) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
+                wrapper.TranslateX = (wrapper.TranslateX * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateX) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
+                wrapper.TranslateY = (wrapper.TranslateY * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateY) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
             }
             else
             {
-                wrapper.Transform.TranslateX = translateX;
-                wrapper.Transform.TranslateY = translateY;
+                wrapper.TranslateX = translateX;
+                wrapper.TranslateY = translateY;
             }
         }
 
