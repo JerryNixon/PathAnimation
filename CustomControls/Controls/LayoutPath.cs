@@ -53,7 +53,7 @@ namespace CustomControls.Controls
         /// The extended geometry, mainly used for getting point at fraction length
         /// </summary>
         public ExtendedPathGeometry ExtendedGeometry { get; private set; }
-        
+
         /// <summary>
         /// Used for providing better designer support, when adding or removing items
         /// </summary>
@@ -155,7 +155,7 @@ namespace CustomControls.Controls
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
             SmoothRotationProperty = DependencyProperty.Register("SmoothRotation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
             SmoothTranslationProperty = DependencyProperty.Register("SmoothTranslation", typeof(int), typeof(LayoutPath), new PropertyMetadata(default(int)));
-           
+
             ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double),
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
@@ -312,8 +312,8 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty ChildAlignmentProperty;
 
         /// <summary>
-       /// Set true to rotate items by 180 degrees
-       /// </summary>
+        /// Set true to rotate items by 180 degrees
+        /// </summary>
         public bool FlipItems { get { return (bool)GetValue(FlipItemsProperty); } set { SetValue(FlipItemsProperty, value); } }
         public static readonly DependencyProperty FlipItemsProperty;
 
@@ -365,95 +365,28 @@ namespace CustomControls.Controls
             {
                 double childPercent = progress - (i * ItemsPadding);
 
-                if (childPercent < 0)
-                {
-                    if (StackAtStart)
-                        childPercent = 0;
-                    else
-                        childPercent = 100 + childPercent;
-                }
-                else if (childPercent > 100)
-                {
-                    if (StackAtEnd)
-                        childPercent = 100;
-                    else
-                        childPercent = childPercent - 100;
-                }
+                ApplyStackFilters(ref childPercent);
 
 
                 if (ChildEasingFunction != null)
-                {
                     childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
-                }
 
                 Point childPoint;
                 double rotationTheta;
                 ExtendedGeometry.GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
 
                 if (i == 0)
+                {
                     CurrentPosition = childPoint;
+                    CurrentRotation = rotationTheta;
+                }
 
                 var wrapper = (LayoutPathChildWrapper)children[i];
-                var wrappedChild = wrapper.Content as FrameworkElement;
-
-                var childWidth = wrappedChild.ActualWidth;
-                var childHeight = wrappedChild.ActualHeight;
-
-                CompositeTransform wrapperTransform = (CompositeTransform)wrapper.RenderTransform;
-
-                if (!OrientToPath)
-                    rotationTheta = 0;
-
-                if (MoveVertically)
-                    rotationTheta += 90;
-
-                if (FlipItems)
-                    rotationTheta += 180;
-
-                rotationTheta = rotationTheta % 360;
 
                 wrapper.SetProgress(childPercent);
 
-                if (!double.IsNaN(wrapper.ProgressDistance) && SmoothRotation > 0 && wrapper.ProgressDistance > 0)
-                {
-                    var degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
-                    while (degreesDistance > 180)
-                    {
-                        if (rotationTheta > wrapperTransform.Rotation)
-                            wrapperTransform.Rotation = wrapperTransform.Rotation + 360;
-                        else
-                            wrapperTransform.Rotation = wrapperTransform.Rotation - 360;
-                        degreesDistance = Math.Max(rotationTheta, wrapperTransform.Rotation) - Math.Min(rotationTheta, wrapperTransform.Rotation);
-                    }
-                    wrapperTransform.Rotation = (wrapperTransform.Rotation * SmoothRotation * 0.2 + rotationTheta * wrapper.ProgressDistance) / (SmoothRotation * 0.2 + wrapper.ProgressDistance);
-                }
-                else
-                {
-                    wrapperTransform.Rotation = rotationTheta;
-                }
-
-                double translateX = childPoint.X - ExtendedGeometry.PathOffset.X;
-                double translateY = childPoint.Y - ExtendedGeometry.PathOffset.Y;
-
-                //center align child
-                translateX -= childWidth / 2.0;
-                translateY -= childHeight / 2.0;
-                wrapperTransform.CenterX = childWidth / 2.0;
-                wrapperTransform.CenterY = childHeight / 2.0;
-
-                if (!double.IsNaN(wrapper.ProgressDistance) && SmoothTranslation > 0 && wrapper.ProgressDistance > 0)
-                {
-                    wrapperTransform.TranslateX = (wrapperTransform.TranslateX * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateX) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
-                    wrapperTransform.TranslateY = (wrapperTransform.TranslateY * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateY) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
-                }
-                else
-                {
-                    wrapperTransform.TranslateX = translateX;
-                    wrapperTransform.TranslateY = translateY;
-                }
-
-                if (i == 0)
-                    CurrentRotation = rotationTheta;
+                Rotate(wrapper, rotationTheta);
+                Translate(wrapper, childPoint);
             }
 
             if (!children.Any())
@@ -464,6 +397,100 @@ namespace CustomControls.Controls
             }
 
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
+        }
+
+        private void ApplyStackFilters(ref double progress)
+        {
+            if (progress < 0)
+            {
+                if (StackAtStart)
+                {
+                    progress = 0;
+                }
+                else
+                {
+                    //transfer to range 0-100.
+                    //Examples
+                    // -2 + 100 = 98 exit
+                    // -102 + 100 = -2 + 100 = 98 exit
+                    while (progress < 0)
+                        progress = 100 + progress;
+                }
+            }
+            else if (progress > 100)
+            {
+                if (StackAtEnd)
+                {
+                    progress = 100;
+                }
+                else
+                {
+                    //transfer to range 0-100
+                    progress = progress % 100;
+                }
+            }
+        }
+
+        private void Rotate(LayoutPathChildWrapper wrapper, double rotationTheta)
+        {
+            if (!OrientToPath)
+                rotationTheta = 0;
+
+            if (MoveVertically)
+                rotationTheta += 90;
+
+            if (FlipItems)
+                rotationTheta += 180;
+
+            rotationTheta = rotationTheta % 360;
+
+            //try smooth rotation
+            if (!double.IsNaN(wrapper.ProgressDistance) && SmoothRotation > 0 && wrapper.ProgressDistance > 0)
+            {
+                var degreesDistance = Math.Max(rotationTheta, wrapper.Transform.Rotation) - Math.Min(rotationTheta, wrapper.Transform.Rotation);
+                var rotation = wrapper.Transform.Rotation;
+                while (degreesDistance > 180)
+                {
+                    if (rotationTheta > rotation)
+                        rotation = rotation + 360;
+                    else
+                        rotation = rotation - 360;
+                    degreesDistance = Math.Max(rotationTheta, rotation) - Math.Min(rotationTheta, rotation);
+                }
+                wrapper.Transform.Rotation = (rotation * SmoothRotation * 0.2 + rotationTheta * wrapper.ProgressDistance) / (SmoothRotation * 0.2 + wrapper.ProgressDistance);
+            }
+            else
+            {
+                wrapper.Transform.Rotation = rotationTheta;
+            }
+        }
+
+        private void Translate(LayoutPathChildWrapper wrapper, Point childPoint)
+        {
+            var wrappedChild = wrapper.Content as FrameworkElement;
+            var childWidth = wrappedChild.ActualWidth;
+            var childHeight = wrappedChild.ActualHeight;
+
+            double translateX = childPoint.X - ExtendedGeometry.PathOffset.X;
+            double translateY = childPoint.Y - ExtendedGeometry.PathOffset.Y;
+
+            //center align child
+            translateX -= childWidth / 2.0;
+            translateY -= childHeight / 2.0;
+
+            wrapper.Transform.CenterX = childWidth / 2.0;
+            wrapper.Transform.CenterY = childHeight / 2.0;
+
+            if (!double.IsNaN(wrapper.ProgressDistance) && SmoothTranslation > 0 && wrapper.ProgressDistance > 0)
+            {
+                wrapper.Transform.TranslateX = (wrapper.Transform.TranslateX * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateX) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
+                wrapper.Transform.TranslateY = (wrapper.Transform.TranslateY * SmoothTranslation * 0.2 / wrapper.ProgressDistance + translateY) / (SmoothTranslation * 0.2 / wrapper.ProgressDistance + 1);
+            }
+            else
+            {
+                wrapper.Transform.TranslateX = translateX;
+                wrapper.Transform.TranslateY = translateY;
+            }
         }
 
         #endregion
