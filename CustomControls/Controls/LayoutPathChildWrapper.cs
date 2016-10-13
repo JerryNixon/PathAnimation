@@ -12,12 +12,11 @@ namespace CustomControls.Controls
 {
     public class LayoutPathChildWrapper : ContentControl
     {
-        internal ContentControl ALINGMENT { get; set; }
+        private ContentControl ALIGNMENT { get; set; }
 
         private CompositeTransform Transform { get; set; }
 
         internal double ProgressDistance { get; private set; } = double.NaN;
-        internal double ProgressDistanceAVG { get; private set; }
 
         static LayoutPathChildWrapper()
         {
@@ -31,10 +30,15 @@ namespace CustomControls.Controls
                     if (!double.IsNaN(newV))
                     {
                         s.ProgressDistance = Math.Abs(newV - oldV);
-                        if (s.ProgressDistance > 50 || s.ProgressDistance == 0)
-                            s.ProgressDistance = s.ProgressDistanceAVG;
-                        else
-                            s.ProgressDistanceAVG = (s.ProgressDistanceAVG + s.ProgressDistance) / 2.0;
+                        if (s.ProgressDistance > 50)
+                        {
+                            //occurs when we transfer from end to beginning (e.g. 99 to 1: In that case Progress distance will give a value of 98 while the actual must be 2).
+                            if (oldV > 50)
+                                oldV = oldV - 100;
+                            else
+                                newV = newV - 100;
+                            s.ProgressDistance = Math.Abs(newV - oldV);
+                        }
                     }
                 }));
             RotationProperty = DependencyProperty.Register("Rotation", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
@@ -53,8 +57,8 @@ namespace CustomControls.Controls
                     ((LayoutPathChildWrapper)o).Transform.TranslateY = (double)e.NewValue;
                 }));
         }
-        
-        #region depedency properties
+
+        #region dependency properties
 
         public double Progress { get { return (double)GetValue(ProgressProperty); } internal set { SetValue(ProgressProperty, value); } }
         public static readonly DependencyProperty ProgressProperty;
@@ -72,7 +76,7 @@ namespace CustomControls.Controls
 
         protected override void OnApplyTemplate()
         {
-            ALINGMENT = GetTemplateChild(nameof(ALINGMENT)) as ContentControl;
+            ALIGNMENT = GetTemplateChild(nameof(ALIGNMENT)) as ContentControl;
         }
 
         public LayoutPathChildWrapper(FrameworkElement child, ChildAlignment alingment, bool moveVertically, bool flip)
@@ -88,10 +92,10 @@ namespace CustomControls.Controls
 
         internal void UpdateAlingment(ChildAlignment alingment, bool moveVertically, bool flip)
         {
-            if (ALINGMENT == null)
+            if (ALIGNMENT == null)
                 return;
 
-            var translate = (TranslateTransform)ALINGMENT.RenderTransform;
+            var translate = (TranslateTransform)ALIGNMENT.RenderTransform;
             if (alingment == ChildAlignment.Center)
             {
                 translate.X = translate.Y = 0;

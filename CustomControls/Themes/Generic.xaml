@@ -54,7 +54,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="local:LayoutPathChildWrapper">
                     <!--Used for controlling child position (Middle, Outer, Inner)-->
-                    <ContentControl x:Name="ALINGMENT">
+                    <ContentControl x:Name="ALIGNMENT">
                         <ContentControl.RenderTransform>
                             <TranslateTransform/>
                         </ContentControl.RenderTransform>
