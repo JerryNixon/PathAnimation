@@ -21,6 +21,7 @@
                 <TextBlock Text="LayoutPath" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
                     <Button Content="LayoutPath controller" Click="LayoutPath_OnClick"/>
+                    <Button Content="LayoutPath attached properties" Click="attachedProperties_click"/>
                     <Button Content="Rotating sunshines example" Click="ButtonBase_OnClick"/>
                     <Button Content="Text along path example" Click="textAlongPath_click"/>
                     <Button Content="Racing car example" Click="racingPath_OnClick"/>

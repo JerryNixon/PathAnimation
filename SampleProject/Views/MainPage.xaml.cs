@@ -51,5 +51,10 @@ namespace SampleProject
         {
             this.Frame.Navigate(typeof(CascadingAnimationCachedExamplePage));
         }
+
+        private void attachedProperties_click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(AttachedPropertiesLayoutPathSample));
+        }
     }
 }

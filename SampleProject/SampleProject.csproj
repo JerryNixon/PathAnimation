@@ -107,6 +107,9 @@
     <Compile Include="Views\CascadingAnimationSamples\CascadingExampleTemplate.xaml.cs">
       <DependentUpon>CascadingExampleTemplate.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\LayoutPathSamples\AttachedPropertiesLayoutPathSample.xaml.cs">
+      <DependentUpon>AttachedPropertiesLayoutPathSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\LayoutPathSamples\LayoutPathPage.xaml.cs">
       <DependentUpon>LayoutPathPage.xaml</DependentUpon>
     </Compile>
@@ -160,6 +163,10 @@
     <Page Include="Views\CascadingAnimationSamples\CascadingExampleTemplate.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LayoutPathSamples\AttachedPropertiesLayoutPathSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LayoutPathSamples\LayoutPathPage.xaml">
       <SubType>Designer</SubType>

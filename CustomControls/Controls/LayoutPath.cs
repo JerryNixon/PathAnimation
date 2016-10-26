@@ -197,7 +197,23 @@ namespace CustomControls.Controls
 
             Action<DependencyObject, DependencyPropertyChangedEventArgs> transformToProgress = delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
             {
-                ((LayoutPath)o).TransformToProgress(((LayoutPath)o).Progress);
+                LayoutPathChildWrapper wrapper = null;
+                while (true)
+                {
+                    o = VisualTreeHelper.GetParent(o);
+                    if (o is LayoutPathChildWrapper)
+                        wrapper = (LayoutPathChildWrapper)o;
+
+                    if (o is LayoutPath)
+                    {
+                        if (wrapper != null)
+                            ((LayoutPath)o).MoveChild(wrapper, (double)e.NewValue);
+                        return;
+                    }
+                    if (o == null)
+                        return;
+                }
+
             };
 
             MoveVerticallyProperty = DependencyProperty.Register(nameof(MoveVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool),
@@ -227,6 +243,12 @@ namespace CustomControls.Controls
                     }
                     transformToProgress(o, e);
                 }));
+
+            ChildProgressProperty = DependencyProperty.RegisterAttached("ChildProgress", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN,
+            delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+            {
+                transformToProgress(o, e);
+            }));
 
 
             ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), (o, e) => transformToProgress(o, e)));
@@ -351,8 +373,45 @@ namespace CustomControls.Controls
 
         #endregion
 
-        #region methods
+        #region attached properties
 
+        public static readonly DependencyProperty IsMovableProperty = DependencyProperty.RegisterAttached("IsMovable", typeof(Boolean), typeof(LayoutPath), new PropertyMetadata(true));
+
+        public static void SetIsMovable(UIElement element, Boolean value)
+        {
+            element.SetValue(IsMovableProperty, value);
+        }
+        public static Boolean GetIsMovable(UIElement element)
+        {
+            return (Boolean)element.GetValue(IsMovableProperty);
+        }
+
+
+        public static readonly DependencyProperty ChildProgressProperty;
+
+        public static void SetChildProgress(UIElement element, double value)
+        {
+            element.SetValue(ChildProgressProperty, value);
+        }
+        public static double GetChildProgress(UIElement element)
+        {
+            return (double)element.GetValue(ChildProgressProperty);
+        }
+
+        public static readonly DependencyProperty ProgressOffsetProperty = DependencyProperty.RegisterAttached("ProgressOffset", typeof(double), typeof(LayoutPath), new PropertyMetadata(0.0));
+
+        public static void SetProgressOffset(UIElement element, double value)
+        {
+            element.SetValue(ProgressOffsetProperty, value);
+        }
+        public static double GetProgressOffset(UIElement element)
+        {
+            return (double)element.GetValue(ProgressOffsetProperty);
+        }
+
+        #endregion
+
+        #region methods
 
         private void TransformToProgress(double progress)
         {
@@ -365,38 +424,42 @@ namespace CustomControls.Controls
             {
                 double childPercent = progress - (i * ItemsPadding);
 
-                ApplyStackFilters(ref childPercent);
-
-
-                if (ChildEasingFunction != null)
-                    childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
-
-                Point childPoint;
-                double rotationTheta;
-                ExtendedGeometry.GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
-
-                if (i == 0)
-                {
-                    CurrentPosition = childPoint;
-                    CurrentRotation = rotationTheta;
-                }
-
                 var wrapper = (LayoutPathChildWrapper)children[i];
+                if (!GetIsMovable((UIElement)wrapper.Content))
+                    continue;
 
-                wrapper.Progress=childPercent;
+                var childProgress = GetChildProgress((UIElement)wrapper.Content);
+                if (!double.IsNaN(childProgress))
+                    childPercent = childProgress;
 
-                Rotate(wrapper, rotationTheta);
-                Translate(wrapper, childPoint);
+                var childOffset = GetProgressOffset((UIElement)wrapper.Content);
+                childPercent += childOffset;
+
+                MoveChild(wrapper, childPercent);
             }
 
-            if (!children.Any())
-            {
-                var tmp = ExtendedGeometry.GetPointAtFractionLength(progress);
-                CurrentPosition = tmp.Item1;
-                CurrentRotation = tmp.Item2;
-            }
+            var tmp = ExtendedGeometry.GetPointAtFractionLength(progress);
+            CurrentPosition = tmp.Item1;
+            CurrentRotation = tmp.Item2;
 
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
+        }
+
+        private void MoveChild(LayoutPathChildWrapper wrapper, double childPercent)
+        {
+            ApplyStackFilters(ref childPercent);
+
+            if (ChildEasingFunction != null)
+                childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
+
+            Point childPoint;
+            double rotationTheta;
+            ExtendedGeometry.GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
+
+            wrapper.Progress = childPercent;
+
+            Rotate(wrapper, rotationTheta);
+            Translate(wrapper, childPoint);
         }
 
         private void ApplyStackFilters(ref double progress)
