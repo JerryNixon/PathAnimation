@@ -363,7 +363,8 @@ namespace CustomControls.Controls
         public string ToXamlDeclaration()
         {
             string color = "{ThemeResource ApplicationForegroundThemeBrush}";
-            if (this.Foreground != null)
+            var themed = (SolidColorBrush) Resources["ApplicationForegroundThemeBrush"];
+            if (this.Foreground != null && this.Foreground != themed)
             {
                 if (Foreground is SolidColorBrush)
                 {
