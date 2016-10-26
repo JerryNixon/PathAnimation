@@ -37,6 +37,5 @@
             <TextBlock Text="E"/>
             <TextBlock Text="F"/>
         </controls:LayoutPath>
-        <Button Content="back" HorizontalAlignment="Left" VerticalAlignment="Top" Click="ButtonBase_OnClick"/>
     </Grid>
 </Page>

@@ -300,6 +300,5 @@
             <Button Content="+" Width="100"  Foreground="White" Click="speedUp"/>
             <Button Content="-" Width="100"  Foreground="White"  Click="speedDown"/>
         </StackPanel>
-        <Button Content="Back" Click="Back_OnClick" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Foreground="Wheat"/>
     </Grid>
 </Page>

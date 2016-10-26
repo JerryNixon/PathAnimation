@@ -73,7 +73,6 @@
 
                 </controls:LayoutPath>
             </Grid>
-            <Button Content="Back" Click="Back_OnClick" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Foreground="Wheat"/>
         </Grid>
     </Grid>
 </Page>

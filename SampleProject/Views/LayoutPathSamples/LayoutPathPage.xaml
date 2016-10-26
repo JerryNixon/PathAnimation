@@ -33,7 +33,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <Button Content="Back" Click="Back_OnClick" Width="100"/>
 
                 <VariableSizedWrapGrid Orientation="Horizontal"  Grid.Column="1" ItemWidth="210" HorizontalAlignment="Right" VerticalAlignment="Bottom">
                     <StackPanel Orientation="Horizontal">

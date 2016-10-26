@@ -35,7 +35,7 @@ namespace SampleProject.Views.LayoutPathSamples
         {
             this.InitializeComponent();
 
-
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 layoutPath.SmoothRotation = 25;
@@ -70,9 +70,6 @@ namespace SampleProject.Views.LayoutPathSamples
             progressChange = progressChange - 0.05;
         }
 
-        private void Back_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
+     
     }
 }

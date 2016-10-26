@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -29,6 +30,7 @@ namespace SampleProject.Views
         public LayoutPathPage()
         {
             this.InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             childAlignmentCB.ItemsSource = Enum.GetValues(typeof(ChildAlignment));
             stretchCB.ItemsSource = Enum.GetValues(typeof(Stretch));
             Loaded += delegate (object sender, RoutedEventArgs args)
@@ -38,10 +40,7 @@ namespace SampleProject.Views
             };
         }
 
-        private void Back_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
+      
 
         private void Add_OnClick(object sender, RoutedEventArgs e)
         {

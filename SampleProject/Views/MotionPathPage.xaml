@@ -117,7 +117,6 @@
                         <Setter Property="Width" Value="200"></Setter>
                     </Style>
                 </VariableSizedWrapGrid.Resources>
-                <Button Content="Back" HorizontalAlignment="Left" VerticalAlignment="Top"  Click="Back_OnClick"/>
 
                 <TextBlock Text="Quick setters" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <Button Content="Path" Click="quickSetPath"/>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -28,6 +29,7 @@ namespace SampleProject.Views.LayoutPathSamples
         public CirclePathTextSample()
         {
             this.InitializeComponent();
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
 
             DoubleAnimationUsingKeyFrames an = new DoubleAnimationUsingKeyFrames();
             an.EnableDependentAnimation = true;
@@ -89,9 +91,6 @@ namespace SampleProject.Views.LayoutPathSamples
             storyboard.Begin();
         }
 
-        private void Back_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Frame.GoBack();
-        }
+       
     }
 }
