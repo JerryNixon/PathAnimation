@@ -40,7 +40,7 @@ namespace SampleProject.Views.LayoutPathSamples
             {
                 layoutPath.SmoothRotation = 25;
                 mapPath.SmoothTranslation = layoutPath.SmoothTranslation = 28;
-                timer = new Timer(Callback, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000 / 60.0));
+                timer = new Timer(Callback, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000 / 60.0));//60 fps
             };
 
         }

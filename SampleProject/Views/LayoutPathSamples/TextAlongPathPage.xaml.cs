@@ -29,14 +29,12 @@ namespace SampleProject.Views.LayoutPathSamples
             this.InitializeComponent();
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
 
-            string text = "Hello world! This is a text animation sample!";
-
-            var chars = text.ToCharArray().Reverse();
-
-            layoutPath.Children.Clear();
-            startKeyFrame.Value = 100 + text.Length * layoutPath.ItemsPadding;
             Storyboard1.RepeatBehavior = RepeatBehavior.Forever;
+            layoutPath.Children.Clear();
 
+            string text = "Hello world! This is a text animation sample!";
+            var chars = text.ToCharArray().Reverse();
+            startKeyFrame.Value = 100 + text.Length * layoutPath.ItemsPadding;
             foreach (char c in chars)
             {
                 TextBlock textBlock = new TextBlock() { Text = c + "" };

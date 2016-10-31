@@ -35,7 +35,7 @@ namespace SampleProject.Views.LayoutPathSamples
             an.EnableDependentAnimation = true;
 
 
-            double lineDuration = 4;
+            double lineDuration = 3;
             double transitionDuration = 1;
 
 

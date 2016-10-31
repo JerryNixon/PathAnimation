@@ -98,6 +98,9 @@
     <Compile Include="Converters\BoolVisibilityConverter.cs" />
     <Compile Include="Converters\EnumStringConverter.cs" />
     <Compile Include="Converters\PointStringConverter.cs" />
+    <Compile Include="Helpers\DelegateCommand.cs" />
+    <Compile Include="Models\TileModel.cs" />
+    <Compile Include="ViewModels\MainPageVM.cs" />
     <Compile Include="Views\CascadingAnimationSamples\CascadingAnimationCachedExamplePage.xaml.cs">
       <DependentUpon>CascadingAnimationCachedExamplePage.xaml</DependentUpon>
     </Compile>
@@ -110,8 +113,8 @@
     <Compile Include="Views\LayoutPathSamples\AttachedPropertiesLayoutPathSample.xaml.cs">
       <DependentUpon>AttachedPropertiesLayoutPathSample.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LayoutPathSamples\LayoutPathPage.xaml.cs">
-      <DependentUpon>LayoutPathPage.xaml</DependentUpon>
+    <Compile Include="Views\LayoutPathSamples\LayoutPathControllerPage.xaml.cs">
+      <DependentUpon>LayoutPathControllerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LayoutPathSamples\CirclePathTextSample.xaml.cs">
       <DependentUpon>CirclePathTextSample.xaml</DependentUpon>
@@ -138,6 +141,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Sun-PNG-HD.png" />
+    <Content Include="Assets\Thumbs\lp1.png" />
+    <Content Include="Assets\Thumbs\lp2.png" />
+    <Content Include="Assets\Thumbs\lp3.png" />
+    <Content Include="Assets\Thumbs\lp4.png" />
+    <Content Include="Assets\Thumbs\lp5.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -168,7 +176,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LayoutPathSamples\LayoutPathPage.xaml">
+    <Page Include="Views\LayoutPathSamples\LayoutPathControllerPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,6 +207,7 @@
       <Name>CustomControls</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
