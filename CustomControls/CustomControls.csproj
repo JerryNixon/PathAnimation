@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\CascadingAnimation.cs" />
+    <Compile Include="Controls\DependencyProperties\LayoutPath.cs" />
     <Compile Include="Controls\LayoutPath.cs" />
     <Compile Include="Controls\LayoutPathChildWrapper.cs" />
     <Compile Include="Controls\MotionPath.cs" />

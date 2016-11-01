@@ -42,16 +42,17 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="{Binding Title}" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                                    <TextBlock Text="{Binding Description}" Grid.Row="1" FontSize="11" TextWrapping="Wrap" />
-                                    <Border Grid.Row="2" BorderThickness="1" BorderBrush="#7F808080" Margin="0,5,0,0">
+                                    <Border Grid.Row="1" BorderThickness="1" BorderBrush="#7F808080" Margin="0,5,0,0" Height="155">
                                         <Image Source="{Binding ThumbnailUri}" Stretch="UniformToFill"/>
                                     </Border>
+                                    <TextBlock Text="{Binding Description}" Grid.Row="2" FontSize="11" TextWrapping="Wrap" />
+                                   
                                 </Grid>
                             </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <TextBlock Text="MotionPath" Style="{StaticResource SubheaderTextBlockStyle}"/>
                 <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
                     <Button Content="MotionPath controller" Click="MotionPath_OnClick"/>

@@ -53,13 +53,32 @@
 
                     <Path x:Name="child3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
-                    <Path Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Path x:Name="child4" controls:LayoutPath.ChildSmoothRotation="3" controls:LayoutPath.ChildSmoothTranslation="3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Path x:Name="child5" controls:LayoutPath.ChildSmoothRotation="6" controls:LayoutPath.ChildSmoothTranslation="6" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
                 </controls:LayoutPath>
             </Border>
             <StackPanel Grid.Row="2">
-                <Slider Header="1st progress" Value="{Binding Path=(controls:LayoutPath.ChildProgress), Mode=TwoWay,ElementName=child1}"></Slider>
+                <Slider Header="1st progress" Value="{Binding Path=(controls:LayoutPath.ChildProgress), Mode=TwoWay,ElementName=child1}"  StepFrequency="0.01"></Slider>
                 <Slider Header="2nd progress offset" Value="{Binding Path=(controls:LayoutPath.ProgressOffset), Mode=TwoWay,ElementName=child2}" Minimum="-10" Maximum="10" StepFrequency="0.01"></Slider>
                 <CheckBox Content="3nd is movable" IsChecked="{Binding Path=(controls:LayoutPath.IsMovable), Mode=TwoWay,ElementName=child3}" ></CheckBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Slider Header="4th smooth translation" Grid.Column="0" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothTranslation), Mode=TwoWay,ElementName=child4}"></Slider>
+                    <Slider Header="4th smooth rotation" Grid.Column="1" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothRotation), Mode=TwoWay,ElementName=child4}"></Slider>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Slider Header="5th smooth translation" Grid.Column="0" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothTranslation), Mode=TwoWay,ElementName=child5}"></Slider>
+                    <Slider Header="5th smooth rotation" Grid.Column="1" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothRotation), Mode=TwoWay,ElementName=child5}"></Slider>
+                </Grid>
             </StackPanel>
         </Grid>
     </Grid>
