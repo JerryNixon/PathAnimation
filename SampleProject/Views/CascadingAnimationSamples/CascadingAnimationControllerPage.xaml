@@ -110,7 +110,7 @@
             <Button Content="back" Click="back_OnClick" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
 
             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="loadingGrid" d:IsHidden="True" >
-                <TextBlock Text="Analyzing data... Please wait. It will worth it!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="Analyzing data... Please wait. It will be worth it!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Grid>
 

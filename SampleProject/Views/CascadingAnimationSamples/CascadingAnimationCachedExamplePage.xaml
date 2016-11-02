@@ -15,8 +15,6 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
-
         <Grid>
             <StackPanel  Margin="48,48,0,0" >
                 <controls:CascadingAnimation x:Name="ct1" CacheMode="BitmapCache" DelayExecution="0:0:0.25" FromOpacityDuration="0:0:0.01" NextLetterOn="00:00:0.05" FromLetterOffsetDuration="0" FromOpacity="0.1">
@@ -1019,7 +1017,7 @@
             <Button Content="back" Click="back_OnClick" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10"/>
 
             <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" x:Name="loadingGrid" d:IsHidden="True" >
-                <TextBlock Text="Analyzing data... Please wait. It will worth it!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBlock Text="Analyzing data... Please wait. It will be worth it!" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Grid>
     </Grid>

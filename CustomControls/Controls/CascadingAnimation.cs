@@ -271,11 +271,24 @@ namespace CustomControls.Controls
                 else
                 {
                     child.Opacity = FromOpacity;
-                    child.RenderTransform = new CompositeTransform()
+                    if (child is Path)
                     {
-                        CenterX = child.ActualWidth == 0 ? child.Width / 2.0 : child.ActualWidth / 2.0,
-                        CenterY = child.ActualHeight == 0 ? child.Height / 2.0 : child.ActualHeight / 2.0
-                    };
+                        var p = (Path) child;
+                        PathGeometry geometry = (PathGeometry) p.Data;
+                        p.RenderTransform = new CompositeTransform()
+                        {
+                            CenterX = (geometry.Bounds.Right + geometry.Bounds.Left)/2.0,
+                            CenterY = (geometry.Bounds.Bottom + geometry.Bounds.Top)/2.0
+                        };
+                    }
+                    else
+                    {
+                        child.RenderTransform = new CompositeTransform()
+                        {
+                            CenterX = child.ActualWidth == 0 ? child.Width/2.0 : child.ActualWidth/2.0,
+                            CenterY = child.ActualHeight == 0 ? child.Height/2.0 : child.ActualHeight/2.0
+                        };
+                    }
                     _childrenToAnimate.Add(child);
                 }
             }
@@ -360,10 +373,11 @@ namespace CustomControls.Controls
             _storyboard.Children.Add(animation);
         }
 
-        public string ToXamlDeclaration()
+        public async Task<string> ToXamlDeclaration()
         {
+            await Task.Delay(1);
             string color = "{ThemeResource ApplicationForegroundThemeBrush}";
-            var themed = (SolidColorBrush) Resources["ApplicationForegroundThemeBrush"];
+            var themed = (SolidColorBrush)Resources["ApplicationForegroundThemeBrush"];
             if (this.Foreground != null && this.Foreground != themed)
             {
                 if (Foreground is SolidColorBrush)
