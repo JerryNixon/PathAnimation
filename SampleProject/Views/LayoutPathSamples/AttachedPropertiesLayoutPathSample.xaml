@@ -14,7 +14,7 @@
             <Setter Property="Margin" Value="1"/>
         </Style>
         <Storyboard x:Name="PathStoryboard">
-            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.Progress)" Storyboard.TargetName="LayoutPath1" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.PathProgress)" Storyboard.TargetName="LayoutPath1" RepeatBehavior="Forever">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:20" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
@@ -30,8 +30,8 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
-            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="0" OrientToPath="True" Stretch="Uniform"  PathVisible="True" 
-                                 ItemsPadding="3" SmoothRotation="4" SmoothTranslation="4">
+            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" OrientToPath="True" Stretch="Uniform"  PathVisibility="Visible" 
+                                 ItemsPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -46,18 +46,18 @@
                         </PathGeometry>
                     </controls:LayoutPath.Path>
 
-                    <Path x:Name="child1" controls:LayoutPath.ChildProgress="25" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Path x:Name="child1" controls:LayoutPath.Progress="25" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
                     <Path x:Name="child2" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
                     <Path x:Name="child3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
 
-                    <Path x:Name="child4" controls:LayoutPath.ChildSmoothRotation="3" controls:LayoutPath.ChildSmoothTranslation="3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
-                    <Path x:Name="child5" controls:LayoutPath.ChildSmoothRotation="6" controls:LayoutPath.ChildSmoothTranslation="6" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Path x:Name="child4" controls:LayoutPath.RotationSmoothing="3" controls:LayoutPath.TranslationSmoothing="3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Path x:Name="child5" controls:LayoutPath.RotationSmoothing="6" controls:LayoutPath.TranslationSmoothing="6" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
                 </controls:LayoutPath>
             </Border>
             <StackPanel Grid.Row="2">
-                <Slider Header="1st progress" Value="{Binding Path=(controls:LayoutPath.ChildProgress), Mode=TwoWay,ElementName=child1}"  StepFrequency="0.01"></Slider>
+                <Slider Header="1st progress" Value="{Binding Path=(controls:LayoutPath.Progress), Mode=TwoWay,ElementName=child1}"  StepFrequency="0.01"></Slider>
                 <Slider Header="2nd progress offset" Value="{Binding Path=(controls:LayoutPath.ProgressOffset), Mode=TwoWay,ElementName=child2}" Minimum="-10" Maximum="10" StepFrequency="0.01"></Slider>
                 <CheckBox Content="3nd is movable" IsChecked="{Binding Path=(controls:LayoutPath.IsMovable), Mode=TwoWay,ElementName=child3}" ></CheckBox>
                 <Grid>
@@ -66,8 +66,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Slider Header="4th smooth translation" Grid.Column="0" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothTranslation), Mode=TwoWay,ElementName=child4}"></Slider>
-                    <Slider Header="4th smooth rotation" Grid.Column="1" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothRotation), Mode=TwoWay,ElementName=child4}"></Slider>
+                    <Slider Header="4th smooth translation" Grid.Column="0" Maximum="20" Value="{Binding Path=(controls:LayoutPath.TranslationSmoothing), Mode=TwoWay,ElementName=child4}"></Slider>
+                    <Slider Header="4th smooth rotation" Grid.Column="1" Maximum="20" Value="{Binding Path=(controls:LayoutPath.RotationSmoothing), Mode=TwoWay,ElementName=child4}"></Slider>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -75,8 +75,8 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
-                    <Slider Header="5th smooth translation" Grid.Column="0" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothTranslation), Mode=TwoWay,ElementName=child5}"></Slider>
-                    <Slider Header="5th smooth rotation" Grid.Column="1" Maximum="20" Value="{Binding Path=(controls:LayoutPath.ChildSmoothRotation), Mode=TwoWay,ElementName=child5}"></Slider>
+                    <Slider Header="5th smooth translation" Grid.Column="0" Maximum="20" Value="{Binding Path=(controls:LayoutPath.TranslationSmoothing), Mode=TwoWay,ElementName=child5}"></Slider>
+                    <Slider Header="5th smooth rotation" Grid.Column="1" Maximum="20" Value="{Binding Path=(controls:LayoutPath.RotationSmoothing), Mode=TwoWay,ElementName=child5}"></Slider>
                 </Grid>
             </StackPanel>
         </Grid>

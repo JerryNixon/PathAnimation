@@ -38,8 +38,8 @@ namespace SampleProject.Views.LayoutPathSamples
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
-                layoutPath.SmoothRotation = 25;
-                mapPath.SmoothTranslation = layoutPath.SmoothTranslation = 28;
+                layoutPath.TranslationSmoothingDefault = 25;
+                mapPath.RotationSmoothingDefault = layoutPath.RotationSmoothingDefault = 28;
                 timer = new Timer(Callback, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(1000 / 60.0));//60 fps
             };
 
@@ -50,7 +50,7 @@ namespace SampleProject.Views.LayoutPathSamples
             CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.High, delegate
             {
                 progress = progress % 100;
-                layoutPath.Progress = progress;
+                layoutPath.PathProgress = progress;
                 progress = progress + progressChange;
             });
         }

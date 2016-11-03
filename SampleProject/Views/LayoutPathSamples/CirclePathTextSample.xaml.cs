@@ -83,7 +83,7 @@ namespace SampleProject.Views.LayoutPathSamples
                 EasingFunction = new ExponentialEase()
             });
 
-            Storyboard.SetTargetProperty(an, "(LayoutPath.Progress)");
+            Storyboard.SetTargetProperty(an, "(LayoutPath.PathProgress)");
             Storyboard.SetTarget(an, layoutPath);
             storyboard.Children.Add(an);
 

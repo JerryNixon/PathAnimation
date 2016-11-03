@@ -23,53 +23,59 @@ namespace CustomControls.Controls
             CurrentLengthProperty = DependencyProperty.Register(nameof(CurrentLength), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
             CurrentRotationProperty = DependencyProperty.Register(nameof(CurrentRotation), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
-            SmoothRotationProperty = DependencyProperty.Register("SmoothRotation", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
-            SmoothTranslationProperty = DependencyProperty.Register("SmoothTranslation", typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
 
-            //properties with callbacks
-            ProgressProperty = DependencyProperty.Register(nameof(Progress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), ProgressChangedCallback));
-            PathVisibleProperty = DependencyProperty.Register(nameof(PathVisible), typeof(bool), typeof(LayoutPath), new PropertyMetadata(true, PathVisibleChangedCallback));
             PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(LayoutPath), new PropertyMetadata(default(Geometry), PathChangedCallback));
             ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, ChildAlingmentChangedCallback));
-            MoveVerticallyProperty = DependencyProperty.Register(nameof(MoveVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), MoveVerticallyChangedCallback));
-            FlipItemsProperty = DependencyProperty.Register("FlipItems", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), FlipItemsChangedCallback));
             ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), TransformToProgress));
+            ChildEasingFunctionProperty = DependencyProperty.Register(nameof(EasingFunctionBase), typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), TransformToProgress));
+            
+            PathVisibilityProperty = DependencyProperty.Register(nameof(PathVisibility), typeof(Visibility), typeof(LayoutPath), new PropertyMetadata(Visibility.Visible, PathVisibleChangedCallback));
+            
+            StartBehaviorProperty = DependencyProperty.Register(nameof(StartBehavior), typeof(Behaviors), typeof(LayoutPath), new PropertyMetadata(Behaviors.Default, TransformToProgress));
+            EndBehaviorProperty = DependencyProperty.Register(nameof(EndBehavior), typeof(Behaviors), typeof(LayoutPath), new PropertyMetadata(Behaviors.Default, TransformToProgress));
+
+            //TODO: replace with enum
+            MoveVerticallyProperty = DependencyProperty.Register(nameof(MoveVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), MoveVerticallyChangedCallback));
+            FlipItemsProperty = DependencyProperty.Register(nameof(FlipItems), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), FlipItemsChangedCallback));
             OrientToPathProperty = DependencyProperty.Register(nameof(OrientToPath), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), TransformToProgress));
-            StackAtStartProperty = DependencyProperty.Register("StackAtStart", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), TransformToProgress));
-            StackAtEndProperty = DependencyProperty.Register("StackAtEnd", typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), TransformToProgress));
-            ChildEasingFunctionProperty = DependencyProperty.Register("EasingFunctionBase", typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), TransformToProgress));
+
+            //properties that can be overridden
+            PathProgressProperty = DependencyProperty.Register(nameof(PathProgress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), ProgressChangedCallback));
+            TranslationSmoothingDefaultProperty = DependencyProperty.Register(nameof(TranslationSmoothingDefault), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
+            RotationSmoothingDefaultProperty = DependencyProperty.Register(nameof(RotationSmoothingDefault), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
 
             //Attached properties
-            ChildProgressProperty = DependencyProperty.RegisterAttached("ChildProgress", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN, TransformToProgress));
+            ProgressProperty = DependencyProperty.RegisterAttached("Progress", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN, TransformToProgress));
+            TranslationSmoothingProperty = DependencyProperty.RegisterAttached("TranslationSmoothing", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN));
+            RotationSmoothingProperty = DependencyProperty.RegisterAttached("RotationSmoothing", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN));
+
             IsMovableProperty = DependencyProperty.RegisterAttached("IsMovable", typeof(Boolean), typeof(LayoutPath), new PropertyMetadata(true));
             ProgressOffsetProperty = DependencyProperty.RegisterAttached("ProgressOffset", typeof(double), typeof(LayoutPath), new PropertyMetadata(0.0, TransformToProgress));
-            ChildSmoothRotationProperty = DependencyProperty.RegisterAttached("ChildSmoothRotation", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN));
-            ChildSmoothTranslationProperty = DependencyProperty.RegisterAttached("ChildSmoothTranslation", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN));
         }
 
-      
+
         #region attached properties
 
 
         public static readonly DependencyProperty IsMovableProperty;
-        public static void SetIsMovable(UIElement element, Boolean value)
+        public static void SetIsMovable(UIElement element, bool value)
         {
             element.SetValue(IsMovableProperty, value);
         }
-        public static Boolean GetIsMovable(UIElement element)
+        public static bool GetIsMovable(UIElement element)
         {
-            return (Boolean)element.GetValue(IsMovableProperty);
+            return (bool)element.GetValue(IsMovableProperty);
         }
 
 
-        public static readonly DependencyProperty ChildProgressProperty;
-        public static void SetChildProgress(UIElement element, double value)
+        public static readonly DependencyProperty ProgressProperty;
+        public static void SetProgress(UIElement element, double value)
         {
-            element.SetValue(ChildProgressProperty, value);
+            element.SetValue(ProgressProperty, value);
         }
-        public static double GetChildProgress(UIElement element)
+        public static double GetProgress(UIElement element)
         {
-            return (double)element.GetValue(ChildProgressProperty);
+            return (double)element.GetValue(ProgressProperty);
         }
 
 
@@ -84,25 +90,25 @@ namespace CustomControls.Controls
         }
 
 
-        public static readonly DependencyProperty ChildSmoothRotationProperty;
-        public static void SetChildSmoothRotation(UIElement element, double value)
+        public static readonly DependencyProperty RotationSmoothingProperty;
+        public static void SetRotationSmoothing(UIElement element, double value)
         {
-            element.SetValue(ChildSmoothRotationProperty, value);
+            element.SetValue(RotationSmoothingProperty, value);
         }
-        public static double GetChildSmoothRotation(UIElement element)
+        public static double GetRotationSmoothing(UIElement element)
         {
-            return (double)element.GetValue(ChildSmoothRotationProperty);
+            return (double)element.GetValue(RotationSmoothingProperty);
         }
 
 
-        public static readonly DependencyProperty ChildSmoothTranslationProperty;
-        public static void SetChildSmoothTranslation(UIElement element, double value)
+        public static readonly DependencyProperty TranslationSmoothingProperty;
+        public static void SetTranslationSmoothing(UIElement element, double value)
         {
-            element.SetValue(ChildSmoothTranslationProperty, value);
+            element.SetValue(TranslationSmoothingProperty, value);
         }
-        public static double GetChildSmoothTranslation(UIElement element)
+        public static double GetTranslationSmoothing(UIElement element)
         {
-            return (double)element.GetValue(ChildSmoothTranslationProperty);
+            return (double)element.GetValue(TranslationSmoothingProperty);
         }
 
 
@@ -114,8 +120,8 @@ namespace CustomControls.Controls
         /// <summary>
         /// Set the distance from start, where <see cref="Children"/> will be transformed (value in Percent 0-100)
         /// </summary>
-        public double Progress { get { return (double)GetValue(ProgressProperty); } set { SetValue(ProgressProperty, value); } }
-        public static readonly DependencyProperty ProgressProperty;
+        public double PathProgress { get { return (double)GetValue(PathProgressProperty); } set { SetValue(PathProgressProperty, value); } }
+        public static readonly DependencyProperty PathProgressProperty;
 
         /// <summary>
         /// Describes how content is resized to fill its allocated space 
@@ -126,8 +132,8 @@ namespace CustomControls.Controls
         /// <summary>
         /// Sets the visibility of <see cref="Path"/>
         /// </summary>
-        public bool PathVisible { get { return (bool)GetValue(PathVisibleProperty); } set { SetValue(PathVisibleProperty, value); } }
-        public static readonly DependencyProperty PathVisibleProperty;
+        public Visibility PathVisibility { get { return (Visibility)GetValue(PathVisibilityProperty); } set { SetValue(PathVisibilityProperty, value); } }
+        public static readonly DependencyProperty PathVisibilityProperty;
 
         /// <summary>
         /// Sets the geometry that will be used for translating <see cref="Children"/>
@@ -150,14 +156,14 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty ItemsPaddingProperty;
 
         /// <summary>
-        /// Gets the <see cref="Point"/> at fraction length of <see cref="Path"/> on current <see cref="Progress"/>
+        /// Gets the <see cref="Point"/> at fraction length of <see cref="Path"/> on current <see cref="PathProgress"/>
         /// Smoothness does not affect CurrentPosition
         /// </summary>
         public Point CurrentPosition { get { return (Point)GetValue(CurrentPositionProperty); } private set { SetValue(CurrentPositionProperty, value); } }
         public static readonly DependencyProperty CurrentPositionProperty;
 
         /// <summary>
-        ///  Gets the degrees at fraction length of <see cref="Path"/> on current <see cref="Progress"/>
+        ///  Gets the degrees at fraction length of <see cref="Path"/> on current <see cref="PathProgress"/>
         ///  Smoothness does not affect CurrentRotation
         /// </summary>
         public double CurrentRotation { get { return (double)GetValue(CurrentRotationProperty); } private set { SetValue(CurrentRotationProperty, value); } }
@@ -191,27 +197,27 @@ namespace CustomControls.Controls
         /// Sets child progress to 0 if it is lower than 0. 
         /// This results items to be stacked at the beginning of path if <see cref="ItemsPadding"/> is specified and progress values are near 0. 
         /// </summary>
-        public bool StackAtStart { get { return (bool)GetValue(StackAtStartProperty); } set { SetValue(StackAtStartProperty, value); } }
-        public static readonly DependencyProperty StackAtStartProperty;
+        public Behaviors StartBehavior { get { return (Behaviors)GetValue(StartBehaviorProperty); } set { SetValue(StartBehaviorProperty, value); } }
+        public static readonly DependencyProperty StartBehaviorProperty;
 
         /// <summary>
         /// Sets child progress to 100 if it is greater than 100. 
         /// This results items to be stacked at the end of path for progress values greater than 100. 
         /// </summary>
-        public bool StackAtEnd { get { return (bool)GetValue(StackAtEndProperty); } set { SetValue(StackAtEndProperty, value); } }
-        public static readonly DependencyProperty StackAtEndProperty;
+        public Behaviors EndBehavior { get { return (Behaviors)GetValue(EndBehaviorProperty); } set { SetValue(EndBehaviorProperty, value); } }
+        public static readonly DependencyProperty EndBehaviorProperty;
 
         /// <summary>
         /// Smooths children rotation.
         /// </summary>
-        public double SmoothRotation { get { return (double)GetValue(SmoothRotationProperty); } set { SetValue(SmoothRotationProperty, value); } }
-        public static readonly DependencyProperty SmoothRotationProperty;
+        public double TranslationSmoothingDefault { get { return (double)GetValue(TranslationSmoothingDefaultProperty); } set { SetValue(TranslationSmoothingDefaultProperty, value); } }
+        public static readonly DependencyProperty TranslationSmoothingDefaultProperty;
 
         /// <summary>
         /// Smooths children translation
         /// </summary>
-        public double SmoothTranslation { get { return (double)GetValue(SmoothTranslationProperty); } set { SetValue(SmoothTranslationProperty, value); } }
-        public static readonly DependencyProperty SmoothTranslationProperty;
+        public double RotationSmoothingDefault { get { return (double)GetValue(RotationSmoothingDefaultProperty); } set { SetValue(RotationSmoothingDefaultProperty, value); } }
+        public static readonly DependencyProperty RotationSmoothingDefaultProperty;
 
         /// <summary>
         /// Sets the easing function each children will have when moving along path.

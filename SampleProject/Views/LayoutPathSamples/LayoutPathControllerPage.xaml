@@ -9,11 +9,13 @@
     mc:Ignorable="d">
     <Page.Resources>
         <converters:EnumStringConverter x:Key="EnumStringConverter"/>
+        <converters:BoolBehaviorConverter x:Key="BoolBehaviorConverter"/>
+        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
         </Style>
         <Storyboard x:Name="PathStoryboard">
-            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.Progress)" Storyboard.TargetName="LayoutPath1" RepeatBehavior="Forever">
+            <DoubleAnimationUsingKeyFrames EnableDependentAnimation="True" Storyboard.TargetProperty="(controls:LayoutPath.PathProgress)" Storyboard.TargetName="LayoutPath1" RepeatBehavior="Forever">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:20" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
@@ -61,8 +63,8 @@
 
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
-            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  Progress="0" OrientToPath="True" Stretch="None"  PathVisible="True" 
-                                 ItemsPadding="3" SmoothRotation="4" SmoothTranslation="4">
+            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" OrientToPath="True" Stretch="None"  PathVisibility="Visible" 
+                                 ItemsPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -108,17 +110,17 @@
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Slider Grid.Column="0"
-                            Header="Progress" Value="{Binding Progress, ElementName=LayoutPath1, Mode=TwoWay}" 
+                    <Slider Grid.Column="0" Grid.Row="0"
+                            Header="Progress" Value="{Binding PathProgress, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="200" StepFrequency="0.01" SmallChange="0.01" LargeChange="0.01"  Margin="5,0"/>
-                    <Slider Grid.Column="1"
+                    <Slider Grid.Column="1" Grid.Row="0"
                             Header="Items Padding" Value="{Binding ItemsPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="6" SmallChange="0.0001"  StepFrequency="0.01" Margin="5,0"/>
                     <Slider Grid.Column="0" Grid.Row="1"
-                            Header="Smooth Rotation" Value="{Binding SmoothRotation, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Header="Rotation Smoothing" Value="{Binding TranslationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="40" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
                     <Slider Grid.Column="1" Grid.Row="1"
-                            Header="Smooth Translation" Value="{Binding SmoothTranslation, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Header="Translation Smoothing" Value="{Binding RotationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="40" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
 
                 </Grid>
@@ -128,7 +130,7 @@
                         <CheckBox IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
                                Margin="0,0,5,0"/>
 
-                        <CheckBox IsChecked="{Binding PathVisible, ElementName=LayoutPath1, Mode=TwoWay}" Content="Path Visible"
+                        <CheckBox IsChecked="{Binding PathVisibility, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolVisibilityConverter}}" Content="Path Visible"
                                Margin="5,0"/>
 
                         <CheckBox IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
@@ -136,8 +138,8 @@
                         <CheckBox IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
                                Margin="5,0"/>
 
-                        <CheckBox IsChecked="{Binding StackAtStart, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtStart" Margin="5,0"/>
-                        <CheckBox IsChecked="{Binding StackAtEnd, ElementName=LayoutPath1, Mode=TwoWay}" Content="StackAtEnd" Margin="5,0"/>
+                        <CheckBox IsChecked="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="StartBehavior" Margin="5,0"/>
+                        <CheckBox IsChecked="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="EndBehavior" Margin="5,0"/>
 
                         <CheckBox Content="Use child SineEase" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
 

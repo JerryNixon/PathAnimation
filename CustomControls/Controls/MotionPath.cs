@@ -101,7 +101,7 @@ namespace CustomControls.Controls
                 Source = this
             });
 
-            LAYOUT_PATH.SetBinding(LayoutPath.PathVisibleProperty, new Binding()
+            LAYOUT_PATH.SetBinding(LayoutPath.PathVisibilityProperty, new Binding()
             {
                 Path = new PropertyPath("PathVisibility"),
                 Source = this,
@@ -451,7 +451,7 @@ namespace CustomControls.Controls
             {
                 if (progress >= 100)
                     progress = 99.9999999999;//avoid going to beginning of path
-                LAYOUT_PATH.Progress = progress;
+                LAYOUT_PATH.PathProgress = progress;
                 CurrentPoint = LAYOUT_PATH.CurrentPosition;
             }
 

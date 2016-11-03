@@ -82,7 +82,7 @@ namespace CustomControls.Controls
                 Source = this
             });
 
-            PATH.Opacity = PathVisible ? 0.5 : 0;
+            PATH.Opacity = PathVisibility == Visibility.Visible ? 0.5 : 0;
 
             if (ExtendedGeometry != null)
                 PATH.Margin = new Thickness(-ExtendedGeometry.PathOffset.X, -ExtendedGeometry.PathOffset.Y, 0, 0);
@@ -135,7 +135,7 @@ namespace CustomControls.Controls
             //Dimensions are needed for correctly aligning items.
             await Task.Delay(1);
 
-            TransformToProgress(Progress);
+            TransformToProgress(PathProgress);
         }
 
         public LayoutPath()
@@ -144,7 +144,7 @@ namespace CustomControls.Controls
 
             Loaded += delegate
             {
-                TransformToProgress(Progress);
+                TransformToProgress(PathProgress);
             };
         }
 
@@ -197,7 +197,7 @@ namespace CustomControls.Controls
             sen.ExtendedGeometry = new ExtendedPathGeometry(data as PathGeometry);
             if (sen.PATH != null)
                 sen.PATH.Margin = new Thickness(-sen.ExtendedGeometry.PathOffset.X, -sen.ExtendedGeometry.PathOffset.Y, 0, 0);
-            sen.TransformToProgress(((LayoutPath)o).Progress);
+            sen.TransformToProgress(((LayoutPath)o).PathProgress);
         }
 
         private static void PathVisibleChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -205,7 +205,7 @@ namespace CustomControls.Controls
             var path = ((LayoutPath)o).PATH;
             //we don't collapse path because we need it's space for stretching control.
             if (path != null)
-                path.Opacity = (bool)e.NewValue ? 0.5 : 0;
+                path.Opacity = (Visibility)e.NewValue == Visibility.Visible ? 0.5 : 0;
         }
 
         private static void ProgressChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -252,7 +252,7 @@ namespace CustomControls.Controls
                 if (!GetIsMovable((UIElement)wrapper.Content))
                     continue;
 
-                var childProgress = GetChildProgress((UIElement)wrapper.Content);
+                var childProgress = GetProgress((UIElement)wrapper.Content);
                 if (!double.IsNaN(childProgress))
                     childPercent = childProgress;
 
@@ -290,7 +290,7 @@ namespace CustomControls.Controls
         {
             if (progress < 0)
             {
-                if (StackAtStart)
+                if (StartBehavior == Behaviors.Stack)
                 {
                     progress = 0;
                 }
@@ -306,9 +306,10 @@ namespace CustomControls.Controls
             }
             else if (progress > 100)
             {
-                if (StackAtEnd)
+                if (EndBehavior == Behaviors.Stack)
                 {
-                    progress = 100;
+                    //avoid going to beginning of the path
+                    progress = 99.9999;
                 }
                 else
                 {
@@ -331,8 +332,8 @@ namespace CustomControls.Controls
 
             rotationTheta = rotationTheta % 360;
 
-            var smooth = SmoothRotation;
-            var childSmooth = GetChildSmoothRotation((UIElement)wrapper.Content);
+            var smooth = TranslationSmoothingDefault;
+            var childSmooth = GetRotationSmoothing((UIElement)wrapper.Content);
             if (!double.IsNaN(childSmooth))
                 smooth = childSmooth;
 
@@ -372,8 +373,8 @@ namespace CustomControls.Controls
 
             wrapper.SetTransformCenter(childWidth / 2.0, childHeight / 2.0);
 
-            var smooth = SmoothTranslation;
-            var childSmooth = GetChildSmoothTranslation((UIElement)wrapper.Content);
+            var smooth = RotationSmoothingDefault;
+            var childSmooth = GetTranslationSmoothing((UIElement)wrapper.Content);
             if (!double.IsNaN(childSmooth))
                 smooth = childSmooth;
 

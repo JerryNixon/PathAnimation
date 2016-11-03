@@ -115,6 +115,7 @@
     <Compile Include="Converters\InstanceConverter.cs" />
     <Compile Include="Converters\StringToPathGeometryConverter.cs" />
     <Compile Include="Enums\AnimationState.cs" />
+    <Compile Include="Enums\Behaviors.cs" />
     <Compile Include="Enums\ChildAlignment.cs" />
     <Compile Include="ExtendedSegments\ExtendedPathGeometry.cs" />
     <Compile Include="Extensions\PathAnimationExtensions.cs" />

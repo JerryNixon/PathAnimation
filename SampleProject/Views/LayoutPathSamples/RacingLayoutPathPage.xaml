@@ -290,7 +290,7 @@
             <Grid >
                 <Path Data="{Binding Source={StaticResource RoadGeometry}}" Stretch="Uniform" Stroke="#7F9C9C9C" UseLayoutRounding="False" StrokeThickness="15" Fill="#4C8D6849"/>
                 <controls:LayoutPath x:Name="mapPath"
-                Path="{Binding Source={StaticResource RoadGeometry}}" Stretch="Uniform" Progress="{Binding Progress, ElementName=layoutPath}" PathVisible="False">
+                Path="{Binding Source={StaticResource RoadGeometry}}" Stretch="Uniform" PathProgress="{Binding PathProgress, ElementName=layoutPath}" PathVisibility="Collapsed">
                     <Rectangle Width="50" Height="50" Fill="#FFD64444" RadiusY="50" RadiusX="50"></Rectangle>
                 </controls:LayoutPath>
             </Grid>

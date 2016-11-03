@@ -46,7 +46,7 @@
                                         <Image Source="{Binding ThumbnailUri}" Stretch="UniformToFill"/>
                                     </Border>
                                     <TextBlock Text="{Binding Description}" Grid.Row="2" FontSize="11" TextWrapping="Wrap" />
-                                   
+
                                 </Grid>
                             </Button>
                         </DataTemplate>
@@ -58,10 +58,12 @@
                     <Button Content="MotionPath controller" Click="MotionPath_OnClick"/>
                 </StackPanel>
 
-                <TextBlock Text="CascadingAnimation" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
-                    <Button Content="CascadingAnimation real-time example" Click="cascadingAnimationRealtimeExample"/>
-                    <Button Content="CascadingAnimation cached example" Click="cascadingAnimationCachedExample"/>
+                <StackPanel Visibility="Collapsed">
+                    <TextBlock Text="CascadingAnimation" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
+                        <Button Content="CascadingAnimation real-time example" Click="cascadingAnimationRealtimeExample"/>
+                        <Button Content="CascadingAnimation cached example" Click="cascadingAnimationCachedExample"/>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
 

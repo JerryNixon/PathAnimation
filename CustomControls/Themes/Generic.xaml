@@ -25,7 +25,7 @@
                                 <TextBlock Text="ViewBox detected. Please specify control width and height." Foreground="Crimson" />
                             </Border>
                         </Grid>
-                        <local:LayoutPath x:Name="LAYOUT_PATH" Visibility="Collapsed" PathVisible="True">
+                        <local:LayoutPath x:Name="LAYOUT_PATH" Visibility="Collapsed" PathVisibility="Visible">
                             <!--<ContentPresenter Content="{TemplateBinding Content}"  />-->
                         </local:LayoutPath>
                     </Grid>
