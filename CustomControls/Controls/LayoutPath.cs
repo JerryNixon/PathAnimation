@@ -332,13 +332,13 @@ namespace CustomControls.Controls
 
             rotationTheta = rotationTheta % 360;
 
-            var smooth = TranslationSmoothingDefault;
-            var childSmooth = GetRotationSmoothing((UIElement)wrapper.Content);
-            if (!double.IsNaN(childSmooth))
-                smooth = childSmooth;
+            var rotationSmoothing = RotationSmoothingDefault;
+            var childRotationSmoothing = GetRotationSmoothing((UIElement)wrapper.Content);
+            if (!double.IsNaN(childRotationSmoothing))
+                rotationSmoothing = childRotationSmoothing;
 
             //try smooth rotation
-            if (!double.IsNaN(wrapper.ProgressDistance) && smooth > 0 && wrapper.ProgressDistance > 0)
+            if (!double.IsNaN(wrapper.ProgressDistance) && rotationSmoothing > 0 && wrapper.ProgressDistance > 0)
             {
                 var degreesDistance = Math.Max(rotationTheta, wrapper.Rotation) - Math.Min(rotationTheta, wrapper.Rotation);
                 var rotation = wrapper.Rotation;
@@ -350,7 +350,7 @@ namespace CustomControls.Controls
                         rotation = rotation - 360;
                     degreesDistance = Math.Max(rotationTheta, rotation) - Math.Min(rotationTheta, rotation);
                 }
-                wrapper.Rotation = wrapper.Rotation = (rotation * smooth * 0.2 + rotationTheta * wrapper.ProgressDistance) / (smooth * 0.2 + wrapper.ProgressDistance);
+                wrapper.Rotation = wrapper.Rotation = (rotation * rotationSmoothing * 0.2 + rotationTheta * wrapper.ProgressDistance) / (rotationSmoothing * 0.2 + wrapper.ProgressDistance);
             }
             else
             {
@@ -373,15 +373,15 @@ namespace CustomControls.Controls
 
             wrapper.SetTransformCenter(childWidth / 2.0, childHeight / 2.0);
 
-            var smooth = RotationSmoothingDefault;
-            var childSmooth = GetTranslationSmoothing((UIElement)wrapper.Content);
-            if (!double.IsNaN(childSmooth))
-                smooth = childSmooth;
+            var translationSmoothing = TranslationSmoothingDefault;
+            var childTranslationSmoothing = GetTranslationSmoothing((UIElement)wrapper.Content);
+            if (!double.IsNaN(childTranslationSmoothing))
+                translationSmoothing = childTranslationSmoothing;
 
-            if (!double.IsNaN(wrapper.ProgressDistance) && smooth > 0 && wrapper.ProgressDistance > 0)
+            if (!double.IsNaN(wrapper.ProgressDistance) && translationSmoothing > 0 && wrapper.ProgressDistance > 0)
             {
-                wrapper.TranslateX = (wrapper.TranslateX * smooth * 0.2 / wrapper.ProgressDistance + translateX) / (smooth * 0.2 / wrapper.ProgressDistance + 1);
-                wrapper.TranslateY = (wrapper.TranslateY * smooth * 0.2 / wrapper.ProgressDistance + translateY) / (smooth * 0.2 / wrapper.ProgressDistance + 1);
+                wrapper.TranslateX = (wrapper.TranslateX * translationSmoothing * 0.2 / wrapper.ProgressDistance + translateX) / (translationSmoothing * 0.2 / wrapper.ProgressDistance + 1);
+                wrapper.TranslateY = (wrapper.TranslateY * translationSmoothing * 0.2 / wrapper.ProgressDistance + translateY) / (translationSmoothing * 0.2 / wrapper.ProgressDistance + 1);
             }
             else
             {
