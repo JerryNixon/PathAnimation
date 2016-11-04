@@ -108,7 +108,7 @@ namespace CustomControls.Controls
                 Converter = new InstanceConverter(o => o as Visibility? == Visibility.Visible)
             });
 
-            LAYOUT_PATH.SetBinding(LayoutPath.OrientToPathProperty, new Binding()
+            LAYOUT_PATH.SetBinding(LayoutPath.ItemOrientationProperty, new Binding()
             {
                 Path = new PropertyPath("OrientToPath"),
                 Source = this,

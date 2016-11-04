@@ -63,7 +63,8 @@
 
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
-            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" OrientToPath="True" Stretch="None"  PathVisibility="Visible" 
+                                      Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" 
+                                      ItemOrientation="ToPath" Stretch="None"  PathVisibility="Visible" 
                                  ItemsPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
@@ -127,22 +128,19 @@
                 <Grid>
                     <VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="160" ItemHeight="60" >
                         <Button Content="Start / Stop anim" Click="StartPauseAnimation"/>
-                        <CheckBox IsChecked="{Binding OrientToPath, ElementName=LayoutPath1, Mode=TwoWay}" Content="Orient to path"
-                               Margin="0,0,5,0"/>
-
+                        
                         <CheckBox IsChecked="{Binding PathVisibility, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolVisibilityConverter}}" Content="Path Visible"
                                Margin="5,0"/>
 
-                        <CheckBox IsChecked="{Binding MoveVertically, ElementName=LayoutPath1, Mode=TwoWay}" Content="Move Vertically"
-                               Margin="5,0"/>
-                        <CheckBox IsChecked="{Binding FlipItems, ElementName=LayoutPath1, Mode=TwoWay}" Content="Flip Items"
-                               Margin="5,0"/>
 
                         <CheckBox IsChecked="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="StartBehavior" Margin="5,0"/>
                         <CheckBox IsChecked="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="EndBehavior" Margin="5,0"/>
 
                         <CheckBox Content="Use child SineEase" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
 
+                        <ComboBox Header="ItemOrientation" x:Name="itemOrientationCB"  SelectedValue="{Binding ItemOrientation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        </ComboBox>
+                        
                         <ComboBox Header="Alignment" x:Name="childAlignmentCB"  SelectedValue="{Binding ChildAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
 

@@ -33,6 +33,7 @@ namespace SampleProject.Views
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             childAlignmentCB.ItemsSource = Enum.GetValues(typeof(ChildAlignment));
             stretchCB.ItemsSource = Enum.GetValues(typeof(Stretch));
+            itemOrientationCB.ItemsSource= Enum.GetValues(typeof(Orientations));
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 childAlignmentCB.SelectedIndex = 1;

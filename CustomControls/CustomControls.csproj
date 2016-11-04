@@ -117,6 +117,7 @@
     <Compile Include="Enums\AnimationState.cs" />
     <Compile Include="Enums\Behaviors.cs" />
     <Compile Include="Enums\ChildAlignment.cs" />
+    <Compile Include="Enums\Orientations.cs" />
     <Compile Include="ExtendedSegments\ExtendedPathGeometry.cs" />
     <Compile Include="Extensions\PathAnimationExtensions.cs" />
     <Compile Include="Internal\SegmentsHelper.cs" />

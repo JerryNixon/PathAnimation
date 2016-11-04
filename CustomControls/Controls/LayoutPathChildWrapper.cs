@@ -79,18 +79,18 @@ namespace CustomControls.Controls
             ALIGNMENT = GetTemplateChild(nameof(ALIGNMENT)) as ContentControl;
         }
 
-        public LayoutPathChildWrapper(FrameworkElement child, ChildAlignment alingment, bool moveVertically, bool flip)
+        public LayoutPathChildWrapper(FrameworkElement child, ChildAlignment alingment, Orientations orientation)
         {
             Content = child;
             DefaultStyleKey = typeof(LayoutPathChildWrapper);
             RenderTransform = Transform = new CompositeTransform();
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
-                UpdateAlingment(alingment, moveVertically, flip);
+                UpdateAlingment(alingment, orientation);
             };
         }
 
-        internal void UpdateAlingment(ChildAlignment alingment, bool moveVertically, bool flip)
+        internal void UpdateAlingment(ChildAlignment alingment, Orientations orientation)
         {
             if (ALIGNMENT == null)
                 return;
@@ -103,10 +103,10 @@ namespace CustomControls.Controls
             else
             {
                 int flipValue = 1;
-                if (flip)
+                if (orientation == Orientations.ToPathReversed || orientation == Orientations.VerticalReversed)
                     flipValue = -1;
                 var child = (FrameworkElement)Content;
-                if (!moveVertically)
+                if (orientation == Orientations.ToPath || orientation == Orientations.ToPathReversed)
                 {
                     translate.X = 0;
                     if (alingment == ChildAlignment.Outer)

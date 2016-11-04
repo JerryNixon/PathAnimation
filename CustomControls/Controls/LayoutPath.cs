@@ -88,7 +88,7 @@ namespace CustomControls.Controls
                 PATH.Margin = new Thickness(-ExtendedGeometry.PathOffset.X, -ExtendedGeometry.PathOffset.Y, 0, 0);
 
             foreach (var child in _children)
-                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically, FlipItems));
+                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
 
             //TODO: _children.Clear does not invoke this event.
             _children.CollectionChanged += ChildrenOnCollectionChanged;
@@ -112,8 +112,7 @@ namespace CustomControls.Controls
                             CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
                         if (wrapper == null)
                             CHILDREN.Children.Insert(args.NewStartingIndex,
-                                new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, MoveVertically,
-                                    FlipItems));
+                                new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
                     }
                 }
 
@@ -152,40 +151,27 @@ namespace CustomControls.Controls
 
         #region dependency properties callbacks
 
-        private static void FlipItemsChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void OrientationChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             var sender = ((LayoutPath)o);
             if (sender.CHILDREN != null)
             {
                 foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                 {
-                    child.UpdateAlingment(sender.ChildAlignment, sender.MoveVertically, sender.FlipItems);
+                    child.UpdateAlingment(sender.ChildAlignment, sender.ItemOrientation);
                 }
             }
             TransformToProgress(o, e);
         }
 
-        private static void MoveVerticallyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void ChildAlignmentChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             var sender = ((LayoutPath)o);
             if (sender.CHILDREN != null)
             {
                 foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                 {
-                    child.UpdateAlingment(sender.ChildAlignment, sender.MoveVertically, sender.FlipItems);
-                }
-            }
-            TransformToProgress(o, e);
-        }
-
-        private static void ChildAlingmentChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
-        {
-            var sender = ((LayoutPath)o);
-            if (sender.CHILDREN != null)
-            {
-                foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
-                {
-                    child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.MoveVertically, sender.FlipItems);
+                    child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.ItemOrientation);
                 }
             }
         }
@@ -321,13 +307,17 @@ namespace CustomControls.Controls
 
         private void Rotate(LayoutPathChildWrapper wrapper, double rotationTheta)
         {
-            if (!OrientToPath)
-                rotationTheta = 0;
+            if (ItemOrientation == Orientations.None)
+            {
+                wrapper.Rotation = 0;
+                return;
+            }
 
-            if (MoveVertically)
+            if (ItemOrientation == Orientations.Vertical)
                 rotationTheta += 90;
-
-            if (FlipItems)
+            else if (ItemOrientation == Orientations.VerticalReversed)
+                rotationTheta += 270;
+            else if (ItemOrientation == Orientations.ToPathReversed)
                 rotationTheta += 180;
 
             rotationTheta = rotationTheta % 360;
@@ -350,11 +340,11 @@ namespace CustomControls.Controls
                         rotation = rotation - 360;
                     degreesDistance = Math.Max(rotationTheta, rotation) - Math.Min(rotationTheta, rotation);
                 }
-                wrapper.Rotation = wrapper.Rotation = (rotation * rotationSmoothing * 0.2 + rotationTheta * wrapper.ProgressDistance) / (rotationSmoothing * 0.2 + wrapper.ProgressDistance);
+                wrapper.Rotation = (rotation * rotationSmoothing * 0.2 + rotationTheta * wrapper.ProgressDistance) / (rotationSmoothing * 0.2 + wrapper.ProgressDistance);
             }
             else
             {
-                wrapper.Rotation = wrapper.Rotation = rotationTheta;
+                wrapper.Rotation = rotationTheta;
             }
         }
 

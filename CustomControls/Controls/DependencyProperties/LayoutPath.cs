@@ -25,19 +25,16 @@ namespace CustomControls.Controls
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
 
             PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(LayoutPath), new PropertyMetadata(default(Geometry), PathChangedCallback));
-            ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, ChildAlingmentChangedCallback));
+            ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, ChildAlignmentChangedCallback));
             ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), TransformToProgress));
             ChildEasingFunctionProperty = DependencyProperty.Register(nameof(EasingFunctionBase), typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), TransformToProgress));
-            
+
             PathVisibilityProperty = DependencyProperty.Register(nameof(PathVisibility), typeof(Visibility), typeof(LayoutPath), new PropertyMetadata(Visibility.Visible, PathVisibleChangedCallback));
-            
+
             StartBehaviorProperty = DependencyProperty.Register(nameof(StartBehavior), typeof(Behaviors), typeof(LayoutPath), new PropertyMetadata(Behaviors.Default, TransformToProgress));
             EndBehaviorProperty = DependencyProperty.Register(nameof(EndBehavior), typeof(Behaviors), typeof(LayoutPath), new PropertyMetadata(Behaviors.Default, TransformToProgress));
 
-            //TODO: replace with enum
-            MoveVerticallyProperty = DependencyProperty.Register(nameof(MoveVertically), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), MoveVerticallyChangedCallback));
-            FlipItemsProperty = DependencyProperty.Register(nameof(FlipItems), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), FlipItemsChangedCallback));
-            OrientToPathProperty = DependencyProperty.Register(nameof(OrientToPath), typeof(bool), typeof(LayoutPath), new PropertyMetadata(default(bool), TransformToProgress));
+            ItemOrientationProperty = DependencyProperty.Register(nameof(ItemOrientation), typeof(Orientations), typeof(LayoutPath), new PropertyMetadata(Orientations.ToPath, OrientationChangedCallback));
 
             //properties that can be overridden
             PathProgressProperty = DependencyProperty.Register(nameof(PathProgress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), ProgressChangedCallback));
@@ -142,10 +139,10 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty PathProperty;
 
         /// <summary>
-        /// Set true if you want <see cref="Children"/> to rotate when moving along <see cref="Path"/>
+        /// Specify orientation of <see cref="Children"/> when moving along <see cref="Path"/>
         /// </summary>
-        public bool OrientToPath { get { return (bool)GetValue(OrientToPathProperty); } set { SetValue(OrientToPathProperty, value); } }
-        public static readonly DependencyProperty OrientToPathProperty;
+        public Orientations ItemOrientation { get { return (Orientations)GetValue(ItemOrientationProperty); } set { SetValue(ItemOrientationProperty, value); } }
+        public static readonly DependencyProperty ItemOrientationProperty;
 
         /// <summary>
         /// Sets the distance that <see cref="Children"/> will keep between each other (in percent of total length).
@@ -174,25 +171,13 @@ namespace CustomControls.Controls
         /// </summary>
         public double CurrentLength { get { return (double)GetValue(CurrentLengthProperty); } private set { SetValue(CurrentLengthProperty, value); } }
         public static readonly DependencyProperty CurrentLengthProperty;
-
-        /// <summary>
-        /// Set true to rotate children by 90 degrees, 
-        /// </summary>
-        public bool MoveVertically { get { return (bool)GetValue(MoveVerticallyProperty); } set { SetValue(MoveVerticallyProperty, value); } }
-        public static readonly DependencyProperty MoveVerticallyProperty;
-
+      
         /// <summary>
         /// Sets the position of items along path
         /// </summary>
         public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
         public static readonly DependencyProperty ChildAlignmentProperty;
-
-        /// <summary>
-        /// Set true to rotate items by 180 degrees
-        /// </summary>
-        public bool FlipItems { get { return (bool)GetValue(FlipItemsProperty); } set { SetValue(FlipItemsProperty, value); } }
-        public static readonly DependencyProperty FlipItemsProperty;
-
+        
         /// <summary>
         /// Sets child progress to 0 if it is lower than 0. 
         /// This results items to be stacked at the beginning of path if <see cref="ItemsPadding"/> is specified and progress values are near 0. 
