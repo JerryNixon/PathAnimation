@@ -52,7 +52,7 @@ namespace SampleProject.Views.LayoutPathSamples
                 //wait to read
                 an.KeyFrames.Add(new EasingDoubleKeyFrame()
                 {
-                    Value = 100 + i * layoutPath.ItemsPadding,
+                    Value = 100 + i * layoutPath.ChildrenPadding,
                     KeyTime = TimeSpan.FromSeconds(currentTime + lineDuration),
 
                 });
@@ -61,7 +61,7 @@ namespace SampleProject.Views.LayoutPathSamples
                 //go to next
                 an.KeyFrames.Add(new EasingDoubleKeyFrame()
                 {
-                    Value = 100 + (i) * layoutPath.ItemsPadding,
+                    Value = 100 + (i) * layoutPath.ChildrenPadding,
                     KeyTime = TimeSpan.FromSeconds(currentTime + transitionDuration),
                     EasingFunction = new SineEase() { EasingMode = EasingMode.EaseInOut }
                 });

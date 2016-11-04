@@ -37,6 +37,7 @@ namespace SampleProject.Views
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 childAlignmentCB.SelectedIndex = 1;
+                itemOrientationCB.SelectedIndex = 1;
                 PathStoryboard.Begin();
             };
         }

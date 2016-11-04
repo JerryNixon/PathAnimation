@@ -65,7 +65,7 @@
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
                                       Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" 
                                       ItemOrientation="ToPath" Stretch="None"  PathVisibility="Visible" 
-                                 ItemsPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
+                                 ChildrenPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -115,7 +115,7 @@
                             Header="Progress" Value="{Binding PathProgress, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="200" StepFrequency="0.01" SmallChange="0.01" LargeChange="0.01"  Margin="5,0"/>
                     <Slider Grid.Column="1" Grid.Row="0"
-                            Header="Items Padding" Value="{Binding ItemsPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Header="Children Padding" Value="{Binding ChildrenPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="6" SmallChange="0.0001"  StepFrequency="0.01" Margin="5,0"/>
                     <Slider Grid.Column="0" Grid.Row="1"
                             Header="Rotation Smoothing" Value="{Binding TranslationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
@@ -133,8 +133,8 @@
                                Margin="5,0"/>
 
 
-                        <CheckBox IsChecked="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="StartBehavior" Margin="5,0"/>
-                        <CheckBox IsChecked="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="EndBehavior" Margin="5,0"/>
+                        <CheckBox IsChecked="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="Start stack" Margin="5,0"/>
+                        <CheckBox IsChecked="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="End stack" Margin="5,0"/>
 
                         <CheckBox Content="Use child SineEase" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
 

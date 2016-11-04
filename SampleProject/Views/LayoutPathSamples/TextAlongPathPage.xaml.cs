@@ -34,7 +34,7 @@ namespace SampleProject.Views.LayoutPathSamples
 
             string text = "Hello world! This is a text animation sample!";
             var chars = text.ToCharArray().Reverse();
-            startKeyFrame.Value = 100 + text.Length * layoutPath.ItemsPadding;
+            startKeyFrame.Value = 100 + text.Length * layoutPath.ChildrenPadding;
             foreach (char c in chars)
             {
                 TextBlock textBlock = new TextBlock() { Text = c + "" };

@@ -232,7 +232,7 @@ namespace CustomControls.Controls
 
             for (int i = 0; i < children.Count(); i++)
             {
-                double childPercent = progress - (i * ItemsPadding);
+                double childPercent = progress - (i * ChildrenPadding);
 
                 var wrapper = (LayoutPathChildWrapper)children[i];
                 if (!GetIsMovable((UIElement)wrapper.Content))

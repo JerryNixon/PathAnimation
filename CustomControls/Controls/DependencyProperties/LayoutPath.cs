@@ -25,9 +25,10 @@ namespace CustomControls.Controls
             CurrentPositionProperty = DependencyProperty.Register(nameof(CurrentPosition), typeof(Point), typeof(LayoutPath), new PropertyMetadata(default(Point)));
 
             PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(LayoutPath), new PropertyMetadata(default(Geometry), PathChangedCallback));
+
             ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, ChildAlignmentChangedCallback));
-            ItemsPaddingProperty = DependencyProperty.Register(nameof(ItemsPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), TransformToProgress));
             ChildEasingFunctionProperty = DependencyProperty.Register(nameof(EasingFunctionBase), typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), TransformToProgress));
+            ChildrenPaddingProperty = DependencyProperty.Register(nameof(ChildrenPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), TransformToProgress));
 
             PathVisibilityProperty = DependencyProperty.Register(nameof(PathVisibility), typeof(Visibility), typeof(LayoutPath), new PropertyMetadata(Visibility.Visible, PathVisibleChangedCallback));
 
@@ -149,8 +150,8 @@ namespace CustomControls.Controls
         /// 
         /// Example: setting ItemsPadding to 20 and progress being to 50, first element will be at progress=50, second at progress=30, third at progress=10 etc..
         /// </summary>
-        public double ItemsPadding { get { return (double)GetValue(ItemsPaddingProperty); } set { SetValue(ItemsPaddingProperty, value); } }
-        public static readonly DependencyProperty ItemsPaddingProperty;
+        public double ChildrenPadding { get { return (double)GetValue(ChildrenPaddingProperty); } set { SetValue(ChildrenPaddingProperty, value); } }
+        public static readonly DependencyProperty ChildrenPaddingProperty;
 
         /// <summary>
         /// Gets the <see cref="Point"/> at fraction length of <see cref="Path"/> on current <see cref="PathProgress"/>
@@ -180,7 +181,7 @@ namespace CustomControls.Controls
         
         /// <summary>
         /// Sets child progress to 0 if it is lower than 0. 
-        /// This results items to be stacked at the beginning of path if <see cref="ItemsPadding"/> is specified and progress values are near 0. 
+        /// This results items to be stacked at the beginning of path if <see cref="ChildrenPadding"/> is specified and progress values are near 0. 
         /// </summary>
         public Behaviors StartBehavior { get { return (Behaviors)GetValue(StartBehaviorProperty); } set { SetValue(StartBehaviorProperty, value); } }
         public static readonly DependencyProperty StartBehaviorProperty;

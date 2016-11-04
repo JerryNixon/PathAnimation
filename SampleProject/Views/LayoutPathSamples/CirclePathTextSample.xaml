@@ -41,7 +41,7 @@
                     </Rectangle.RenderTransform>
                 </Rectangle>
                 <controls:LayoutPath x:Name="layoutPath" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    ItemsPadding="4.15" PathProgress="100" ItemOrientation="VerticalReversed"  PathVisibility="Collapsed" ChildAlignment="Outer"  
+                    ChildrenPadding="4.15" PathProgress="100" ItemOrientation="VerticalReversed"  PathVisibility="Collapsed" ChildAlignment="Outer"  
                 Path="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z">
 
                     <TextBlock Text="Life has its shadows, as well as its sun;"  Foreground="LightGoldenrodYellow" FontWeight="SemiBold"></TextBlock>
