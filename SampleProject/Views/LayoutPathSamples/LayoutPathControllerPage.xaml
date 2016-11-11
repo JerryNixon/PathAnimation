@@ -131,13 +131,15 @@
                         
                         <CheckBox IsChecked="{Binding PathVisibility, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolVisibilityConverter}}" Content="Path Visible"
                                Margin="5,0"/>
-
-
-                        <CheckBox IsChecked="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="Start stack" Margin="5,0"/>
-                        <CheckBox IsChecked="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay,Converter={StaticResource BoolBehaviorConverter}}" Content="End stack" Margin="5,0"/>
-
                         <CheckBox Content="Use child SineEase" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
 
+
+                        <ComboBox Header="Start behavior" x:Name="startBehaviorCB"  SelectedValue="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        </ComboBox>
+                        <ComboBox Header="End behavior" x:Name="endBehaviorCB"  SelectedValue="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        </ComboBox>
+                        
+                       
                         <ComboBox Header="ItemOrientation" x:Name="itemOrientationCB"  SelectedValue="{Binding ItemOrientation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
                         

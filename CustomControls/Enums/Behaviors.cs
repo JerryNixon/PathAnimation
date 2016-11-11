@@ -9,6 +9,7 @@ namespace CustomControls.Enums
     public enum Behaviors
     {
         Default,
-        Stack
+        Stack,
+        Collapse
     }
 }

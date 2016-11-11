@@ -33,16 +33,20 @@ namespace SampleProject.Views
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             childAlignmentCB.ItemsSource = Enum.GetValues(typeof(ChildAlignment));
             stretchCB.ItemsSource = Enum.GetValues(typeof(Stretch));
-            itemOrientationCB.ItemsSource= Enum.GetValues(typeof(Orientations));
+            itemOrientationCB.ItemsSource = Enum.GetValues(typeof(Orientations));
+            startBehaviorCB.ItemsSource = Enum.GetValues(typeof(Behaviors));
+            endBehaviorCB.ItemsSource = Enum.GetValues(typeof(Behaviors));
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
                 childAlignmentCB.SelectedIndex = 1;
                 itemOrientationCB.SelectedIndex = 1;
+                startBehaviorCB.SelectedIndex = 0;
+                endBehaviorCB.SelectedIndex = 0;
                 PathStoryboard.Begin();
             };
         }
 
-      
+
 
         private void Add_OnClick(object sender, RoutedEventArgs e)
         {

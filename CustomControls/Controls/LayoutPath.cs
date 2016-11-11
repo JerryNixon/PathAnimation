@@ -257,7 +257,7 @@ namespace CustomControls.Controls
 
         private void MoveChild(LayoutPathChildWrapper wrapper, double childPercent)
         {
-            ApplyStackFilters(ref childPercent);
+            ApplyStackFilters(ref childPercent, wrapper);
 
             if (ChildEasingFunction != null)
                 childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
@@ -272,36 +272,56 @@ namespace CustomControls.Controls
             Translate(wrapper, childPoint);
         }
 
-        private void ApplyStackFilters(ref double progress)
+        private void ApplyStackFilters(ref double progress, LayoutPathChildWrapper wrapper)
         {
             if (progress < 0)
             {
-                if (StartBehavior == Behaviors.Stack)
+                if (StartBehavior == Behaviors.Collapse)
                 {
-                    progress = 0;
+                    wrapper.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    //transfer to range 0-100.
-                    //Examples
-                    // -2 + 100 = 98 exit
-                    // -102 + 100 = -2 + 100 = 98 exit
-                    while (progress < 0)
-                        progress = 100 + progress;
+                    wrapper.Visibility = Visibility.Visible;
+                    if (StartBehavior == Behaviors.Stack)
+                    {
+                        progress = 0;
+                    }
+                    else
+                    {
+                        //transfer to range 0-100.
+                        //Examples
+                        // -2 + 100 = 98 exit
+                        // -102 + 100 = -2 + 100 = 98 exit
+                        while (progress < 0)
+                            progress = 100 + progress;
+                    }
                 }
             }
             else if (progress > 100)
             {
-                if (EndBehavior == Behaviors.Stack)
+                if (EndBehavior == Behaviors.Collapse)
                 {
-                    //avoid going to beginning of the path
-                    progress = 99.9999;
+                    wrapper.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    //transfer to range 0-100
-                    progress = progress % 100;
+                    wrapper.Visibility = Visibility.Visible;
+                    if (EndBehavior == Behaviors.Stack)
+                    {
+                        //avoid going to beginning of the path
+                        progress = 99.9999;
+                    }
+                    else
+                    {
+                        //transfer to range 0-100
+                        progress = progress % 100;
+                    }
                 }
+            }
+            else
+            {
+                wrapper.Visibility = Visibility.Visible;
             }
         }
 
