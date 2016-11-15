@@ -141,10 +141,10 @@ namespace CustomControls.Controls
         {
             DefaultStyleKey = typeof(LayoutPath);
 
-            Loaded += delegate
-            {
-                TransformToProgress(PathProgress);
-            };
+            Loaded += async delegate
+             {
+                 TransformToProgress(PathProgress);
+             };
         }
 
         #endregion
@@ -161,7 +161,7 @@ namespace CustomControls.Controls
                     child.UpdateAlingment(sender.ChildAlignment, sender.ItemOrientation);
                 }
             }
-            TransformToProgress(o, e);
+            UpdateRotation(o, e);
         }
 
         private static void ChildAlignmentChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -174,6 +174,7 @@ namespace CustomControls.Controls
                     child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.ItemOrientation);
                 }
             }
+            TransformToProgress(o, e);
         }
 
         private static void PathChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -183,7 +184,8 @@ namespace CustomControls.Controls
             sen.ExtendedGeometry = new ExtendedPathGeometry(data as PathGeometry);
             if (sen.PATH != null)
                 sen.PATH.Margin = new Thickness(-sen.ExtendedGeometry.PathOffset.X, -sen.ExtendedGeometry.PathOffset.Y, 0, 0);
-            sen.TransformToProgress(((LayoutPath)o).PathProgress);
+            bool smooth = !DesignMode.DesignModeEnabled;
+            sen.TransformToProgress(((LayoutPath)o).PathProgress, smooth);
         }
 
         private static void PathVisibleChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -196,22 +198,20 @@ namespace CustomControls.Controls
 
         private static void ProgressChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            ((LayoutPath)o).TransformToProgress((double)e.NewValue);
+            bool smooth = !DesignMode.DesignModeEnabled;
+            ((LayoutPath)o).TransformToProgress((double)e.NewValue, smooth);
         }
 
-        private static void TransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void AttachedTransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             LayoutPathChildWrapper wrapper = null;
+            bool smooth = !DesignMode.DesignModeEnabled;
             while (true)
             {
                 o = VisualTreeHelper.GetParent(o);
-                if (o is LayoutPathChildWrapper)
-                    wrapper = (LayoutPathChildWrapper)o;
-
                 if (o is LayoutPath)
                 {
-                    if (wrapper != null)
-                        ((LayoutPath)o).MoveChild(wrapper, (double)e.NewValue);
+                        ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress, smooth);
                     return;
                 }
                 if (o == null)
@@ -219,11 +219,34 @@ namespace CustomControls.Controls
             }
         }
 
+        private static void TransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            bool smooth = !DesignMode.DesignModeEnabled;
+            ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress, smooth);
+        }
+
+        private static void UpdateRotation(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var path = (LayoutPath)o;
+            if (path.ExtendedGeometry == null || path.CHILDREN == null)
+                return;
+            var children = path.CHILDREN.Children.ToArray();
+            for (int i = 0; i < children.Count(); i++)
+            {
+                var wrapper = (LayoutPathChildWrapper)children[i];
+                var progress = wrapper.Progress;
+                Point childPoint;
+                double rotationTheta;
+                path.ExtendedGeometry.GetPointAtFractionLength(progress, out childPoint, out rotationTheta);
+                path.Rotate(wrapper, rotationTheta, false);
+            }
+        }
+
         #endregion
 
         #region methods
 
-        private void TransformToProgress(double progress)
+        private void TransformToProgress(double progress, bool smooth = true)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
                 return;
@@ -245,7 +268,7 @@ namespace CustomControls.Controls
                 var childOffset = GetProgressOffset((UIElement)wrapper.Content);
                 childPercent += childOffset;
 
-                MoveChild(wrapper, childPercent);
+                MoveChild(wrapper, childPercent, smooth);
             }
 
             var tmp = ExtendedGeometry.GetPointAtFractionLength(progress);
@@ -255,12 +278,16 @@ namespace CustomControls.Controls
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
         }
 
-        private void MoveChild(LayoutPathChildWrapper wrapper, double childPercent)
+        private void MoveChild(LayoutPathChildWrapper wrapper, double childPercent, bool smooth)
         {
+            wrapper.RawProgress = childPercent;
             ApplyStackFilters(ref childPercent, wrapper);
 
             if (ChildEasingFunction != null)
+            {
                 childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
+                wrapper.RawProgress = ChildEasingFunction.Ease(wrapper.RawProgress / 100.0) * 100;
+            }
 
             Point childPoint;
             double rotationTheta;
@@ -268,8 +295,8 @@ namespace CustomControls.Controls
 
             wrapper.Progress = childPercent;
 
-            Rotate(wrapper, rotationTheta);
-            Translate(wrapper, childPoint);
+            Rotate(wrapper, rotationTheta, smooth);
+            Translate(wrapper, childPoint, smooth);
         }
 
         private void ApplyStackFilters(ref double progress, LayoutPathChildWrapper wrapper)
@@ -325,7 +352,7 @@ namespace CustomControls.Controls
             }
         }
 
-        private void Rotate(LayoutPathChildWrapper wrapper, double rotationTheta)
+        private void Rotate(LayoutPathChildWrapper wrapper, double rotationTheta, bool smooth)
         {
             if (ItemOrientation == Orientations.None)
             {
@@ -342,13 +369,18 @@ namespace CustomControls.Controls
 
             rotationTheta = rotationTheta % 360;
 
+
             var rotationSmoothing = RotationSmoothingDefault;
-            var childRotationSmoothing = GetRotationSmoothing((UIElement)wrapper.Content);
-            if (!double.IsNaN(childRotationSmoothing))
-                rotationSmoothing = childRotationSmoothing;
+            var progressDistance = wrapper.ProgressDistance;
+            if (smooth)
+            {
+                var childRotationSmoothing = GetRotationSmoothing((UIElement)wrapper.Content);
+                if (!double.IsNaN(childRotationSmoothing))
+                    rotationSmoothing = childRotationSmoothing;
+            }
 
             //try smooth rotation
-            if (!double.IsNaN(wrapper.ProgressDistance) && rotationSmoothing > 0 && wrapper.ProgressDistance > 0)
+            if (smooth && !double.IsNaN(progressDistance) && rotationSmoothing > 0 && progressDistance > 0)
             {
                 var degreesDistance = Math.Max(rotationTheta, wrapper.Rotation) - Math.Min(rotationTheta, wrapper.Rotation);
                 var rotation = wrapper.Rotation;
@@ -360,7 +392,7 @@ namespace CustomControls.Controls
                         rotation = rotation - 360;
                     degreesDistance = Math.Max(rotationTheta, rotation) - Math.Min(rotationTheta, rotation);
                 }
-                wrapper.Rotation = (rotation * rotationSmoothing * 0.2 + rotationTheta * wrapper.ProgressDistance) / (rotationSmoothing * 0.2 + wrapper.ProgressDistance);
+                wrapper.Rotation = (rotation * rotationSmoothing * 0.2 + rotationTheta * progressDistance) / (rotationSmoothing * 0.2 + progressDistance);
             }
             else
             {
@@ -368,14 +400,19 @@ namespace CustomControls.Controls
             }
         }
 
-        private void Translate(LayoutPathChildWrapper wrapper, Point childPoint)
+        private void Translate(LayoutPathChildWrapper wrapper, Point childPoint, bool smooth)
         {
+            double translateX = childPoint.X, translateY = childPoint.Y;
             var wrappedChild = wrapper.Content as FrameworkElement;
+
+            var translationSmoothing = TranslationSmoothingDefault;
+            var progressDistance = wrapper.ProgressDistance;
+
             var childWidth = wrappedChild.ActualWidth;
             var childHeight = wrappedChild.ActualHeight;
 
-            double translateX = childPoint.X - ExtendedGeometry.PathOffset.X;
-            double translateY = childPoint.Y - ExtendedGeometry.PathOffset.Y;
+            translateX = childPoint.X - ExtendedGeometry.PathOffset.X;
+            translateY = childPoint.Y - ExtendedGeometry.PathOffset.Y;
 
             //center align child
             translateX -= childWidth / 2.0;
@@ -383,15 +420,17 @@ namespace CustomControls.Controls
 
             wrapper.SetTransformCenter(childWidth / 2.0, childHeight / 2.0);
 
-            var translationSmoothing = TranslationSmoothingDefault;
-            var childTranslationSmoothing = GetTranslationSmoothing((UIElement)wrapper.Content);
-            if (!double.IsNaN(childTranslationSmoothing))
-                translationSmoothing = childTranslationSmoothing;
-
-            if (!double.IsNaN(wrapper.ProgressDistance) && translationSmoothing > 0 && wrapper.ProgressDistance > 0)
+            if (smooth)
             {
-                wrapper.TranslateX = (wrapper.TranslateX * translationSmoothing * 0.2 / wrapper.ProgressDistance + translateX) / (translationSmoothing * 0.2 / wrapper.ProgressDistance + 1);
-                wrapper.TranslateY = (wrapper.TranslateY * translationSmoothing * 0.2 / wrapper.ProgressDistance + translateY) / (translationSmoothing * 0.2 / wrapper.ProgressDistance + 1);
+                var childTranslationSmoothing = GetTranslationSmoothing((UIElement)wrapper.Content);
+                if (!double.IsNaN(childTranslationSmoothing))
+                    translationSmoothing = childTranslationSmoothing;
+            }
+
+            if (smooth && !double.IsNaN(progressDistance) && translationSmoothing > 0 && progressDistance > 0)
+            {
+                wrapper.TranslateX = (wrapper.TranslateX * translationSmoothing * 0.2 / progressDistance + translateX) / (translationSmoothing * 0.2 / progressDistance + 1);
+                wrapper.TranslateY = (wrapper.TranslateY * translationSmoothing * 0.2 / progressDistance + translateY) / (translationSmoothing * 0.2 / progressDistance + 1);
             }
             else
             {

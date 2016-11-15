@@ -63,9 +63,9 @@
 
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
-                                      Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" 
+                                      Margin="20"  x:Name="LayoutPath1" Visibility="Visible" PathProgress="40" 
                                       ItemOrientation="ToPath" Stretch="None"  PathVisibility="Visible" 
-                                 ChildrenPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
+                                 ChildrenPadding="3" TranslationSmoothingDefault="5" RotationSmoothingDefault="5" >
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -118,10 +118,10 @@
                             Header="Children Padding" Value="{Binding ChildrenPadding, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="6" SmallChange="0.0001"  StepFrequency="0.01" Margin="5,0"/>
                     <Slider Grid.Column="0" Grid.Row="1"
-                            Header="Rotation Smoothing" Value="{Binding TranslationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Header="Translation Smoothing" Value="{Binding TranslationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="40" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
                     <Slider Grid.Column="1" Grid.Row="1"
-                            Header="Translation Smoothing" Value="{Binding RotationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
+                            Header="Rotation Smoothing" Value="{Binding RotationSmoothingDefault, ElementName=LayoutPath1, Mode=TwoWay}" 
                             Minimum="0" Maximum="40" SmallChange="1"  StepFrequency="1" Margin="5,0"/>
 
                 </Grid>

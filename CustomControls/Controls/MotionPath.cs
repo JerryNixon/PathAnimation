@@ -104,8 +104,7 @@ namespace CustomControls.Controls
             LAYOUT_PATH.SetBinding(LayoutPath.PathVisibilityProperty, new Binding()
             {
                 Path = new PropertyPath("PathVisibility"),
-                Source = this,
-                Converter = new InstanceConverter(o => o as Visibility? == Visibility.Visible)
+                Source = this
             });
 
             LAYOUT_PATH.SetBinding(LayoutPath.ItemOrientationProperty, new Binding()

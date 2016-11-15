@@ -43,12 +43,12 @@ namespace CustomControls.Controls
             RotationSmoothingDefaultProperty = DependencyProperty.Register(nameof(RotationSmoothingDefault), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double)));
 
             //Attached properties
-            ProgressProperty = DependencyProperty.RegisterAttached("Progress", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN, TransformToProgress));
+            ProgressProperty = DependencyProperty.RegisterAttached("Progress", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN, AttachedTransformToProgress));
             TranslationSmoothingProperty = DependencyProperty.RegisterAttached("TranslationSmoothing", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN));
             RotationSmoothingProperty = DependencyProperty.RegisterAttached("RotationSmoothing", typeof(double), typeof(LayoutPath), new PropertyMetadata(double.NaN));
 
             IsMovableProperty = DependencyProperty.RegisterAttached("IsMovable", typeof(Boolean), typeof(LayoutPath), new PropertyMetadata(true));
-            ProgressOffsetProperty = DependencyProperty.RegisterAttached("ProgressOffset", typeof(double), typeof(LayoutPath), new PropertyMetadata(0.0, TransformToProgress));
+            ProgressOffsetProperty = DependencyProperty.RegisterAttached("ProgressOffset", typeof(double), typeof(LayoutPath), new PropertyMetadata(0.0, AttachedTransformToProgress));
         }
 
 

@@ -694,8 +694,6 @@ namespace CustomControls.Converters
                 return ConvertBack(geometry);
             else
                 return default(string);
-
-
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)

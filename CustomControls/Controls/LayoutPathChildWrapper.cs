@@ -18,6 +18,8 @@ namespace CustomControls.Controls
 
         internal double ProgressDistance { get; private set; } = double.NaN;
 
+        internal double RawProgress;
+
         static LayoutPathChildWrapper()
         {
             ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),

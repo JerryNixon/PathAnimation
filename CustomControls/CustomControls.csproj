@@ -112,7 +112,6 @@
     <Compile Include="Controls\LayoutPath.cs" />
     <Compile Include="Controls\LayoutPathChildWrapper.cs" />
     <Compile Include="Controls\MotionPath.cs" />
-    <Compile Include="Converters\InstanceConverter.cs" />
     <Compile Include="Converters\StringToPathGeometryConverter.cs" />
     <Compile Include="Enums\AnimationState.cs" />
     <Compile Include="Enums\Behaviors.cs" />
