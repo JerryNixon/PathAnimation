@@ -64,6 +64,8 @@ namespace CustomControls.Controls
 
         #region initialization
 
+
+
         protected override void OnApplyTemplate()
         {
             VIEW_BOX = GetTemplateChild(nameof(VIEW_BOX)) as Viewbox;
@@ -87,11 +89,15 @@ namespace CustomControls.Controls
             if (ExtendedGeometry != null)
                 PATH.Margin = new Thickness(-ExtendedGeometry.PathOffset.X, -ExtendedGeometry.PathOffset.Y, 0, 0);
 
+
+
+
             foreach (var child in _children)
                 CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
 
             //TODO: _children.Clear does not invoke this event.
             _children.CollectionChanged += ChildrenOnCollectionChanged;
+
 
             base.OnApplyTemplate();
         }
@@ -102,18 +108,14 @@ namespace CustomControls.Controls
         private readonly object _collectionChangedLocker = new object();
         private async void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
+
             lock (_collectionChangedLocker)
             {
-                if (args.NewItems != null)
+
+                if (args.Action == NotifyCollectionChangedAction.Reset)
                 {
-                    foreach (var child in args.NewItems)
-                    {
-                        var wrapper =
-                            CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
-                        if (wrapper == null)
-                            CHILDREN.Children.Insert(args.NewStartingIndex,
-                                new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
-                    }
+                    CHILDREN.Children.Clear();
+                    return;
                 }
 
                 if (args.OldItems != null)
@@ -128,12 +130,21 @@ namespace CustomControls.Controls
                         }
                     }
                 }
+
+                if (args.NewItems != null)
+                {
+                    foreach (var child in args.NewItems)
+                    {
+                        var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
+                        if (wrapper == null)
+                            CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
+                    }
+                }
             }
 
             //Force UI to render elements. If not, width and height are giving 0 values. 
             //Dimensions are needed for correctly aligning items.
             await Task.Delay(1);
-
             TransformToProgress(PathProgress);
         }
 
@@ -141,10 +152,10 @@ namespace CustomControls.Controls
         {
             DefaultStyleKey = typeof(LayoutPath);
 
-            Loaded += async delegate
-             {
-                 TransformToProgress(PathProgress);
-             };
+            Loaded += delegate
+            {
+                TransformToProgress(PathProgress);
+            };
         }
 
         #endregion
@@ -184,8 +195,7 @@ namespace CustomControls.Controls
             sen.ExtendedGeometry = new ExtendedPathGeometry(data as PathGeometry);
             if (sen.PATH != null)
                 sen.PATH.Margin = new Thickness(-sen.ExtendedGeometry.PathOffset.X, -sen.ExtendedGeometry.PathOffset.Y, 0, 0);
-            bool smooth = !DesignMode.DesignModeEnabled;
-            sen.TransformToProgress(((LayoutPath)o).PathProgress, smooth);
+            sen.TransformToProgress(((LayoutPath)o).PathProgress);
         }
 
         private static void PathVisibleChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -198,20 +208,18 @@ namespace CustomControls.Controls
 
         private static void ProgressChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            bool smooth = !DesignMode.DesignModeEnabled;
-            ((LayoutPath)o).TransformToProgress((double)e.NewValue, smooth);
+            ((LayoutPath)o).TransformToProgress((double)e.NewValue);
         }
 
         private static void AttachedTransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             LayoutPathChildWrapper wrapper = null;
-            bool smooth = !DesignMode.DesignModeEnabled;
             while (true)
             {
                 o = VisualTreeHelper.GetParent(o);
                 if (o is LayoutPath)
                 {
-                        ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress, smooth);
+                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress);
                     return;
                 }
                 if (o == null)
@@ -221,8 +229,7 @@ namespace CustomControls.Controls
 
         private static void TransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            bool smooth = !DesignMode.DesignModeEnabled;
-            ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress, smooth);
+            ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress);
         }
 
         private static void UpdateRotation(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -246,7 +253,7 @@ namespace CustomControls.Controls
 
         #region methods
 
-        private void TransformToProgress(double progress, bool smooth = true)
+        private void TransformToProgress(double progress)
         {
             if (ExtendedGeometry == null || CHILDREN == null)
                 return;
@@ -268,7 +275,7 @@ namespace CustomControls.Controls
                 var childOffset = GetProgressOffset((UIElement)wrapper.Content);
                 childPercent += childOffset;
 
-                MoveChild(wrapper, childPercent, smooth);
+                MoveChild(wrapper, childPercent);
             }
 
             var tmp = ExtendedGeometry.GetPointAtFractionLength(progress);
@@ -278,7 +285,7 @@ namespace CustomControls.Controls
             CurrentLength = ExtendedGeometry.PathLength * (progress / 100.0);
         }
 
-        private void MoveChild(LayoutPathChildWrapper wrapper, double childPercent, bool smooth)
+        private void MoveChild(LayoutPathChildWrapper wrapper, double childPercent)
         {
             wrapper.RawProgress = childPercent;
             ApplyStackFilters(ref childPercent, wrapper);
@@ -295,6 +302,7 @@ namespace CustomControls.Controls
 
             wrapper.Progress = childPercent;
 
+            bool smooth = !DesignMode.DesignModeEnabled;
             Rotate(wrapper, rotationTheta, smooth);
             Translate(wrapper, childPoint, smooth);
         }
