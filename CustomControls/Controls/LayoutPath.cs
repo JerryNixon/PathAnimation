@@ -63,9 +63,7 @@ namespace CustomControls.Controls
         #endregion
 
         #region initialization
-
-
-
+        
         protected override void OnApplyTemplate()
         {
             VIEW_BOX = GetTemplateChild(nameof(VIEW_BOX)) as Viewbox;
@@ -156,7 +154,7 @@ namespace CustomControls.Controls
             {
                 foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                 {
-                    child.UpdateAlingment(sender.ChildAlignment, sender.ItemOrientation);
+                    child.UpdateAlignment(sender.ChildAlignment, sender.ItemOrientation);
                 }
             }
             UpdateRotation(o, e);
@@ -169,7 +167,7 @@ namespace CustomControls.Controls
             {
                 foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                 {
-                    child.UpdateAlingment((Enums.ChildAlignment)e.NewValue, sender.ItemOrientation);
+                    child.UpdateAlignment((ChildAlignment)e.NewValue, sender.ItemOrientation);
                 }
             }
             TransformToProgress(o, e);
@@ -200,7 +198,6 @@ namespace CustomControls.Controls
 
         private static void AttachedTransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            LayoutPathChildWrapper wrapper = null;
             while (true)
             {
                 o = VisualTreeHelper.GetParent(o);

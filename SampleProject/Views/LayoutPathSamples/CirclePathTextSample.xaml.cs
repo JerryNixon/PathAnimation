@@ -45,14 +45,14 @@ namespace SampleProject.Views.LayoutPathSamples
                 KeyTime = TimeSpan.Zero
             });
 
-            for (int i = 0; i < layoutPath.Children.Count; i++)
+            for (int i = 0; i < LayoutPath.Children.Count; i++)
             {
                 var currentTime = i * lineDuration;
 
                 //wait to read
                 an.KeyFrames.Add(new EasingDoubleKeyFrame()
                 {
-                    Value = 100 + i * layoutPath.ChildrenPadding,
+                    Value = 100 + i * LayoutPath.ChildrenPadding,
                     KeyTime = TimeSpan.FromSeconds(currentTime + lineDuration),
 
                 });
@@ -61,7 +61,7 @@ namespace SampleProject.Views.LayoutPathSamples
                 //go to next
                 an.KeyFrames.Add(new EasingDoubleKeyFrame()
                 {
-                    Value = 100 + (i) * layoutPath.ChildrenPadding,
+                    Value = 100 + (i) * LayoutPath.ChildrenPadding,
                     KeyTime = TimeSpan.FromSeconds(currentTime + transitionDuration),
                     EasingFunction = new SineEase() { EasingMode = EasingMode.EaseInOut }
                 });
@@ -72,19 +72,19 @@ namespace SampleProject.Views.LayoutPathSamples
             an.KeyFrames.Add(new EasingDoubleKeyFrame()
             {
                 Value = 200,
-                KeyTime = TimeSpan.FromSeconds(layoutPath.Children.Count * lineDuration + transitionDuration),
+                KeyTime = TimeSpan.FromSeconds(LayoutPath.Children.Count * lineDuration + transitionDuration),
                 EasingFunction = new ExponentialEase()
             });
 
             an.KeyFrames.Add(new EasingDoubleKeyFrame()
             {
                 Value = 200,
-                KeyTime = TimeSpan.FromSeconds(layoutPath.Children.Count * lineDuration + transitionDuration + lineDuration),
+                KeyTime = TimeSpan.FromSeconds(LayoutPath.Children.Count * lineDuration + transitionDuration + lineDuration),
                 EasingFunction = new ExponentialEase()
             });
 
             Storyboard.SetTargetProperty(an, "(LayoutPath.PathProgress)");
-            Storyboard.SetTarget(an, layoutPath);
+            Storyboard.SetTarget(an, LayoutPath);
             storyboard.Children.Add(an);
 
             storyboard.RepeatBehavior = RepeatBehavior.Forever;

@@ -3,17 +3,13 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.ApplicationModel;
 using Windows.Foundation;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
-using CustomControls.Converters;
 using CustomControls.ExtendedSegments;
 using CustomControls.Extensions;
 using LayoutPath.Enums;
@@ -33,7 +29,7 @@ namespace CustomControls.Controls
 
         private ExtendedLineSegment _movementLine;
         private CompositeTransform _contentTransform;
-        private Point _initialContentPoint = new Point();
+        private Point _initialContentPoint;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly Storyboard _storyboard = new Storyboard();

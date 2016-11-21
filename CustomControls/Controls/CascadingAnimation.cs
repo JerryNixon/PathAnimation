@@ -56,9 +56,9 @@ namespace CustomControls.Controls
 
         public IList<object> Children => _children;
 
-        Storyboard _storyboard = new Storyboard();
-        List<object> _children = new List<object>();
-        List<object> _childrenToAnimate = new List<object>();
+        readonly Storyboard _storyboard = new Storyboard();
+        readonly List<object> _children = new List<object>();
+        readonly List<object> _childrenToAnimate = new List<object>();
         private Geometry _cascadingText;
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace CustomControls.Controls
             }
         }
 
-        public async Task InitialiseAsync(bool initialiseQueue = true)
+        public async Task InitializeAsync(bool initializeQueue = true)
         {
             await Task.Run(async delegate
             {
@@ -99,11 +99,11 @@ namespace CustomControls.Controls
                 });
 
             });
-            if (initialiseQueue && _nextAnimation != null)//cascade initialization
-                await _nextAnimation.InitialiseAsync();
+            if (initializeQueue && _nextAnimation != null)//cascade initialization
+                await _nextAnimation.InitializeAsync();
         }
 
-        public async Task ResetAsync(bool initialiseQueue = true)
+        public async Task ResetAsync(bool initializeQueue = true)
         {
             await Task.Run(async delegate
             {
@@ -117,7 +117,7 @@ namespace CustomControls.Controls
                 });
 
             });
-            if (initialiseQueue && _nextAnimation != null)//cascade initialization
+            if (initializeQueue && _nextAnimation != null)//cascade initialization
                 await _nextAnimation.ResetAsync();
         }
 
@@ -144,7 +144,7 @@ namespace CustomControls.Controls
 
             _storyboard.Completed += (sender, args) => Completed?.Invoke();
 
-            Loaded += delegate (object sender, RoutedEventArgs args)
+            Loaded += delegate 
             {
                 if (DesignMode.DesignModeEnabled)
                 {
@@ -165,8 +165,8 @@ namespace CustomControls.Controls
         private void AnalyzeSegments()
         {
             List<KeyValuePair<Matrix, PathFigure>> ranges = new List<KeyValuePair<Matrix, PathFigure>>();
-            var pg = (PathGeometry)this.CascadingText;
-            double TotalLength = 0;
+            var pg = (PathGeometry)CascadingText;
+            double totalLength = 0;
             if (pg == null)
                 return;
 
@@ -195,7 +195,7 @@ namespace CustomControls.Controls
 
                 foreach (ExtendedSegmentBase t in figureSegments)
                 {
-                    t.DistanceFromStart = TotalLength += t.SegmentLength;
+                    t.DistanceFromStart = totalLength += t.SegmentLength;
                 }
 
                 Matrix range = new Matrix(double.MaxValue, double.MinValue, double.MaxValue, double.MinValue, 0, 0);
@@ -221,7 +221,7 @@ namespace CustomControls.Controls
             Grid container = new Grid();
             while (ranges.Any())
             {
-                Path path = new Path() { Fill = this.Foreground };
+                Path path = new Path() { Fill = Foreground };
                 PathGeometry geometry = new PathGeometry();
                 var pair = ranges.First();
                 var items = ranges.Where(x => (x.Key.M11 >= pair.Key.M11 && x.Key.M12 <= pair.Key.M12 || x.Key.M11 <= pair.Key.M11 && x.Key.M12 >= pair.Key.M12) &&
@@ -378,7 +378,7 @@ namespace CustomControls.Controls
             await Task.Delay(1);
             string color = "{ThemeResource ApplicationForegroundThemeBrush}";
             var themed = (SolidColorBrush)Resources["ApplicationForegroundThemeBrush"];
-            if (this.Foreground != null && this.Foreground != themed)
+            if (Foreground != null && this.Foreground != themed)
             {
                 if (Foreground is SolidColorBrush)
                 {

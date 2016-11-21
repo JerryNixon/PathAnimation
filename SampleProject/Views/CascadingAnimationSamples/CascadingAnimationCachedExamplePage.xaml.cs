@@ -34,7 +34,7 @@ namespace SampleProject.Views.CascadingAnimationSamples
             {
                 x = ct1;
 
-                await x.InitialiseAsync();
+                await x.InitializeAsync();
                 loadingGrid.Visibility = Visibility.Collapsed;
                 x.PlayAnimation();
             };

@@ -31,17 +31,17 @@ namespace SampleProject.Views
         {
             this.InitializeComponent();
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
-            childAlignmentCB.ItemsSource = Enum.GetValues(typeof(ChildAlignment));
-            stretchCB.ItemsSource = Enum.GetValues(typeof(Stretch));
-            itemOrientationCB.ItemsSource = Enum.GetValues(typeof(Orientations));
-            startBehaviorCB.ItemsSource = Enum.GetValues(typeof(Behaviors));
-            endBehaviorCB.ItemsSource = Enum.GetValues(typeof(Behaviors));
+            ChildAlignmentCb.ItemsSource = Enum.GetValues(typeof(ChildAlignment));
+            StretchCb.ItemsSource = Enum.GetValues(typeof(Stretch));
+            ItemOrientationCb.ItemsSource = Enum.GetValues(typeof(Orientations));
+            StartBehaviorCb.ItemsSource = Enum.GetValues(typeof(Behaviors));
+            EndBehaviorCb.ItemsSource = Enum.GetValues(typeof(Behaviors));
             Loaded += delegate (object sender, RoutedEventArgs args)
             {
-                childAlignmentCB.SelectedIndex = 1;
-                itemOrientationCB.SelectedIndex = 1;
-                startBehaviorCB.SelectedIndex = 0;
-                endBehaviorCB.SelectedIndex = 0;
+                ChildAlignmentCb.SelectedIndex = 1;
+                ItemOrientationCb.SelectedIndex = 1;
+                StartBehaviorCb.SelectedIndex = 0;
+                EndBehaviorCb.SelectedIndex = 0;
                 PathStoryboard.Begin();
             };
         }

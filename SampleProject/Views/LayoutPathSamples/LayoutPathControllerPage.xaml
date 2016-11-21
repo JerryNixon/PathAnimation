@@ -9,7 +9,6 @@
     mc:Ignorable="d">
     <Page.Resources>
         <converters:EnumStringConverter x:Key="EnumStringConverter"/>
-        <converters:BoolBehaviorConverter x:Key="BoolBehaviorConverter"/>
         <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="1"/>
@@ -134,19 +133,19 @@
                         <CheckBox Content="Use child SineEase" Margin="5,0" Checked="ToggleSine_Changed" Unchecked="ToggleSine_Changed"/>
 
 
-                        <ComboBox Header="Start behavior" x:Name="startBehaviorCB"  SelectedValue="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="Start behavior" x:Name="StartBehaviorCb"  SelectedValue="{Binding StartBehavior, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
-                        <ComboBox Header="End behavior" x:Name="endBehaviorCB"  SelectedValue="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="End behavior" x:Name="EndBehaviorCb"  SelectedValue="{Binding EndBehavior, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
                         
                        
-                        <ComboBox Header="ItemOrientation" x:Name="itemOrientationCB"  SelectedValue="{Binding ItemOrientation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="ItemOrientation" x:Name="ItemOrientationCb"  SelectedValue="{Binding ItemOrientation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
                         
-                        <ComboBox Header="Alignment" x:Name="childAlignmentCB"  SelectedValue="{Binding ChildAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="Alignment" x:Name="ChildAlignmentCb"  SelectedValue="{Binding ChildAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
 
-                        <ComboBox Header="Stretch" x:Name="stretchCB"  SelectedValue="{Binding Stretch, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="Stretch" x:Name="StretchCb"  SelectedValue="{Binding Stretch, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <ContentPresenter Content="{Binding Converter={StaticResource EnumStringConverter}}"  />

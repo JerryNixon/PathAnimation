@@ -86,19 +86,22 @@ namespace CustomControls.Controls
             Content = child;
             DefaultStyleKey = typeof(LayoutPathChildWrapper);
             RenderTransform = Transform = new CompositeTransform();
-            Loaded += delegate (object sender, RoutedEventArgs args)
+            Loaded += delegate
             {
-                UpdateAlingment(alingment, orientation);
+                UpdateAlignment(alingment, orientation);
             };
         }
 
-        internal void UpdateAlingment(ChildAlignment alingment, Orientations orientation)
+        internal void UpdateAlignment(ChildAlignment alignment, Orientations orientation)
         {
             if (ALIGNMENT == null)
                 return;
 
-            var translate = (TranslateTransform)ALIGNMENT.RenderTransform;
-            if (alingment == ChildAlignment.Center)
+            var translate = ALIGNMENT.RenderTransform as TranslateTransform;
+            if (translate == null)
+                return;
+
+            if (alignment == ChildAlignment.Center)
             {
                 translate.X = translate.Y = 0;
             }
@@ -111,7 +114,7 @@ namespace CustomControls.Controls
                 if (orientation == Orientations.ToPath || orientation == Orientations.ToPathReversed)
                 {
                     translate.X = 0;
-                    if (alingment == ChildAlignment.Outer)
+                    if (alignment == ChildAlignment.Outer)
                     {
                         translate.Y = child.ActualHeight * flipValue * -1 / 2.0;
                     }
@@ -123,7 +126,7 @@ namespace CustomControls.Controls
                 else
                 {
                     translate.Y = 0;
-                    if (alingment == ChildAlignment.Outer)
+                    if (alignment == ChildAlignment.Outer)
                     {
                         translate.X = child.ActualWidth * flipValue * -1 / 2.0;
                     }

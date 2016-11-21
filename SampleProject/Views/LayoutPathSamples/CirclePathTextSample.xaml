@@ -2,7 +2,6 @@
     x:Class="SampleProject.Views.LayoutPathSamples.CirclePathTextSample"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:SampleProject.Views.LayoutPathSamples"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:controls="using:CustomControls.Controls"
@@ -40,7 +39,7 @@
                         <CompositeTransform TranslateX="270"/>
                     </Rectangle.RenderTransform>
                 </Rectangle>
-                <controls:LayoutPath x:Name="layoutPath" HorizontalAlignment="Center" VerticalAlignment="Center"
+                <controls:LayoutPath x:Name="LayoutPath" HorizontalAlignment="Center" VerticalAlignment="Center"
                     ChildrenPadding="4.15" PathProgress="100" ItemOrientation="VerticalReversed"  PathVisibility="Collapsed" ChildAlignment="Outer"  
                 Path="M258.5,129.5 C258.5,200.745 200.745,258.5 129.5,258.5 C58.2553,258.5 0.5,200.745 0.5,129.5 C0.5,58.2553 58.2553,0.5 129.5,0.5 C200.745,0.5 258.5,58.2553 258.5,129.5 z">
 

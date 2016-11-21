@@ -33,7 +33,7 @@ namespace SampleProject.Views.CascadingAnimationSamples
             Loaded += async delegate (object sender, RoutedEventArgs args)
             {
                 x = ct1;
-                await x.InitialiseAsync();
+                await x.InitializeAsync();
                 loadingGrid.Visibility = Visibility.Collapsed;
                 x.PlayAnimation();
             };
