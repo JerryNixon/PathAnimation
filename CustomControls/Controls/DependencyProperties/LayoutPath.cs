@@ -116,7 +116,7 @@ namespace CustomControls.Controls
         #region dependency properties
 
         /// <summary>
-        /// Set the distance from start, where <see cref="Children"/> will be transformed (value in Percent 0-100)
+        /// Transforms <see cref="Children"/> at fraction length (value in Percent 0-100)
         /// </summary>
         public double PathProgress { get { return (double)GetValue(PathProgressProperty); } set { SetValue(PathProgressProperty, value); } }
         public static readonly DependencyProperty PathProgressProperty;
@@ -168,27 +168,25 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty CurrentRotationProperty;
 
         /// <summary>
-        /// Gets the length distance for <see cref="CurrentPosition"/>
+        /// Gets the fraction length for <see cref="CurrentPosition"/>
         /// </summary>
         public double CurrentLength { get { return (double)GetValue(CurrentLengthProperty); } private set { SetValue(CurrentLengthProperty, value); } }
         public static readonly DependencyProperty CurrentLengthProperty;
       
         /// <summary>
-        /// Sets the position of items along path
+        /// Sets the alignment of items along path
         /// </summary>
         public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
         public static readonly DependencyProperty ChildAlignmentProperty;
-        
+
         /// <summary>
-        /// Sets child progress to 0 if it is lower than 0. 
-        /// This results items to be stacked at the beginning of path if <see cref="ChildrenPadding"/> is specified and progress values are near 0. 
+        /// Sets <see cref="Children"/> start behavior
         /// </summary>
         public Behaviors StartBehavior { get { return (Behaviors)GetValue(StartBehaviorProperty); } set { SetValue(StartBehaviorProperty, value); } }
         public static readonly DependencyProperty StartBehaviorProperty;
 
         /// <summary>
-        /// Sets child progress to 100 if it is greater than 100. 
-        /// This results items to be stacked at the end of path for progress values greater than 100. 
+        /// Sets <see cref="Children"/> end behavior
         /// </summary>
         public Behaviors EndBehavior { get { return (Behaviors)GetValue(EndBehaviorProperty); } set { SetValue(EndBehaviorProperty, value); } }
         public static readonly DependencyProperty EndBehaviorProperty;
@@ -206,7 +204,7 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty RotationSmoothingDefaultProperty;
 
         /// <summary>
-        /// Sets the easing function each children will have when moving along path.
+        /// Sets the easing function each child will have when moving along path.
         /// </summary>
         public EasingFunctionBase ChildEasingFunction { get { return (EasingFunctionBase)GetValue(ChildEasingFunctionProperty); } set { SetValue(ChildEasingFunctionProperty, value); } }
         public static readonly DependencyProperty ChildEasingFunctionProperty;

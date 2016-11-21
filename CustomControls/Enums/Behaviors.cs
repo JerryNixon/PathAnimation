@@ -8,8 +8,17 @@ namespace CustomControls.Enums
 {
     public enum Behaviors
     {
+        /// <summary>
+        /// Children loop alogn path
+        /// </summary>
         Default,
+        /// <summary>
+        /// Children are stacked on position
+        /// </summary>
         Stack,
+        /// <summary>
+        /// Children collapse
+        /// </summary>
         Collapse
     }
 }

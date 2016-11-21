@@ -89,56 +89,43 @@ namespace CustomControls.Controls
             if (ExtendedGeometry != null)
                 PATH.Margin = new Thickness(-ExtendedGeometry.PathOffset.X, -ExtendedGeometry.PathOffset.Y, 0, 0);
 
-
-
-
             foreach (var child in _children)
                 CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
 
             //TODO: _children.Clear does not invoke this event.
             _children.CollectionChanged += ChildrenOnCollectionChanged;
 
-
             base.OnApplyTemplate();
         }
 
-        /// <summary>
-        /// Used for providing better designer support, when adding or removing items
-        /// </summary>
-        private readonly object _collectionChangedLocker = new object();
         private async void ChildrenOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-
-            lock (_collectionChangedLocker)
+            if (args.Action == NotifyCollectionChangedAction.Reset)
             {
+                CHILDREN.Children.Clear();
+                return;
+            }
 
-                if (args.Action == NotifyCollectionChangedAction.Reset)
+            if (args.OldItems != null)
+            {
+                foreach (var child in args.OldItems)
                 {
-                    CHILDREN.Children.Clear();
-                    return;
-                }
-
-                if (args.OldItems != null)
-                {
-                    foreach (var child in args.OldItems)
+                    var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
+                    if (wrapper != null)
                     {
-                        var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
-                        if (wrapper != null)
-                        {
-                            CHILDREN.Children.Remove(wrapper);
-                            ((LayoutPathChildWrapper)wrapper).Content = null;
-                        }
+                        CHILDREN.Children.Remove(wrapper);
+                        ((LayoutPathChildWrapper)wrapper).Content = null;
                     }
                 }
+            }
 
-                if (args.NewItems != null)
+            if (args.NewItems != null)
+            {
+                foreach (var child in args.NewItems)
                 {
-                    foreach (var child in args.NewItems)
-                    {
-                        var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
-                        if (wrapper == null)
-                            CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
-                    }
+                    var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
+                    if (wrapper == null)
+                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
                 }
             }
 
