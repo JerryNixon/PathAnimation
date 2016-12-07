@@ -63,7 +63,7 @@ namespace CustomControls.Controls
         #endregion
 
         #region initialization
-        
+
         protected override void OnApplyTemplate()
         {
             VIEW_BOX = GetTemplateChild(nameof(VIEW_BOX)) as Viewbox;
@@ -196,14 +196,44 @@ namespace CustomControls.Controls
             ((LayoutPath)o).TransformToProgress((double)e.NewValue);
         }
 
-        private static void AttachedTransformToProgress(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        private static void AttachedProgressPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
+            LayoutPathChildWrapper wrapper = null;
             while (true)
             {
                 o = VisualTreeHelper.GetParent(o);
+                if (o is LayoutPathChildWrapper)
+                    wrapper = (LayoutPathChildWrapper)o;
+
                 if (o is LayoutPath)
                 {
-                    ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress);
+                    
+                    ((LayoutPath)o).MoveChild(wrapper, (double)e.NewValue);
+                    return;
+                }
+                if (o == null)
+                    return;
+            }
+        }
+
+        private static void AttachedProgressOffsetPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            LayoutPathChildWrapper wrapper = null;
+            while (true)
+            {
+                o = VisualTreeHelper.GetParent(o);
+                if (o is LayoutPathChildWrapper)
+                    wrapper = (LayoutPathChildWrapper)o;
+
+                if (o is LayoutPath)
+                {
+                    if (DesignMode.DesignModeEnabled)
+                    {
+                        ((LayoutPath)o).TransformToProgress(((LayoutPath)o).PathProgress);
+                        return;
+                    }
+
+                    ((LayoutPath)o).MoveChild(wrapper, wrapper.Progress + ((double)e.NewValue / 100.0));
                     return;
                 }
                 if (o == null)

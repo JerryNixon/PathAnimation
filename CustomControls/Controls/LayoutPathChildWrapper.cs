@@ -10,72 +10,21 @@ using CustomControls.Enums;
 
 namespace CustomControls.Controls
 {
-    public class LayoutPathChildWrapper : ContentControl
+    public partial class LayoutPathChildWrapper : ContentControl
     {
+        #region private members
         private ContentControl ALIGNMENT { get; set; }
 
         private CompositeTransform Transform { get; set; }
+        #endregion
 
+        #region internal members
         internal double ProgressDistance { get; private set; } = double.NaN;
 
         internal double RawProgress;
-
-        static LayoutPathChildWrapper()
-        {
-            ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    var s = ((LayoutPathChildWrapper)o);
-                    double oldV = (double)e.OldValue;
-                    double newV = (double)e.NewValue;
-
-                    if (!double.IsNaN(newV))
-                    {
-                        s.ProgressDistance = Math.Abs(newV - oldV);
-                        if (s.ProgressDistance > 50)
-                        {
-                            //occurs when we transfer from end to beginning (e.g. 99 to 1: In that case Progress distance will give a value of 98 while the actual must be 2).
-                            if (oldV > 50)
-                                oldV = oldV - 100;
-                            else
-                                newV = newV - 100;
-                            s.ProgressDistance = Math.Abs(newV - oldV);
-                        }
-                    }
-                }));
-            RotationProperty = DependencyProperty.Register("Rotation", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPathChildWrapper)o).Transform.Rotation = (double)e.NewValue;
-                }));
-            TranslateXProperty = DependencyProperty.Register("TranslateX", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPathChildWrapper)o).Transform.TranslateX = (double)e.NewValue;
-                }));
-            TranslateYProperty = DependencyProperty.Register("TranslateY", typeof(double), typeof(LayoutPathChildWrapper), new PropertyMetadata(default(double),
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    ((LayoutPathChildWrapper)o).Transform.TranslateY = (double)e.NewValue;
-                }));
-        }
-
-        #region dependency properties
-
-        public double Progress { get { return (double)GetValue(ProgressProperty); } internal set { SetValue(ProgressProperty, value); } }
-        public static readonly DependencyProperty ProgressProperty;
-
-        public double Rotation { get { return (double)GetValue(RotationProperty); } internal set { SetValue(RotationProperty, value); } }
-        public static readonly DependencyProperty RotationProperty;
-
-        public double TranslateX { get { return (double)GetValue(TranslateXProperty); } internal set { SetValue(TranslateXProperty, value); } }
-        public static readonly DependencyProperty TranslateXProperty;
-
-        public double TranslateY { get { return (double)GetValue(TranslateYProperty); } internal set { SetValue(TranslateYProperty, value); } }
-        public static readonly DependencyProperty TranslateYProperty;
-
         #endregion
 
+        #region initialization
         protected override void OnApplyTemplate()
         {
             ALIGNMENT = GetTemplateChild(nameof(ALIGNMENT)) as ContentControl;
@@ -91,7 +40,49 @@ namespace CustomControls.Controls
                 UpdateAlignment(alingment, orientation);
             };
         }
+        #endregion
+        
+        #region propety changed callbacks
 
+        private static void ProgressPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            var s = ((LayoutPathChildWrapper)o);
+            double oldV = (double)e.OldValue;
+            double newV = (double)e.NewValue;
+
+            if (!double.IsNaN(newV))
+            {
+                s.ProgressDistance = Math.Abs(newV - oldV);
+                if (s.ProgressDistance > 50)
+                {
+                    //occurs when we transfer from end to beginning (e.g. 99 to 1: In that case Progress distance will give a value of 98 while the actual must be 2).
+                    if (oldV > 50)
+                        oldV = oldV - 100;
+                    else
+                        newV = newV - 100;
+                    s.ProgressDistance = Math.Abs(newV - oldV);
+                }
+            }
+        }
+
+        private static void TranslateXPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutPathChildWrapper)o).Transform.TranslateX = (double)e.NewValue;
+        }
+
+        private static void TranslateYPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutPathChildWrapper)o).Transform.TranslateY = (double)e.NewValue;
+        }
+
+        private static void RotationPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
+        {
+            ((LayoutPathChildWrapper)o).Transform.Rotation = (double)e.NewValue;
+        }
+
+        #endregion
+
+        #region internal methods
         internal void UpdateAlignment(ChildAlignment alignment, Orientations orientation)
         {
             if (ALIGNMENT == null)
@@ -144,5 +135,6 @@ namespace CustomControls.Controls
             Transform.CenterX = x;
             Transform.CenterY = y;
         }
+        #endregion
     }
 }

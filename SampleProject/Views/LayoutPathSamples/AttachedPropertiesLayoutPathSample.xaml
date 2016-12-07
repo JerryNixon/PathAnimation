@@ -29,9 +29,9 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
-                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
-            Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  PathProgress="0" ItemOrientation="ToPath" Stretch="Uniform"  PathVisibility="Visible" 
-                                 ChildrenPadding="3" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
+                <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  
+                                      PathProgress="0" ItemOrientation="ToPath" Stretch="Uniform"  PathVisibility="Visible" 
+                                 ChildrenPadding="3.5" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
                             <PathFigure IsClosed="True" StartPoint="0,50">
@@ -46,14 +46,30 @@
                         </PathGeometry>
                     </controls:LayoutPath.Path>
 
-                    <Path x:Name="child1" controls:LayoutPath.Progress="25" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Grid x:Name="child1" controls:LayoutPath.Progress="25" CacheMode="BitmapCache">
+                        <Path   Height="40" Stroke="White" StrokeThickness="1" Stretch="Uniform" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                        <TextBlock  TextLineBounds="Tight" Text="1st" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Grid>
 
-                    <Path x:Name="child2" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Grid x:Name="child2" CacheMode="BitmapCache" controls:LayoutPath.ProgressOffset="1">
+                        <Path   Height="40" Stroke="White" StrokeThickness="1" Stretch="Uniform" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                        <TextBlock  TextLineBounds="Tight" Text="2nd" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Grid>
 
-                    <Path x:Name="child3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Grid x:Name="child3" CacheMode="BitmapCache">
+                        <Path Height="40" Stroke="White" StrokeThickness="1" Stretch="Uniform" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                        <TextBlock  TextLineBounds="Tight" Text="3rd" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Grid>
 
-                    <Path x:Name="child4" controls:LayoutPath.RotationSmoothing="3" controls:LayoutPath.TranslationSmoothing="3" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
-                    <Path x:Name="child5" controls:LayoutPath.RotationSmoothing="6" controls:LayoutPath.TranslationSmoothing="6" Width="39.25" Height="28" Stroke="White" StrokeThickness="1" Stretch="Fill" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                    <Grid x:Name="child4" controls:LayoutPath.RotationSmoothing="3" controls:LayoutPath.TranslationSmoothing="3" CacheMode="BitmapCache">
+                        <Path  Height="40" Stroke="White" StrokeThickness="1" Stretch="Uniform" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                        <TextBlock  TextLineBounds="Tight" Text="4th" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Grid>
+
+                    <Grid x:Name="child5" controls:LayoutPath.RotationSmoothing="6" controls:LayoutPath.TranslationSmoothing="6" CacheMode="BitmapCache">
+                        <Path Height="40" Stroke="White" StrokeThickness="1" Stretch="Uniform" Fill="CornflowerBlue" Data="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z "/>
+                        <TextBlock  TextLineBounds="Tight" Text="5th" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Grid>
                 </controls:LayoutPath>
             </Border>
             <StackPanel Grid.Row="2">
