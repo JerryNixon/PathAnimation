@@ -7,6 +7,7 @@ using SampleProject.Models;
 using System.Windows.Input;
 using SampleProject.Helpers;
 using SampleProject.Views;
+using SampleProject.Views.CascadingAnimationSamples;
 using SampleProject.Views.LayoutPathSamples;
 
 namespace SampleProject.ViewModels
@@ -51,6 +52,17 @@ namespace SampleProject.ViewModels
                 ThumbnailUri = new Uri("ms-appx:///Assets/Thumbs/lp5.png", UriKind.RelativeOrAbsolute),
                 Command = new DelegateCommand(delegate { App.Frame.Navigate(typeof(RacingLayoutPathPage)); })
             },
+        };
+
+        public List<TileModel> MotionPathOptions { get; set; } = new List<TileModel>()
+        {
+            new TileModel()
+            {
+                Title = "Properties controller",
+                Description = "Manipulate all properties of MotionPath control.",
+                ThumbnailUri = new Uri("ms-appx:///Assets/Thumbs/mp1.png", UriKind.RelativeOrAbsolute),
+                Command = new DelegateCommand(delegate { App.Frame.Navigate(typeof(MotionPathPage)); })
+            }
         };
 
     }

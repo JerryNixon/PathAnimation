@@ -17,10 +17,7 @@ namespace SampleProject.Views
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
         }
         
-        private void MotionPath_OnClick(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(MotionPathPage));
-        }
+     
       
         private void cascadingAnimationRealtimeExample(object sender, RoutedEventArgs e)
         {

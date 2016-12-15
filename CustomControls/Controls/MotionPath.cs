@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Contacts;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,6 +31,7 @@ namespace CustomControls.Controls
         private ExtendedLineSegment _movementLine;
         private CompositeTransform _contentTransform;
         private Point _initialContentPoint;
+        private TimeSpan _playingDuration;
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly Storyboard _storyboard = new Storyboard();
@@ -293,7 +295,7 @@ namespace CustomControls.Controls
             Starting?.Invoke(this, cancelArgs);
             if (cancelArgs.Cancel)
                 return;
-
+            _playingDuration = Duration;
             StartProgressAnimation();
         }
 
@@ -365,6 +367,20 @@ namespace CustomControls.Controls
             if (Path == null)
                 CalculateLineMovement();
         }
+
+        public void RewindNow()
+        {
+            if (AutoRewind)
+            {
+                var time = _storyboard.GetCurrentTime();
+                if (State == AnimationState.Running || State == AnimationState.Rewinding)
+                {
+                    _storyboard.Seek(_playingDuration - time);
+                    State = State == AnimationState.Running ? AnimationState.Rewinding : AnimationState.Running;
+                }
+            }
+        }
+
 
         public void Pause()
         {

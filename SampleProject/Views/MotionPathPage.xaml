@@ -63,13 +63,16 @@
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                         <StackPanel.Resources>
                             <Style TargetType="Button">
-                                <Setter Property="Width" Value="70"></Setter>
+                                <Setter Property="Width" Value="100"></Setter>
                                 <Setter Property="Margin" Value="5,2.5,0,0"></Setter>
+                                <Setter Property="BorderThickness" Value="0"></Setter>
+
                             </Style>
                         </StackPanel.Resources>
-                        <Button Content="play"  Click="ButtonBase_OnClick" BorderThickness="0"/>
-                        <Button Content="pause"  Click="ButtonBase_pause" BorderThickness="0"/>
-                        <Button Content="reset"  Click="ButtonReset_OnClick" BorderThickness="0"/>
+                        <Button Content="play"  Click="ButtonBase_OnClick"/>
+                        <Button Content="pause"  Click="ButtonBase_pause"/>
+                        <Button Content="Rewind now"  Click="RewindNowClick"/>
+                        <Button Content="reset"  Click="ButtonReset_OnClick"/>
                     </StackPanel>
                 </Grid>
                 <Border BorderThickness="1" BorderBrush="{ThemeResource FlyoutBorderThemeBrush}" Background="{ThemeResource AppBarBackgroundThemeBrush}" CornerRadius="10" Padding="5" Margin="0,15,0,0">

@@ -17,6 +17,26 @@
             <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
             <Setter Property="Margin" Value="2.5"></Setter>
         </Style>
+
+        <DataTemplate x:Key="tileTemplate">
+            <Button Command="{Binding Command}" Height="245" Width="265"
+                                Background="Transparent"  
+                                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <Border Grid.Row="1" BorderThickness="1" BorderBrush="#7F808080" Margin="0,5,0,0" Height="155">
+                        <Image Source="{Binding ThumbnailUri}" Stretch="UniformToFill"/>
+                    </Border>
+                    <TextBlock Text="{Binding Description}" Grid.Row="2" FontSize="11" TextWrapping="Wrap" />
+
+                </Grid>
+            </Button>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -24,39 +44,22 @@
             <StackPanel Margin="30">
                 <TextBlock Text="Layout Path" Style="{StaticResource SubheaderTextBlockStyle}"/>
 
-                <ItemsControl ItemsSource="{Binding LayoutPathOptions}">
+                <ItemsControl ItemsSource="{Binding LayoutPathOptions}" ItemTemplate="{StaticResource tileTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapGrid ItemHeight="250" ItemWidth="270" Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Command="{Binding Command}" Height="245" Width="265"
-                                Background="Transparent"  
-                                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="5">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="{Binding Title}" Style="{StaticResource SubtitleTextBlockStyle}"/>
-                                    <Border Grid.Row="1" BorderThickness="1" BorderBrush="#7F808080" Margin="0,5,0,0" Height="155">
-                                        <Image Source="{Binding ThumbnailUri}" Stretch="UniformToFill"/>
-                                    </Border>
-                                    <TextBlock Text="{Binding Description}" Grid.Row="2" FontSize="11" TextWrapping="Wrap" />
-
-                                </Grid>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
                 <TextBlock Text="MotionPath" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                <StackPanel Margin="0,30" Width="300" HorizontalAlignment="Left">
-                    <Button Content="MotionPath controller" Click="MotionPath_OnClick"/>
-                </StackPanel>
+                <ItemsControl ItemsSource="{Binding MotionPathOptions}" ItemTemplate="{StaticResource tileTemplate}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapGrid ItemHeight="250" ItemWidth="270" Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
 
                 <StackPanel Visibility="Collapsed">
                     <TextBlock Text="CascadingAnimation" Style="{StaticResource SubheaderTextBlockStyle}"/>

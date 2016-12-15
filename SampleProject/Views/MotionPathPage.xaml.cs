@@ -107,5 +107,10 @@ namespace SampleProject.Views
             TestMotion.LineAbsoluteStart = new Point(50, 50);
             TestMotion.LineRelativeEnd = new Point(double.NaN, double.NaN);
         }
+
+        private void RewindNowClick(object sender, RoutedEventArgs e)
+        {
+            TestMotion.RewindNow();
+        }
     }
 }
