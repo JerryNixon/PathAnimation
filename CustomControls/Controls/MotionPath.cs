@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
+using CustomControls.Converters;
 using CustomControls.ExtendedSegments;
 using CustomControls.Extensions;
 using LayoutPath.Enums;
@@ -109,6 +110,7 @@ namespace CustomControls.Controls
             {
                 Path = new PropertyPath("OrientToPath"),
                 Source = this,
+                Converter = new BoolToOrientationConverter()
             });
 
             ValidateWidthHeight();

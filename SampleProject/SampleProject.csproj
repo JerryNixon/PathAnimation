@@ -98,6 +98,7 @@
     <Compile Include="Converters\BoolBehaviorConverter.cs" />
     <Compile Include="Converters\BoolVisibilityConverter.cs" />
     <Compile Include="Converters\EnumStringConverter.cs" />
+    <Compile Include="Converters\HeightToPointConverter.cs" />
     <Compile Include="Converters\PointStringConverter.cs" />
     <Compile Include="Helpers\DelegateCommand.cs" />
     <Compile Include="Models\TileModel.cs" />
@@ -130,6 +131,12 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\MotionPathSamples\MotionPathBehaviorsChildUC.xaml.cs">
+      <DependentUpon>MotionPathBehaviorsChildUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MotionPathSamples\MotionPathBehaviorsSample.xaml.cs">
+      <DependentUpon>MotionPathBehaviorsSample.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MotionPathSamples\MotionPathPage.xaml.cs">
       <DependentUpon>MotionPathPage.xaml</DependentUpon>
     </Compile>
@@ -148,6 +155,7 @@
     <Content Include="Assets\Thumbs\lp4.png" />
     <Content Include="Assets\Thumbs\lp5.png" />
     <Content Include="Assets\Thumbs\mp1.png" />
+    <Content Include="Assets\Thumbs\mp2.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -197,6 +205,14 @@
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MotionPathSamples\MotionPathBehaviorsChildUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MotionPathSamples\MotionPathBehaviorsSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MotionPathSamples\MotionPathPage.xaml">
       <SubType>Designer</SubType>

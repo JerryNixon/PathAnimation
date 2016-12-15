@@ -1,0 +1,43 @@
+﻿<UserControl
+    x:Class="SampleProject.Views.MotionPathSamples.MotionPathBehaviorsChildUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleProject.Views.MotionPathSamples"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:controls="using:CustomControls.Controls"
+    xmlns:converters="using:SampleProject.Converters"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+    <UserControl.Resources>
+        <converters:HeightToPointConverter x:Key="HeightToPointConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Background="LightBlue" x:Name="gridContainer" HorizontalAlignment="Stretch">
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="PointerEntered" SourceObject="{Binding ElementName=gridContainer}">
+                    <core:CallMethodAction TargetObject="{Binding ElementName=MotionPath}" MethodName="Start"/>
+                </core:EventTriggerBehavior>
+                <core:EventTriggerBehavior EventName="Tapped" SourceObject="{Binding ElementName=gridContainer}">
+                    <core:CallMethodAction TargetObject="{Binding ElementName=MotionPath}" MethodName="RewindNow"/>
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+            <Grid Margin="10,50,10,0" x:Name="parent" >
+                <controls:MotionPath Margin="0,10"  x:Name="MotionPath" AutoRewind="True" Duration="00:00:02" PathVisibility="Collapsed"
+                                     LineRelativeEnd="{Binding ElementName=parent,Converter={StaticResource HeightToPointConverter}}" >
+                    <Rectangle  Height="50" Margin="0,5" Fill="Gray" StrokeThickness="1" Stroke="Black" VerticalAlignment="Bottom"/>
+                </controls:MotionPath>
+                <TextBlock Text="{Binding }" />
+            </Grid>
+        </Grid>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" Text="{Binding Progress,ElementName=MotionPath}"/>
+    </Grid>
+</UserControl>

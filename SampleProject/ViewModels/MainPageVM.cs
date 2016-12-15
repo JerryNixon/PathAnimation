@@ -9,6 +9,7 @@ using SampleProject.Helpers;
 using SampleProject.Views;
 using SampleProject.Views.CascadingAnimationSamples;
 using SampleProject.Views.LayoutPathSamples;
+using SampleProject.Views.MotionPathSamples;
 
 namespace SampleProject.ViewModels
 {
@@ -62,6 +63,13 @@ namespace SampleProject.ViewModels
                 Description = "Manipulate all properties of MotionPath control.",
                 ThumbnailUri = new Uri("ms-appx:///Assets/Thumbs/mp1.png", UriKind.RelativeOrAbsolute),
                 Command = new DelegateCommand(delegate { App.Frame.Navigate(typeof(MotionPathPage)); })
+            },
+             new TileModel()
+            {
+                Title = "Behaviors sample",
+                Description = "A sample demonstrating how you can use behaviors to Start and rewind an animation.",
+                ThumbnailUri = new Uri("ms-appx:///Assets/Thumbs/mp2.png", UriKind.RelativeOrAbsolute),
+                Command = new DelegateCommand(delegate { App.Frame.Navigate(typeof(MotionPathBehaviorsSample)); })
             }
         };
 
