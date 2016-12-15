@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:c="using:CustomControls.Controls"
     xmlns:viewModels="using:SampleProject.ViewModels"
+    xmlns:models="using:SampleProject.Models"
     mc:Ignorable="d">
     <d:Page.DataContext>
         <viewModels:MainPageVM/>
@@ -18,7 +19,7 @@
             <Setter Property="Margin" Value="2.5"></Setter>
         </Style>
 
-        <DataTemplate x:Key="tileTemplate">
+        <DataTemplate x:Key="TileTemplate" x:DataType="models:TileModel">
             <Button Command="{Binding Command}" Height="245" Width="265"
                                 Background="Transparent"  
                                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Padding="5">
@@ -43,8 +44,7 @@
         <ScrollViewer >
             <StackPanel Margin="30">
                 <TextBlock Text="Layout Path" Style="{StaticResource SubheaderTextBlockStyle}"/>
-
-                <ItemsControl ItemsSource="{Binding LayoutPathOptions}" ItemTemplate="{StaticResource tileTemplate}">
+                <ItemsControl ItemsSource="{Binding LayoutPathOptions}" ItemTemplate="{StaticResource TileTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapGrid ItemHeight="250" ItemWidth="270" Orientation="Horizontal"/>
@@ -53,7 +53,7 @@
                 </ItemsControl>
 
                 <TextBlock Text="MotionPath" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                <ItemsControl ItemsSource="{Binding MotionPathOptions}" ItemTemplate="{StaticResource tileTemplate}">
+                <ItemsControl ItemsSource="{Binding MotionPathOptions}" ItemTemplate="{StaticResource TileTemplate}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapGrid ItemHeight="250" ItemWidth="270" Orientation="Horizontal"/>
