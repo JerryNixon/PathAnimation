@@ -12,9 +12,9 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 using CustomControls.Converters;
+using CustomControls.Enums;
 using CustomControls.ExtendedSegments;
 using CustomControls.Extensions;
-using LayoutPath.Enums;
 
 namespace CustomControls.Controls
 {

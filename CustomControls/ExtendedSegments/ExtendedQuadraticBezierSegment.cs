@@ -4,6 +4,10 @@ using Windows.UI.Xaml.Media;
 
 namespace CustomControls.ExtendedSegments
 {
+    /// <summary>
+    /// Extended quadratic bezier segment
+    /// </summary>
+    /// <seealso cref="CustomControls.ExtendedSegments.ExtendedBezierBase" />
     class ExtendedQuadraticBezierSegment : ExtendedBezierBase
     {
         public ExtendedQuadraticBezierSegment(PathSegment segment, Point startPoint) : base(segment, startPoint)

@@ -4,12 +4,16 @@ using Windows.UI.Xaml.Media;
 
 namespace CustomControls.ExtendedSegments
 {
+    /// <summary>
+    /// Extended bezier segment
+    /// </summary>
+    /// <seealso cref="CustomControls.ExtendedSegments.ExtendedBezierBase" />
     class ExtendedBezierSegment : ExtendedBezierBase
     {
         public ExtendedBezierSegment(PathSegment segment, Point startPoint) : base(segment, startPoint)
         {
             if (!(segment is BezierSegment))
-                throw new ArgumentException();
+                throw new ArgumentException("BezierSegment segment expected on ExtendedBezierSegment constructor");
         }
 
         protected override Point BezierFormula(double t)

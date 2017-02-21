@@ -10,8 +10,18 @@ using Windows.UI.Xaml.Shapes;
 
 namespace CustomControls.ExtendedSegments
 {
+    /// <summary>
+    /// Extended path geometry class, providing missing path geometry methods
+    /// </summary>
+    /// <seealso cref="Windows.UI.Xaml.DependencyObject" />
     public class ExtendedPathGeometry : DependencyObject
     {
+        /// <summary>
+        /// Gets the original path geometry.
+        /// </summary>
+        /// <value>
+        /// The path geometry.
+        /// </value>
         public PathGeometry PathGeometry { get; }
 
         /// <summary>
@@ -20,10 +30,14 @@ namespace CustomControls.ExtendedSegments
         public Point PathOffset = new Point(double.MaxValue, double.MaxValue);
 
         /// <summary>
-        /// contains all segments added by initial analysis
+        /// Contains all segments added by initial analysis
         /// </summary>
         private List<ExtendedSegmentBase> _allSegments;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExtendedPathGeometry"/> class.
+        /// </summary>
+        /// <param name="data">The original data.</param>
         public ExtendedPathGeometry(PathGeometry data)
         {
             PathGeometry = data;
@@ -37,48 +51,47 @@ namespace CustomControls.ExtendedSegments
         public static readonly DependencyProperty PathLengthProperty =
             DependencyProperty.Register(nameof(PathLength), typeof(double), typeof(ExtendedPathGeometry), new PropertyMetadata(default(double)));
 
+
         private void AnalyzeSegments()
         {
             _allSegments = new List<ExtendedSegmentBase>();
-            var pg = PathGeometry;
-            double pathLength = 0;
+            var pathLength = 0.0;
 
-            foreach (var figure in pg.Figures)
+            foreach (var figure in PathGeometry.Figures)
             {
-                var figureSegments = new List<ExtendedSegmentBase>();
                 if (figure.IsClosed)
-                    figure.Segments.Add(new LineSegment() { Point = figure.StartPoint });//close path by adding again startPoint
-                for (int i = 0; i < figure.Segments.Count; i++)
+                    figure.Segments.Add(new LineSegment() { Point = figure.StartPoint });//close path by using a line segment
+                for (var i = 0; i < figure.Segments.Count; i++)
                 {
-                    Point startPoint;
-                    //determine start point of segment
-                    startPoint = (i == 0 ? figure.StartPoint : figureSegments[i - 1].EndPoint);
+                    //start point of segment is the end point of the previous one, or figure's start point if it is the first one
+                    var startPoint = i == 0 ? figure.StartPoint : _allSegments[i - 1].EndPoint;
 
+                    //add suitable extended segment based on original segment type
                     if (figure.Segments[i] is LineSegment)
-                        figureSegments.Add(new ExtendedLineSegment(figure.Segments[i], startPoint));
+                        _allSegments.Add(new ExtendedLineSegment(figure.Segments[i], startPoint));
                     else if (figure.Segments[i] is BezierSegment)
-                        figureSegments.Add(new ExtendedBezierSegment(figure.Segments[i], startPoint));
+                        _allSegments.Add(new ExtendedBezierSegment(figure.Segments[i], startPoint));
                     else if (figure.Segments[i] is QuadraticBezierSegment)
-                        figureSegments.Add(new ExtendedQuadraticBezierSegment(figure.Segments[i], startPoint));
+                        _allSegments.Add(new ExtendedQuadraticBezierSegment(figure.Segments[i], startPoint));
                     else if (figure.Segments[i] is ArcSegment)
-                        figureSegments.Add(new ExtendedArcSegment(figure.Segments[i], startPoint));
+                        _allSegments.Add(new ExtendedArcSegment(figure.Segments[i], startPoint));
                     else if (figure.Segments[i] is PolyLineSegment || figure.Segments[i] is PolyBezierSegment || figure.Segments[i] is PolyQuadraticBezierSegment)
-                        figureSegments.Add(new ExtendedPolySegmentBase(figure.Segments[i], startPoint));
+                        _allSegments.Add(new ExtendedPolySegmentBase(figure.Segments[i], startPoint));
                 }
-
-                foreach (ExtendedSegmentBase t in figureSegments)
+               
+                //calculate each segment's distance from start and total path length
+                foreach (var segment in _allSegments)
                 {
-                    t.DistanceFromStart = pathLength += t.SegmentLength;
+                    segment.DistanceFromStart = pathLength += segment.SegmentLength;
                 }
-
-                _allSegments.AddRange(figureSegments);
             }
 
-            for (int i = 0; i < _allSegments.Count; i++)
+            foreach (var segment in _allSegments)
             {
-                _allSegments[i].EndsAtPercent = _allSegments[i].DistanceFromStart / pathLength;
+                segment.EndsAtPercent = segment.DistanceFromStart / pathLength;
             }
-            for (int i = 1; i < _allSegments.Count; i++)
+
+            for (var i = 1; i < _allSegments.Count; i++)
             {
                 _allSegments[i].StartsAtPercent = _allSegments[i - 1].EndsAtPercent;
             }
@@ -101,9 +114,14 @@ namespace CustomControls.ExtendedSegments
                 PathOffset.Y = 0;
 
             PathLength = pathLength;
-
         }
 
+        /// <summary>
+        /// Gets a point at fraction length.
+        /// </summary>
+        /// <param name="progress">The progress.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="rotationTheta">The rotation theta.</param>
         public void GetPointAtFractionLength(double progress, out Point point, out double rotationTheta)
         {
             if (progress < 0)

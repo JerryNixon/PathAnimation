@@ -1,10 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿//Code taken and parsed to c# from alexjlockwood/ArcToBezier.java: https://gist.github.com/alexjlockwood/8ca9228e861222866c666513ed401a71
+
+using System;
 using Windows.Foundation;
 using Windows.UI.Xaml.Media;
 
 namespace CustomControls.Internal
 {
+    /// <summary>
+    /// A segment helper used for approximating an arc to bezier segment.
+    /// </summary>
     internal class SegmentsHelper
     {
         /// <summary>

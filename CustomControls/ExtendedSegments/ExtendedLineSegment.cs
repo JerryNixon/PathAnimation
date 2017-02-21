@@ -4,18 +4,21 @@ using Windows.UI.Xaml.Media;
 
 namespace CustomControls.ExtendedSegments
 {
+    /// <summary>
+    /// Extended line segment
+    /// </summary>
+    /// <seealso cref="CustomControls.ExtendedSegments.ExtendedSegmentBase" />
     class ExtendedLineSegment : ExtendedSegmentBase
     {
         public ExtendedLineSegment(PathSegment segment, Point startPoint) : base(segment, startPoint)
         {
             if (!(segment is LineSegment))
-                throw new ArgumentException();
+                throw new ArgumentException("LineSegment segment expected on ExtendedLineSegment constructor");
         }
 
         protected override Point GetEndPoint()
         {
-            var s = (LineSegment)Segment;
-            return s.Point;
+            return ((LineSegment)Segment).Point;
         }
 
         protected override double GetSegmentLength()
@@ -26,14 +29,12 @@ namespace CustomControls.ExtendedSegments
         public override double GetDegreesAt(double percent)
         {
             if (EndPoint.X.Equals(StartPoint.X))
-                if (EndPoint.Y >= StartPoint.Y)
-                    return 90;
-                else
-                    return -90;
+            {
+                return EndPoint.Y >= StartPoint.Y ? 90 : -90;
+            }
 
             var dt = (EndPoint.Y - StartPoint.Y) / (EndPoint.X - StartPoint.X);
             return (Math.Atan(dt) * (180 / Math.PI));
-
         }
 
         public override double GetOrientedDegreesAt(double percent)
@@ -43,12 +44,19 @@ namespace CustomControls.ExtendedSegments
 
         public override Point GetPointAt(double percent)
         {
-            var indP = new Point();
-            indP.X = StartPoint.X + percent * (EndPoint.X - StartPoint.X);
-            indP.Y = StartPoint.Y + percent * (EndPoint.Y - StartPoint.Y);
-            return indP;
+            return new Point
+            {
+                X = StartPoint.X + percent * (EndPoint.X - StartPoint.X),
+                Y = StartPoint.Y + percent * (EndPoint.Y - StartPoint.Y)
+            };
         }
 
+        /// <summary>
+        /// Gets oriented degrees by using the vector that is described by provided 2 points
+        /// </summary>
+        /// <param name="start">The start point.</param>
+        /// <param name="end">The end point.</param>
+        /// <returns></returns>
         public static double GetOrientedDegrees(Point start, Point end)
         {
             end.X = end.X - start.X;
