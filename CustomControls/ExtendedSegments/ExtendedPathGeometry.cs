@@ -25,7 +25,7 @@ namespace CustomControls.ExtendedSegments
         public PathGeometry PathGeometry { get; }
 
         /// <summary>
-        /// Contains information about potential blank space on the left and top of our path
+        /// Contains information about potential blank space on the left and top of PathGeometry
         /// </summary>
         public Point PathOffset = new Point(double.MaxValue, double.MaxValue);
 
@@ -117,7 +117,7 @@ namespace CustomControls.ExtendedSegments
         }
 
         /// <summary>
-        /// Gets a point at fraction length.
+        /// Gets the Point and a rotation theta on this PathGeometry at the specified progress of its length.
         /// </summary>
         /// <param name="progress">The progress.</param>
         /// <param name="point">The point.</param>

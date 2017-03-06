@@ -3,7 +3,7 @@ ExtendedPathGeometry, extends and provides some missing options for PathGeometry
 
 #### Declaration / Instantiation
 ###### C#:
-ExtendedPathGeometry provides a constructor with a PathGeometry parameter as also an extension method for PathGeometry types:
+ExtendedPathGeometry provides a constructor with a PathGeometry parameter as also an extension method for PathGeometry type:
 ```cs
 //constructor
 public ExtendedPathGeometry(PathGeometry data);
@@ -27,10 +27,30 @@ You cannot instantiate ExtendedPathGeometry directly in xaml
 | Property | Description |
 | :------- | :---------- |
 | PathGeometry | Gets the original path geometry. |
-| PathOffset | Contains information about potential blank space on the left and top of our path. This is usefull for croping path graphic. |
+| PathOffset | Contains information about potential blank space on the left and top of PathGeometry. This is usefull for croping path graphic. |
 | PathLength | Gets total circumferential length of ExtendedPathGeometry |
 
 #### Methods
-| Method | Description |
+
+###### GetPointAtFractionLength
+*Gets the Point and a rotation theta on this PathGeometry at the specified fraction of its length.*
+```cs
+void GetPointAtFractionLength(double progress, out Point point, out double rotationTheta);
+```
+| Parameter | Description |
 | :------- | :---------- |
-| GetPointAtFractionLength | Gets a point at fraction length. |
+| progress | Specified fraction in percent (range [0,1]). |
+| point |  Contains the location at the specified progress value |
+| rotationTheta | Contains the rotation (in degrees [0,360]) at the specified progress value |
+
+**Example usages: **
+
+```cs
+ExtendedPathGeometry pg = new ExtendedPathGeometry(pathGeometry);
+Point p;
+double rotationTheta;
+//gets point and rotation theta at 20% of total length
+pg.GetPointAtFractionLength(0.2, out p, out rotationTheta);
+//gets point and rotation theta at fraction length = 100
+pg.GetPointAtFractionLength(100.0 / pg.PathLength, out p, out rotationTheta);
+```
