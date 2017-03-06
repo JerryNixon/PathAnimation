@@ -27,8 +27,8 @@
               Fill="#33808080" Height="455.278" Margin="-122,201.193,-40.579,111.529" UseLayoutRounding="False" Width="1528.579" />
 
         <controls:LayoutPath Path="M0,452.807 C0,452.807 246.991,472.48 352,400.807 C478,314.807 534.206,194.277 654,176.807 C846,148.807 866.005,328.213 724,380.807 C562,440.807 327.009,222.882 414,56.8074 C480,-69.193 718.445,47.1904 846,92.8064 C1148,200.807 1528.58,174.761 1528.58,174.761" 
-                             x:Name ="layoutPath" PathProgress="70" StartBehavior="Stack" ChildrenPadding="0.43" ItemOrientation="ToPath" PathVisibility="Collapsed" EndBehavior="Stack" 
-                             HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" ChildAlignment="Center" TranslationSmoothingDefault="0" 
+                             x:Name ="layoutPath" PathProgress="70" StartBehavior="Stack" ChildrenPadding="0.43" ChildrenOrientation="ToPath" PathVisibility="Collapsed" EndBehavior="Stack" 
+                             HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Uniform" ChildrenAlignment="Center" TranslationSmoothingDefault="0" 
                              Margin="-60,0">
             <TextBlock Text="A"/>
             <TextBlock Text="B"/>

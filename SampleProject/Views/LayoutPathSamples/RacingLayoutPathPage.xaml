@@ -29,7 +29,7 @@
                Stroke="#FF9C9C9C" UseLayoutRounding="False" StrokeThickness="2"/>
 
                     <controls:LayoutPath x:Name="layoutPath" Path="{Binding Source={StaticResource RoadGeometry}}" 
-                                         ItemOrientation="Vertical"  ChildAlignment="Center">
+                                         ChildrenOrientation="Vertical"  ChildrenAlignment="Center">
                         <Viewbox Width="40">
                             <!-- car taken from http://www.codeproject.com/Articles/132437/WPF-Grand-Prix-->
                             <Grid>

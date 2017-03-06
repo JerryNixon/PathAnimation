@@ -106,7 +106,7 @@ namespace CustomControls.Controls
                 Source = this
             });
 
-            LAYOUT_PATH.SetBinding(LayoutPath.ItemOrientationProperty, new Binding()
+            LAYOUT_PATH.SetBinding(LayoutPath.ChildrenOrientationProperty, new Binding()
             {
                 Path = new PropertyPath("OrientToPath"),
                 Source = this,

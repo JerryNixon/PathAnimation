@@ -63,7 +63,7 @@
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" 
                                       Margin="20"  x:Name="LayoutPath1" Visibility="Visible" PathProgress="40" 
-                                      ItemOrientation="ToPath" Stretch="None"  PathVisibility="Visible" 
+                                      ChildrenOrientation="ToPath" Stretch="None"  PathVisibility="Visible" 
                                  ChildrenPadding="3" TranslationSmoothingDefault="5" RotationSmoothingDefault="5" >
                     <controls:LayoutPath.Path>
                         <PathGeometry>
@@ -140,10 +140,10 @@
                         </ComboBox>
                         
                        
-                        <ComboBox Header="ItemOrientation" x:Name="ItemOrientationCb"  SelectedValue="{Binding ItemOrientation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+                        <ComboBox Header="Children Orientation" x:Name="ItemOrientationCb"  SelectedValue="{Binding ChildrenOrientation, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
-                        
-                        <ComboBox Header="Alignment" x:Name="ChildAlignmentCb"  SelectedValue="{Binding ChildAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
+
+                        <ComboBox Header="Children Alignment" x:Name="ChildAlignmentCb"  SelectedValue="{Binding ChildrenAlignment, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">
                         </ComboBox>
 
                         <ComboBox Header="Stretch" x:Name="StretchCb"  SelectedValue="{Binding Stretch, ElementName=LayoutPath1, Mode=TwoWay}" MinWidth="130" Margin="5,0">

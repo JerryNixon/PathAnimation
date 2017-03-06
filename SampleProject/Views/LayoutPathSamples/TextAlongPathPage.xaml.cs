@@ -42,8 +42,6 @@ namespace SampleProject.Views.LayoutPathSamples
             }
 
             Storyboard1.Begin();
-
-            
         }
 
     }

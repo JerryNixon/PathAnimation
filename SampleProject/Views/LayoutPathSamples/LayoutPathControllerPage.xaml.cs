@@ -74,11 +74,11 @@ namespace SampleProject.Views
             var cb = (CheckBox)sender;
             if (cb.IsChecked == true)
             {
-                LayoutPath1.ChildEasingFunction = new SineEase() { EasingMode = EasingMode.EaseInOut };
+                LayoutPath1.ChildrenEasingFunction = new SineEase() { EasingMode = EasingMode.EaseInOut };
             }
             else
             {
-                LayoutPath1.ChildEasingFunction = null;
+                LayoutPath1.ChildrenEasingFunction = null;
             }
         }
 

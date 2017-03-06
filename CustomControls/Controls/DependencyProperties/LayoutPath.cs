@@ -26,8 +26,8 @@ namespace CustomControls.Controls
 
             PathProperty = DependencyProperty.Register(nameof(Path), typeof(Geometry), typeof(LayoutPath), new PropertyMetadata(default(Geometry), PathChangedCallback));
 
-            ChildAlignmentProperty = DependencyProperty.Register(nameof(ChildAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, ChildAlignmentChangedCallback));
-            ChildEasingFunctionProperty = DependencyProperty.Register(nameof(EasingFunctionBase), typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), TransformToProgress));
+            ChildrenAlignmentProperty = DependencyProperty.Register(nameof(ChildrenAlignment), typeof(ChildAlignment), typeof(LayoutPath), new PropertyMetadata(ChildAlignment.Center, ChildAlignmentChangedCallback));
+            ChildrenEasingFunctionProperty = DependencyProperty.Register(nameof(EasingFunctionBase), typeof(EasingFunctionBase), typeof(LayoutPath), new PropertyMetadata(default(EasingFunctionBase), TransformToProgress));
             ChildrenPaddingProperty = DependencyProperty.Register(nameof(ChildrenPadding), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), TransformToProgress));
 
             PathVisibilityProperty = DependencyProperty.Register(nameof(PathVisibility), typeof(Visibility), typeof(LayoutPath), new PropertyMetadata(Visibility.Visible, PathVisibleChangedCallback));
@@ -35,7 +35,7 @@ namespace CustomControls.Controls
             StartBehaviorProperty = DependencyProperty.Register(nameof(StartBehavior), typeof(Behaviors), typeof(LayoutPath), new PropertyMetadata(Behaviors.Default, TransformToProgress));
             EndBehaviorProperty = DependencyProperty.Register(nameof(EndBehavior), typeof(Behaviors), typeof(LayoutPath), new PropertyMetadata(Behaviors.Default, TransformToProgress));
 
-            ItemOrientationProperty = DependencyProperty.Register(nameof(ItemOrientation), typeof(Orientations), typeof(LayoutPath), new PropertyMetadata(Orientations.ToPath, OrientationChangedCallback));
+            ChildrenOrientationProperty = DependencyProperty.Register(nameof(ChildrenOrientation), typeof(Orientations), typeof(LayoutPath), new PropertyMetadata(Orientations.ToPath, OrientationChangedCallback));
 
             //properties that can be overridden
             PathProgressProperty = DependencyProperty.Register(nameof(PathProgress), typeof(double), typeof(LayoutPath), new PropertyMetadata(default(double), ProgressChangedCallback));
@@ -142,8 +142,8 @@ namespace CustomControls.Controls
         /// <summary>
         /// Specify orientation of <see cref="Children"/> when moving along <see cref="Path"/>
         /// </summary>
-        public Orientations ItemOrientation { get { return (Orientations)GetValue(ItemOrientationProperty); } set { SetValue(ItemOrientationProperty, value); } }
-        public static readonly DependencyProperty ItemOrientationProperty;
+        public Orientations ChildrenOrientation { get { return (Orientations)GetValue(ChildrenOrientationProperty); } set { SetValue(ChildrenOrientationProperty, value); } }
+        public static readonly DependencyProperty ChildrenOrientationProperty;
 
         /// <summary>
         /// Sets the distance that <see cref="Children"/> will keep between each other (in percent of total length).
@@ -176,8 +176,8 @@ namespace CustomControls.Controls
         /// <summary>
         /// Sets the alignment of items along path
         /// </summary>
-        public ChildAlignment ChildAlignment { get { return (ChildAlignment)GetValue(ChildAlignmentProperty); } set { SetValue(ChildAlignmentProperty, value); } }
-        public static readonly DependencyProperty ChildAlignmentProperty;
+        public ChildAlignment ChildrenAlignment { get { return (ChildAlignment)GetValue(ChildrenAlignmentProperty); } set { SetValue(ChildrenAlignmentProperty, value); } }
+        public static readonly DependencyProperty ChildrenAlignmentProperty;
 
         /// <summary>
         /// Sets <see cref="Children"/> start behavior
@@ -206,8 +206,8 @@ namespace CustomControls.Controls
         /// <summary>
         /// Sets the easing function each child will have when moving along path.
         /// </summary>
-        public EasingFunctionBase ChildEasingFunction { get { return (EasingFunctionBase)GetValue(ChildEasingFunctionProperty); } set { SetValue(ChildEasingFunctionProperty, value); } }
-        public static readonly DependencyProperty ChildEasingFunctionProperty;
+        public EasingFunctionBase ChildrenEasingFunction { get { return (EasingFunctionBase)GetValue(ChildrenEasingFunctionProperty); } set { SetValue(ChildrenEasingFunctionProperty, value); } }
+        public static readonly DependencyProperty ChildrenEasingFunctionProperty;
 
         #endregion
     }

@@ -88,7 +88,7 @@ namespace CustomControls.Controls
                 PATH.Margin = new Thickness(-ExtendedGeometry.PathOffset.X, -ExtendedGeometry.PathOffset.Y, 0, 0);
 
             foreach (var child in _children)
-                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
+                CHILDREN.Children.Add(new LayoutPathChildWrapper(child as FrameworkElement, ChildrenAlignment, ChildrenOrientation));
 
             //TODO: _children.Clear does not invoke this event.
             _children.CollectionChanged += ChildrenOnCollectionChanged;
@@ -123,7 +123,7 @@ namespace CustomControls.Controls
                 {
                     var wrapper = CHILDREN.Children.FirstOrDefault(x => ((LayoutPathChildWrapper)x).Content == child);
                     if (wrapper == null)
-                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildAlignment, ItemOrientation));
+                        CHILDREN.Children.Insert(args.NewStartingIndex, new LayoutPathChildWrapper(child as FrameworkElement, ChildrenAlignment, ChildrenOrientation));
                 }
             }
 
@@ -154,7 +154,7 @@ namespace CustomControls.Controls
             {
                 foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                 {
-                    child.UpdateAlignment(sender.ChildAlignment, sender.ItemOrientation);
+                    child.UpdateAlignment(sender.ChildrenAlignment, sender.ChildrenOrientation);
                 }
             }
             UpdateRotation(o, e);
@@ -167,7 +167,7 @@ namespace CustomControls.Controls
             {
                 foreach (LayoutPathChildWrapper child in sender.CHILDREN.Children)
                 {
-                    child.UpdateAlignment((ChildAlignment)e.NewValue, sender.ItemOrientation);
+                    child.UpdateAlignment((ChildAlignment)e.NewValue, sender.ChildrenOrientation);
                 }
             }
             TransformToProgress(o, e);
@@ -317,10 +317,10 @@ namespace CustomControls.Controls
             wrapper.RawProgress = childPercent;
             ApplyStackFilters(ref childPercent, wrapper);
 
-            if (ChildEasingFunction != null)
+            if (ChildrenEasingFunction != null)
             {
-                childPercent = ChildEasingFunction.Ease(childPercent / 100.0) * 100;
-                wrapper.RawProgress = ChildEasingFunction.Ease(wrapper.RawProgress / 100.0) * 100;
+                childPercent = ChildrenEasingFunction.Ease(childPercent / 100.0) * 100;
+                wrapper.RawProgress = ChildrenEasingFunction.Ease(wrapper.RawProgress / 100.0) * 100;
             }
 
             Point childPoint;
@@ -388,17 +388,17 @@ namespace CustomControls.Controls
 
         private void Rotate(LayoutPathChildWrapper wrapper, double rotationTheta, bool smooth)
         {
-            if (ItemOrientation == Orientations.None)
+            if (ChildrenOrientation == Orientations.None)
             {
                 wrapper.Rotation = 0;
                 return;
             }
 
-            if (ItemOrientation == Orientations.Vertical)
+            if (ChildrenOrientation == Orientations.Vertical)
                 rotationTheta += 90;
-            else if (ItemOrientation == Orientations.VerticalReversed)
+            else if (ChildrenOrientation == Orientations.VerticalReversed)
                 rotationTheta += 270;
-            else if (ItemOrientation == Orientations.ToPathReversed)
+            else if (ChildrenOrientation == Orientations.ToPathReversed)
                 rotationTheta += 180;
 
             rotationTheta = rotationTheta % 360;

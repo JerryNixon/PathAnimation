@@ -30,7 +30,7 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="1"  BorderBrush="Gray" BorderThickness="1" Background="#4C838383">
                 <controls:LayoutPath  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"  x:Name="LayoutPath1" Visibility="Visible"  
-                                      PathProgress="0" ItemOrientation="ToPath" Stretch="Uniform"  PathVisibility="Visible" 
+                                      PathProgress="0" ChildrenOrientation="ToPath" Stretch="Uniform"  PathVisibility="Visible" 
                                  ChildrenPadding="3.5" TranslationSmoothingDefault="4" RotationSmoothingDefault="4">
                     <controls:LayoutPath.Path>
                         <PathGeometry>
