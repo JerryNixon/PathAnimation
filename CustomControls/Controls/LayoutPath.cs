@@ -153,13 +153,6 @@ namespace CustomControls.Controls
             {
                 TransformToProgress(PathProgress);
             };
-
-            PathGeometry yourPathGeometry = new PathGeometry();
-            LayoutPath layoutPath1 = new LayoutPath() { Path = yourPathGeometry };
-            LayoutPath layoutPath2 = new LayoutPath(pathGeometry: yourPathGeometry);
-            //instantiate by using path markup syntax
-            LayoutPath layoutPath3 = new LayoutPath(pathMarkup: "M 10,100 C 10,300 300,-200 300,100");
-
         }
 
         public LayoutPath(string pathMarkup)
@@ -171,8 +164,6 @@ namespace CustomControls.Controls
             {
                 TransformToProgress(PathProgress);
             };
-
-            PathGeometry yourPathGeometry = new PathGeometry();
         }
 
         #endregion
