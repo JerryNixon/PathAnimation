@@ -5,8 +5,8 @@
 A class, extending current windows 10 PathGeometry class for providing missing functionality ([user guide](Documentation/extendedPathGeometryUG.md)).
 
 ### Layout Path
-A control used for placing / animating UIElements along a path ([user guide](layoutPathUG.md)).
+A control used for placing / animating UIElements along a path ([user guide](Documentation/layoutPathUG.md)).
 
 ### Motion Path
 A control used for moving an element over a path or by specifying destination coordinates
-([user guide](motionPathUG.md)).
+([user guide](Documentation/motionPathUG.md)).

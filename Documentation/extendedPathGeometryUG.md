@@ -43,7 +43,7 @@ void GetPointAtFractionLength(double progress, out Point point, out double rotat
 | point |  Contains the location at the specified progress value |
 | rotationTheta | Contains the rotation (in degrees [0,360]) at the specified progress value |
 
-**Example usages: **
+**Example usages:**
 
 ```cs
 ExtendedPathGeometry pg = new ExtendedPathGeometry(pathGeometry);

@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
+using CustomControls.Converters;
 using CustomControls.Enums;
 using CustomControls.ExtendedSegments;
 
@@ -141,6 +142,37 @@ namespace CustomControls.Controls
             {
                 TransformToProgress(PathProgress);
             };
+        }
+
+        public LayoutPath(PathGeometry pathGeometry)
+        {
+            DefaultStyleKey = typeof(LayoutPath);
+            Path = pathGeometry;
+
+            Loaded += delegate
+            {
+                TransformToProgress(PathProgress);
+            };
+
+            PathGeometry yourPathGeometry = new PathGeometry();
+            LayoutPath layoutPath1 = new LayoutPath() { Path = yourPathGeometry };
+            LayoutPath layoutPath2 = new LayoutPath(pathGeometry: yourPathGeometry);
+            //instantiate by using path markup syntax
+            LayoutPath layoutPath3 = new LayoutPath(pathMarkup: "M 10,100 C 10,300 300,-200 300,100");
+
+        }
+
+        public LayoutPath(string pathMarkup)
+        {
+            DefaultStyleKey = typeof(LayoutPath);
+            Path = new StringToPathGeometryConverter().Convert(pathMarkup);
+
+            Loaded += delegate
+            {
+                TransformToProgress(PathProgress);
+            };
+
+            PathGeometry yourPathGeometry = new PathGeometry();
         }
 
         #endregion
