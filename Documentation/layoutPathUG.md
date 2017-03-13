@@ -66,15 +66,15 @@ Properties that you can specify on `LayoutPath` control:
 | `PathProgress` | Transforms `Children` at fraction length *(value in Percent 0-100)* |
 | `ExtendedGeometry` | The extended  path geometry, mainly used for getting point at fraction length |
 | `Children` | Children that are positioned along *Path* |
-| `ChildrenAlignment` | **ChildAlignment** of `Children` along `Path` |
+| `ChildrenAlignment` | [ChildAlignment](layoutPathEnumsUG.md#ChildAlignment) of `Children` along `Path` |
 | `ChildrenEasingFunction` | The easing function each child will have when moving along `Path` |
-| `ChildrenOrientation` | The **Orientation** of `Children` when moving along `Path` |
+| `ChildrenOrientation` | The [Orientation](layoutPathEnumsUG.md#Orientations) of `Children` when moving along `Path` |
 | `ChildrenPadding` | The distance that `Children` will keep between each other *(in percent of total length)* |
 | `CurrentPosition` | The *Point* at fraction length of `Path` on current `PathProgress` |
 | `CurrentLength` | The fraction length for `CurrentPosition` |
 | `CurrentRotation` | The degrees at fraction length of `Path` on current `PathProgress` |
-| `StartBehavior` | `Children` start **Behavior** |
-| `EndBehavior` | `Children` end **Behavior** |
+| `StartBehavior` | `Children` start [Behavior](layoutPathEnumsUG.md#Behaviors) |
+| `EndBehavior` | `Children` end [Behavior](layoutPathEnumsUG.md#Behaviors) |
 | `Stretch` | Describes how LayoutPath is resized to fill its allocated space |
 | `RotationSmoothingDefault` | Smooths `Children` rotation when animating along `Path` |
 | `TranslationSmoothingDefault` | Smooths `Children` translation when animating along `Path` |
