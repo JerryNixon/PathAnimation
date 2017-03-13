@@ -67,7 +67,7 @@ Properties that you can specify on `LayoutPath` control:
 | `PathVisibility` | Visibility of `Path` |
 | `PathProgress` | Transforms `Children` at fraction length *(value in Percent 0-100)* |
 | `ExtendedGeometry` | The extended  path geometry, mainly used for getting point at fraction length |
-| `Children` | Children that are positioned along *Path* |
+| `Children` | Children that are positioned along `Path` |
 | `ChildrenAlignment` | [ChildAlignment](layoutPathEnumsUG.md#childalignment) of `Children` along `Path` |
 | `ChildrenEasingFunction` | The easing function each child will have when moving along `Path` |
 | `ChildrenOrientation` | The [Orientation](layoutPathEnumsUG.md#orientations) of `Children` when moving along `Path` |
@@ -77,7 +77,7 @@ Properties that you can specify on `LayoutPath` control:
 | `CurrentRotation` | The degrees at fraction length of `Path` on current `PathProgress` |
 | `StartBehavior` | `Children` start [Behavior](layoutPathEnumsUG.md#behaviors) |
 | `EndBehavior` | `Children` end [Behavior](layoutPathEnumsUG.md#behaviors) |
-| `Stretch` | Describes how LayoutPath is resized to fill its allocated space |
+| `Stretch` | Describes how `LayoutPath` is resized to fill its allocated space |
 | `RotationSmoothingDefault` | Smooths `Children` rotation when animating along `Path` |
 | `TranslationSmoothingDefault` | Smooths `Children` translation when animating along `Path` |
 
@@ -95,6 +95,24 @@ Properties that you can specify on `LayoutPath` `Children`.
 
 #### Methods
 
-| Property | Description |
+| Method | Description |
 | :------- | :---------- |
 | ResetSmoothingAndRefresh | Call this to reset smoothing and position items to `PathProgress`. Useful when there is no active storyboard for applying changes. |
+
+#### FAQ
+**Setting Progress on LayoutPath doesn't move Children** <br/>
+That's an expected behavior. You have to set **`PathProgress`** property instead. **`Progress`** is an attached property and can be used for controlling a child's progress individually.
+
+**Rotation / Translation smoothing does not have any effect** <br />
+Same as previous one. Set **`Rotation / Translation smoothing default`** property.
+
+**Text is flickering when moving along path** <br/>
+Set `CacheMode="BitmapCache"` in order to avoid text flickering in an animation.
+
+**Specify ChildrenPadding in pixels** <br />
+You can set ChildrenPadding in percent. If you wish to set it in pixels use the following code:
+```cs
+double distanceInPixels = 20.0;
+var percent = distanceInPixels / layoutPath.ExtendedGeometry.PathLength;
+layoutPath.ChildrenPadding = percent;
+```
