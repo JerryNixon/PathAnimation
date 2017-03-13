@@ -27,7 +27,7 @@ Controls how `Children` behave when they are off `PathProgress` range [0-100]
 
 | Default | Collapse | Stack |
 | :-----: | :------: | :----: |
-| ![default](images/behaviorDefault.png) | ![collapse](images/behaviorCollapse.png) | ![stack](images/behaviorStack.png) |
+| ![default](images/behaviorDefault.png) | ![collapse](images/behaviorCollapse.png) | ![stack](images/behaviorStack.PNG) |
 | children loop | children collapse | children stack |
 
 *This example includes 8 letters one after another. The last 4 [e-h] have progress values lower than 0. Behavior is applied to `StartBehavior`*
