@@ -4,10 +4,10 @@ A control used for placing / animating UIElements along a path.
 It provides some usefull options such as rotation / translation smoothing, start / end behavior and more.
 
 #### Declaration / Instantiation
-In order to start using Layout Path, you must instantiate a class and specify the Path property.
-Path is then analyzed and converted into an [ExtendedPathGeometry](extendedPathGeometryUG.md) for getting point and rotation at a fraction length. 
+In order to start using `LayoutPath`, you must instantiate a class and specify the `Path` property.
+`Path` is then analyzed and converted into an [ExtendedPathGeometry](extendedPathGeometryUG.md) for getting point and rotation at a fraction length. 
 ###### C#:
-LayoutPath provides 2 constructors and an extension method for instantiating a new LayoutPath class.
+`LayoutPath` provides 3 constructors and an extension method for instantiating a new `LayoutPath` class.
 ```cs
 //Default constructor
 public LayoutPath();
@@ -16,7 +16,7 @@ public LayoutPath(PathGeometry pathGeometry);
 //extension method
 public static LayoutPath ToLayoutPath(this PathGeometry geometry);
 ```
-So, you can create a new LayoutPath as follows:
+So, you can create a new `LayoutPath` as follows:
 ```cs
 PathGeometry yourPathGeometry = new PathGeometry();
 //Instantiate by setting property
@@ -27,11 +27,11 @@ LayoutPath layoutPath2 = new LayoutPath(pathGeometry: yourPathGeometry);
 LayoutPath layoutPath3 = new LayoutPath(pathMarkup: "M 10,100 C 10,300 300,-200 300,100");
 ```
 
-*Note: LayoutPath uses [StringToPathGeometryConverter](https://stringtopathgeometry.codeplex.com/SourceControl/latest#PathConverter/PathConverter/StringToPathGeometryConverter.cs)
+*Note: `LayoutPath` uses [StringToPathGeometryConverter](https://stringtopathgeometry.codeplex.com/SourceControl/latest#PathConverter/PathConverter/StringToPathGeometryConverter.cs)
 codeplex project for converting path markup to path geometry and vice versa.*
 
 ###### Xaml:
-You can declare a LayoutPath as follows:
+You can declare a `LayoutPath` as follows:
 ```xml
 <!-- initialize by using path markup -->
 <controls:LayoutPath Path="M 10,100 C 10,300 300,-200 300,100">
@@ -54,3 +54,45 @@ You can declare a LayoutPath as follows:
     <Button Content="Second child" />
 </controls:LayoutPath>
 ```
+
+#### Properties
+
+Properties that you can specify on `LayoutPath` control:
+
+| Property | Description |
+| :------- | :---------- |
+| `Path` | Geometry that will be used for translating `Children` |
+| `PathVisibility` | Visibility of `Path` |
+| `PathProgress` | Transforms `Children` at fraction length *(value in Percent 0-100)* |
+| `ExtendedGeometry` | The extended  path geometry, mainly used for getting point at fraction length |
+| `Children` | Children that are positioned along *Path* |
+| `ChildrenAlignment` | **ChildAlignment** of `Children` along `Path` |
+| `ChildrenEasingFunction` | The easing function each child will have when moving along `Path` |
+| `ChildrenOrientation` | The **Orientation** of `Children` when moving along `Path` |
+| `ChildrenPadding` | The distance that `Children` will keep between each other *(in percent of total length)* |
+| `CurrentPosition` | The *Point* at fraction length of `Path` on current `PathProgress` |
+| `CurrentLength` | The fraction length for `CurrentPosition` |
+| `CurrentRotation` | The degrees at fraction length of `Path` on current `PathProgress` |
+| `StartBehavior` | `Children` start **Behavior** |
+| `EndBehavior` | `Children` end **Behavior** |
+| `Stretch` | Describes how LayoutPath is resized to fill its allocated space |
+| `RotationSmoothingDefault` | Smooths `Children` rotation when animating along `Path` |
+| `TranslationSmoothingDefault` | Smooths `Children` translation when animating along `Path` |
+
+#### Attached Properties
+
+Properties that you can specify on `LayoutPath` `Children`.
+
+| Property | Description |
+| :------- | :---------- |
+| `Progress` | Specify explicitly the `Progress` of child. <br/>*Setting this property will force child to ignore `LayoutPath.PathProgress` property* |
+| `ProgressOffset` | The child progress offset property. *Affects all next child elements.* |
+| `RotationSmoothing` | Specify explicitly the rotation smoothing of child. <br/>*Setting this property will force child to ignore `LayoutPath.RotationSmoothingDefault` property* |
+| `RotationSmoothing` | Specify explicitly the translation smoothing of child. <br/>*Setting this property will force child to ignore `LayoutPath.TranslationSmoothingDefault` property* |
+
+
+#### Methods
+
+| Property | Description |
+| :------- | :---------- |
+| ResetSmoothingAndRefresh | Call this to reset smoothing and position items to `PathProgress`. Useful when there is no active storyboard for applying changes. |

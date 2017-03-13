@@ -52,7 +52,7 @@ namespace CustomControls.Controls
         #region public properties
 
         /// <summary>
-        /// Children that are animated along <see cref="Path"/>
+        /// Children that are positioned along <see cref="Path"/>
         /// </summary>
         public IList<object> Children => _children;
 
@@ -291,7 +291,7 @@ namespace CustomControls.Controls
         #region methods
 
         /// <summary>
-        /// Call this to reset smoothing and position items to <see cref="PathProgress"/>. Usefull when there is no active storyboard for applying changes.
+        /// Call this to reset smoothing and position items to <see cref="PathProgress"/>. Useful when there is no active storyboard for applying changes.
         /// </summary>
         /// <param name="progress">Reset to a specific <see cref="PathProgress"/> value.</param>
         public void ResetSmoothingAndRefresh(double? progress = null)

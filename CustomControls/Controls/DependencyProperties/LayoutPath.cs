@@ -53,8 +53,7 @@ namespace CustomControls.Controls
 
 
         #region attached properties
-
-
+        
         public static readonly DependencyProperty IsMovableProperty;
         public static void SetIsMovable(UIElement element, bool value)
         {
@@ -65,7 +64,9 @@ namespace CustomControls.Controls
             return (bool)element.GetValue(IsMovableProperty);
         }
 
-
+        /// <summary>
+        /// Specify explicitly the Progress of child. Setting this property will force child to ignore LayoutPath.PathProgress property
+        /// </summary>
         public static readonly DependencyProperty ProgressProperty;
         public static void SetProgress(UIElement element, double value)
         {
@@ -76,7 +77,9 @@ namespace CustomControls.Controls
             return (double)element.GetValue(ProgressProperty);
         }
 
-
+        /// <summary>
+        /// Gets or sets the child progress offset property. Affects all next child elements.
+        /// </summary>
         public static readonly DependencyProperty ProgressOffsetProperty;
         public static void SetProgressOffset(UIElement element, double value)
         {
@@ -87,7 +90,9 @@ namespace CustomControls.Controls
             return (double)element.GetValue(ProgressOffsetProperty);
         }
 
-
+        /// <summary>
+        /// Specify explicitly the rotation smoothing of child. Setting this property will force child to ignore LayoutPath.RotationSmoothingDefault property
+        /// </summary>
         public static readonly DependencyProperty RotationSmoothingProperty;
         public static void SetRotationSmoothing(UIElement element, double value)
         {
@@ -98,7 +103,9 @@ namespace CustomControls.Controls
             return (double)element.GetValue(RotationSmoothingProperty);
         }
 
-
+        /// <summary>
+        /// Specify explicitly the translation smoothing of child. Setting this property will force child to ignore LayoutPath.TranslationSmoothingDefault property
+        /// </summary>
         public static readonly DependencyProperty TranslationSmoothingProperty;
         public static void SetTranslationSmoothing(UIElement element, double value)
         {
@@ -140,7 +147,7 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty PathProperty;
 
         /// <summary>
-        /// Specify orientation of <see cref="Children"/> when moving along <see cref="Path"/>
+        /// Gets or sets orientation of <see cref="Children"/> when moving along <see cref="Path"/>
         /// </summary>
         public Orientations ChildrenOrientation { get { return (Orientations)GetValue(ChildrenOrientationProperty); } set { SetValue(ChildrenOrientationProperty, value); } }
         public static readonly DependencyProperty ChildrenOrientationProperty;
@@ -192,13 +199,13 @@ namespace CustomControls.Controls
         public static readonly DependencyProperty EndBehaviorProperty;
 
         /// <summary>
-        /// Smooths children rotation.
+        /// Smooths children translation when animating along path
         /// </summary>
         public double TranslationSmoothingDefault { get { return (double)GetValue(TranslationSmoothingDefaultProperty); } set { SetValue(TranslationSmoothingDefaultProperty, value); } }
         public static readonly DependencyProperty TranslationSmoothingDefaultProperty;
 
         /// <summary>
-        /// Smooths children translation
+        /// Smooths Children rotation when animating along path
         /// </summary>
         public double RotationSmoothingDefault { get { return (double)GetValue(RotationSmoothingDefaultProperty); } set { SetValue(RotationSmoothingDefaultProperty, value); } }
         public static readonly DependencyProperty RotationSmoothingDefaultProperty;
