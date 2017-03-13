@@ -1,5 +1,7 @@
-# Layout Path
+# Layout Path 
 A control used for placing / animating UIElements along a path.
+
+![inner](images/layoutPathExample.gif)
 
 It provides some usefull options such as rotation / translation smoothing, start / end behavior and more.
 
