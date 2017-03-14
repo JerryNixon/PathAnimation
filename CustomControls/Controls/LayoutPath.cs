@@ -351,7 +351,7 @@ namespace CustomControls.Controls
             ExtendedGeometry.GetPointAtFractionLength(childPercent, out childPoint, out rotationTheta);
 
             wrapper.Progress = childPercent;
-
+            
             Rotate(wrapper, rotationTheta, smooth);
             Translate(wrapper, childPoint, smooth);
         }
@@ -360,6 +360,12 @@ namespace CustomControls.Controls
         {
             if (progress < 0)
             {
+                if (!ExtendedGeometry.PathGeometry.Figures.First().IsClosed)
+                {
+                    //avoid traveling form start to end when smoothing in enabled
+                    wrapper.ForceNoSmoothOnProcessing();
+                }
+
                 if (StartBehavior == Behaviors.Collapse)
                 {
                     wrapper.Visibility = Visibility.Collapsed;
@@ -384,6 +390,12 @@ namespace CustomControls.Controls
             }
             else if (progress > 100)
             {
+                if (!ExtendedGeometry.PathGeometry.Figures.First().IsClosed)
+                {
+                    //avoid traveling form end to start when smoothing in enabled
+                    wrapper.ForceNoSmoothOnProcessing();
+                }
+
                 if (EndBehavior == Behaviors.Collapse)
                 {
                     wrapper.Visibility = Visibility.Collapsed;
@@ -393,18 +405,25 @@ namespace CustomControls.Controls
                     wrapper.Visibility = Visibility.Visible;
                     if (EndBehavior == Behaviors.Stack)
                     {
-                        //avoid going to beginning of the path
                         progress = 99.9999;
                     }
                     else
                     {
                         //transfer to range 0-100
                         progress = progress % 100;
+                        if (progress == 0)
+                        {
+                            progress = 99.9999;
+                        }
                     }
                 }
             }
             else
             {
+                if (progress == 100)
+                {
+                    progress = 99.9999;
+                }
                 wrapper.Visibility = Visibility.Visible;
             }
         }
@@ -437,7 +456,7 @@ namespace CustomControls.Controls
             }
 
             //try smooth rotation
-            if (smooth && !double.IsNaN(progressDistance) && rotationSmoothing > 0 && progressDistance > 0)
+            if (smooth && !double.IsNaN(progressDistance) && rotationSmoothing > 0 && progressDistance > 0 && !wrapper.NoRotateSmoothForced)
             {
                 var degreesDistance = Math.Max(rotationTheta, wrapper.Rotation) - Math.Min(rotationTheta, wrapper.Rotation);
                 var rotation = wrapper.Rotation;
@@ -454,6 +473,7 @@ namespace CustomControls.Controls
             else
             {
                 wrapper.Rotation = rotationTheta;
+                wrapper.NoRotateSmoothForced = false;
             }
         }
 
@@ -484,7 +504,7 @@ namespace CustomControls.Controls
                     translationSmoothing = childTranslationSmoothing;
             }
 
-            if (smooth && !double.IsNaN(progressDistance) && translationSmoothing > 0 && progressDistance > 0)
+            if (smooth && !double.IsNaN(progressDistance) && translationSmoothing > 0 && progressDistance > 0 && !wrapper.NoTranslateSmoothForced)
             {
                 wrapper.TranslateX = (wrapper.TranslateX * translationSmoothing * 0.2 / progressDistance + translateX) / (translationSmoothing * 0.2 / progressDistance + 1);
                 wrapper.TranslateY = (wrapper.TranslateY * translationSmoothing * 0.2 / progressDistance + translateY) / (translationSmoothing * 0.2 / progressDistance + 1);
@@ -493,6 +513,7 @@ namespace CustomControls.Controls
             {
                 wrapper.TranslateX = translateX;
                 wrapper.TranslateY = translateY;
+                wrapper.NoTranslateSmoothForced = false;
             }
         }
 

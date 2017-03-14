@@ -84,11 +84,6 @@ namespace SampleProject.Views
 
         private void RefreshOnCLick(object sender, RoutedEventArgs e)
         {
-            if (!paused)
-            {
-                PathStoryboard.Pause();
-                paused = true;
-            }
             LayoutPath1.ResetSmoothingAndRefresh();
         }
     }

@@ -22,6 +22,9 @@ namespace CustomControls.Controls
         internal double ProgressDistance { get; private set; } = double.NaN;
 
         internal double RawProgress;
+
+        internal bool NoTranslateSmoothForced { get;  set; }
+        internal bool NoRotateSmoothForced { get;  set; }
         #endregion
 
         #region initialization
@@ -41,7 +44,7 @@ namespace CustomControls.Controls
             };
         }
         #endregion
-        
+
         #region propety changed callbacks
 
         private static void ProgressPropertyChangedCallback(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -134,6 +137,11 @@ namespace CustomControls.Controls
         {
             Transform.CenterX = x;
             Transform.CenterY = y;
+        }
+
+        internal void ForceNoSmoothOnProcessing()
+        {
+            NoTranslateSmoothForced = NoRotateSmoothForced = true;
         }
         #endregion
     }
