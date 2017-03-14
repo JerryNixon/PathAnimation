@@ -38,7 +38,7 @@ namespace CustomControls.Controls
         private readonly Storyboard _storyboard = new Storyboard();
 
         #endregion
-
+        
         public new double Width
         {
             get { return base.Width; }
@@ -138,23 +138,27 @@ namespace CustomControls.Controls
 
         static MotionPath()
         {
+            AutoRewindProperty = DependencyProperty.Register("AutoRewind", typeof(bool), typeof(MotionPath), new PropertyMetadata(false));
+
             CurrentPointProperty = DependencyProperty.Register("CurrentPoint", typeof(Point), typeof(MotionPath), new PropertyMetadata(new Point(double.NaN, double.NaN)));
 
-            AutoRewindProperty = DependencyProperty.Register("AutoRewind", typeof(bool), typeof(MotionPath), new PropertyMetadata(false));
+            CurrentTimeProperty = DependencyProperty.Register("CurrentTime", typeof(TimeSpan), typeof(MotionPath), new PropertyMetadata(default(TimeSpan)));
 
             DurationProperty = DependencyProperty.Register("Duration", typeof(TimeSpan), typeof(MotionPath), new PropertyMetadata(TimeSpan.FromSeconds(1)));
 
-            StateProperty = DependencyProperty.Register("State", typeof(AnimationState), typeof(MotionPath), new PropertyMetadata(AnimationState.Ready,
-                delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
-                {
-                    var sender = (MotionPath)o;
-                    var val = (AnimationState)e.NewValue;
+            EasingFunctionProperty = DependencyProperty.Register("EasingFunction", typeof(EasingFunctionBase), typeof(MotionPath), new PropertyMetadata(default(EasingFunctionBase)));
 
-                    sender.StateChanged?.Invoke(sender, val);
-                    if (val == AnimationState.Complete)
-                        sender.Completed?.Invoke(sender);
-                }));
+            LineRelativeEndProperty = DependencyProperty.Register("LineRelativeEnd", typeof(Point), typeof(MotionPath),
+                  new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
 
+            LineAbsoluteStartProperty = DependencyProperty.Register("LineAbsoluteStart", typeof(Point), typeof(MotionPath),
+               new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
+
+            LineAbsoluteEndProperty = DependencyProperty.Register("LineAbsoluteEnd", typeof(Point), typeof(MotionPath),
+                new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
+
+            OrientToPathProperty = DependencyProperty.Register("OrientToPath", typeof(bool), typeof(MotionPath), new PropertyMetadata(default(bool)));
+            
             ProgressProperty = DependencyProperty.Register("Progress", typeof(double), typeof(MotionPath), new PropertyMetadata(0.0,
                 delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
                 {
@@ -169,22 +173,18 @@ namespace CustomControls.Controls
                     sender.UpdatePathData(data);
                 }));
 
-            LineAbsoluteStartProperty = DependencyProperty.Register("LineAbsoluteStart", typeof(Point), typeof(MotionPath),
-                new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
+              PathVisibilityProperty = DependencyProperty.Register("PathVisibility", typeof(Visibility), typeof(MotionPath), new PropertyMetadata(default(Visibility)));
+            
+            StateProperty = DependencyProperty.Register("State", typeof(AnimationState), typeof(MotionPath), new PropertyMetadata(AnimationState.Ready,
+              delegate (DependencyObject o, DependencyPropertyChangedEventArgs e)
+              {
+                  var sender = (MotionPath)o;
+                  var val = (AnimationState)e.NewValue;
 
-            LineAbsoluteEndProperty = DependencyProperty.Register("LineAbsoluteEnd", typeof(Point), typeof(MotionPath),
-                new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
-
-            LineRelativeEndProperty = DependencyProperty.Register("LineRelativeEnd", typeof(Point), typeof(MotionPath),
-                  new PropertyMetadata(new Point(double.NaN, double.NaN), RefreshCalculations));
-
-            PathVisibilityProperty = DependencyProperty.Register("PathVisibility", typeof(Visibility), typeof(MotionPath), new PropertyMetadata(default(Visibility)));
-
-            CurrentTimeProperty = DependencyProperty.Register("CurrentTime", typeof(TimeSpan), typeof(MotionPath), new PropertyMetadata(default(TimeSpan)));
-
-            OrientToPathProperty = DependencyProperty.Register("OrientToPath", typeof(bool), typeof(MotionPath), new PropertyMetadata(default(bool)));
-
-            EasingFunctionProperty = DependencyProperty.Register("EasingFunction", typeof(EasingFunctionBase), typeof(MotionPath), new PropertyMetadata(default(EasingFunctionBase)));
+                  sender.StateChanged?.Invoke(sender, val);
+                  if (val == AnimationState.Complete)
+                      sender.Completed?.Invoke(sender);
+              }));
         }
 
         private static void RefreshCalculations(DependencyObject o, DependencyPropertyChangedEventArgs e)
@@ -203,17 +203,21 @@ namespace CustomControls.Controls
         public delegate void StateChangedEventHandler(object sender, AnimationState state);
         public delegate void EventHandler(object sender);
         /// <summary>
-        /// Raised when state is ready and we are starting a new animation
+        /// Occurs when state is ready and we are starting a new animation
         /// </summary>
         public event CancelEventHandler Starting;
         /// <summary>
-        /// Raising when a new animation starts
+        /// Occurs when a new animation starts
         /// </summary>
         public event EventHandler Started;
         /// <summary>
-        /// Raising when an animation completes
+        /// Occurs when an animation completes
         /// </summary>
         public event EventHandler Completed;
+
+        /// <summary>
+        /// Occurs when animation state changes.
+        /// </summary>
         public event StateChangedEventHandler StateChanged;
         #endregion
 
@@ -262,12 +266,19 @@ namespace CustomControls.Controls
 
         #region public methods
 
+        /// <summary>
+        /// Starts the animation
+        /// </summary>
         public void Start()
         {
             TryStart();
             Started?.Invoke(this);
         }
 
+        /// <summary>
+        /// Starts the animation asynchronously
+        /// </summary>
+        /// <returns></returns>
         public async Task StartAsync()
         {
             await Task.Run(delegate
@@ -340,7 +351,7 @@ namespace CustomControls.Controls
                 });
             }
 
-            if (Path == null || true)
+            if (Path == null )
             {
                 CalculateLineMovement();
                 _initialContentPoint = GetChildAbsolutePoint();
@@ -356,6 +367,9 @@ namespace CustomControls.Controls
             _storyboard.Begin();
         }
 
+        /// <summary>
+        /// Resets current animation and child position
+        /// </summary>
         public void Reset()
         {
             if (State != AnimationState.Ready)
@@ -370,6 +384,9 @@ namespace CustomControls.Controls
                 CalculateLineMovement();
         }
 
+        /// <summary>
+        /// Rewinds the animation when playing
+        /// </summary>
         public void RewindNow()
         {
             if (AutoRewind)
@@ -383,7 +400,9 @@ namespace CustomControls.Controls
             }
         }
 
-
+        /// <summary>
+        /// Pauses the animation
+        /// </summary>
         public void Pause()
         {
             if (State == AnimationState.Running || State == AnimationState.Rewinding)

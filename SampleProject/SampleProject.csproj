@@ -131,6 +131,9 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\MotionPathSamples\MotionPathAllCases.xaml.cs">
+      <DependentUpon>MotionPathAllCases.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MotionPathSamples\MotionPathBehaviorsChildUC.xaml.cs">
       <DependentUpon>MotionPathBehaviorsChildUC.xaml</DependentUpon>
     </Compile>
@@ -154,6 +157,7 @@
     <Content Include="Assets\Thumbs\lp3.png" />
     <Content Include="Assets\Thumbs\lp4.png" />
     <Content Include="Assets\Thumbs\lp5.png" />
+    <Content Include="Assets\Thumbs\mp3.png" />
     <Content Include="Assets\Thumbs\mp1.png" />
     <Content Include="Assets\Thumbs\mp2.png" />
     <Content Include="Properties\Default.rd.xml" />
@@ -205,6 +209,10 @@
     <Page Include="Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MotionPathSamples\MotionPathAllCases.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MotionPathSamples\MotionPathBehaviorsChildUC.xaml">
       <SubType>Designer</SubType>

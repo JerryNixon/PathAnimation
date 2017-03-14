@@ -1,0 +1,104 @@
+﻿<Page
+    x:Class="SampleProject.Views.MotionPathSamples.MotionPathAllCases"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleProject.Views.MotionPathSamples"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:CustomControls.Controls"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+            <Style TargetType="StackPanel">
+                <Setter Property="Margin" Value="1"></Setter>
+            </Style>
+            <Style TargetType="TextBlock">
+                <Setter Property="FontSize" Value="12"></Setter>
+            </Style>
+
+            <Style TargetType="Border" x:Key="borderFrame">
+                <Setter Property="Width" Value="150"></Setter>
+                <Setter Property="Height" Value="100"></Setter>
+                <Setter Property="Background" Value="#FFC3DEFF"></Setter>
+                <Setter Property="BorderThickness" Value="1"></Setter>
+                <Setter Property="BorderBrush" Value="Black"></Setter>
+            </Style>
+
+            <Style TargetType="controls:MotionPath">
+                <Setter Property="AutoRewind" Value="True"></Setter>
+                <Setter Property="Duration" Value="00:00:02"></Setter>
+            </Style>
+
+            <Style TargetType="Path" x:Key="butterfly">
+                <Setter Property="Width" Value="40"></Setter>
+                <Setter Property="Height" Value="40"></Setter>
+                <Setter Property="Stretch" Value="Uniform"></Setter>
+                <Setter Property="Fill" >
+                    <Setter.Value>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FFD85454" Offset="0"/>
+                            <GradientStop Color="#FF993939" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Stroke" Value="Black"></Setter>
+            </Style>
+
+            <x:String x:Key="butterflyGeometry">F1 M 133.242,3.82999C 133.103,2.12811 130.674,0.701721 129.535,0.36969C 109.54,-5.44736 77.5898,30.2498 70.3398,38.7362L 70.3606,38.386C 70.3763,38.2512 70.3841,38.1152 70.3841,37.9765C 70.3841,35.8977 68.6992,34.2134 66.621,34.2134C 64.5436,34.2134 62.86,35.8977 62.86,37.9765C 62.86,38.1152 62.8691,38.2512 62.8835,38.386L 62.9036,38.7362C 55.6529,30.2498 23.7012,-5.44736 3.70638,0.36969C 2.56775,0.701721 0.137329,2.12689 0,3.82999C -0.330811,7.9361 1.14774,11.3326 3.84241,13.9817C 14.5253,24.4817 11.093,34.8846 14.0865,41.6177C 15.8437,45.5721 28.8476,46.5057 25.9505,47.5474C -1.51242,57.4354 31.4427,94.563 46.8196,85.3365C 52.6581,81.8339 62.7916,64.5942 64.2238,62.1269L 64.916,74.3352C 64.916,75.2766 65.6784,76.0396 66.6197,76.0396C 67.5625,76.0396 68.3241,75.2766 68.3241,74.3352L 69.0169,62.1269C 70.4478,64.5942 80.582,81.8339 86.4205,85.3365C 101.799,94.563 134.754,57.4354 107.292,47.5474C 104.393,46.5057 117.397,45.5721 119.155,41.6177C 122.147,34.8846 118.715,24.4803 129.398,13.9817C 132.092,11.3326 133.573,7.93475 133.242,3.82999 Z</x:String>
+        </Grid.Resources>
+
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="1">
+            <StackPanel  Orientation="Horizontal"  >
+                <StackPanel>
+                    <Border Style="{StaticResource borderFrame}">
+                        <controls:MotionPath LineRelativeEnd="30,50" x:Name="mp1">
+                            <Path Style="{StaticResource butterfly}" Data="{Binding Source={StaticResource butterflyGeometry}}"></Path>
+                        </controls:MotionPath>
+                    </Border>
+                    <TextBlock Text="LineRelativeEnd = 30,50"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Border Style="{StaticResource borderFrame}">
+                        <controls:MotionPath LineRelativeEnd="30,70" LineAbsoluteStart="10,10" x:Name="mp2">
+                            <Path Style="{StaticResource butterfly}" Data="{Binding Source={StaticResource butterflyGeometry}}"></Path>
+                        </controls:MotionPath>
+                    </Border>
+                    <TextBlock Text="LineAbsoluteStart = 10,10"/>
+                    <TextBlock Text="LineRelativeEnd = 30,70"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Border Style="{StaticResource borderFrame}">
+                        <controls:MotionPath LineAbsoluteEnd="30,70" x:Name="mp3">
+                            <Path Style="{StaticResource butterfly}" Data="{Binding Source={StaticResource butterflyGeometry}}"></Path>
+                        </controls:MotionPath>
+                    </Border>
+                    <TextBlock Text="LineAbsoluteEnd = 30,70"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Border Style="{StaticResource borderFrame}">
+                        <controls:MotionPath LineAbsoluteStart="5,5" LineAbsoluteEnd="130,70" x:Name="mp4">
+                            <Path Style="{StaticResource butterfly}" Data="{Binding Source={StaticResource butterflyGeometry}}"></Path>
+                        </controls:MotionPath>
+                    </Border>
+                    <TextBlock Text="LineAbsoluteStart = 5,5"/>
+                    <TextBlock Text="LineAbsoluteEnd = 130,70"/>
+                </StackPanel>
+
+                <StackPanel>
+                    <Border Style="{StaticResource borderFrame}">
+                        <controls:MotionPath Path="M0,0 L10,25 L0,50 H70 V30" x:Name="mp5" Margin="10">
+                            <Path Style="{StaticResource butterfly}" Data="{Binding Source={StaticResource butterflyGeometry}}"></Path>
+                        </controls:MotionPath>
+
+                    </Border>
+                    <TextBlock Text="Path mode"/>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="play all" HorizontalAlignment="Center" Click="Button_Click"></Button>
+        </StackPanel>
+    </Grid>
+</Page>

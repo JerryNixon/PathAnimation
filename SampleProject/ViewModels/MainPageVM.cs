@@ -63,6 +63,12 @@ namespace SampleProject.ViewModels
                 Description = "Manipulate all properties of MotionPath control.",
                 ThumbnailUri = new Uri("ms-appx:///Assets/Thumbs/mp1.png", UriKind.RelativeOrAbsolute),
                 Command = new DelegateCommand(delegate { App.Frame.Navigate(typeof(MotionPathPage)); })
+            }, new TileModel()
+            {
+                Title = "All cases sample",
+                Description = "A sample containing all possible property combinations for MotionPath.",
+                ThumbnailUri = new Uri("ms-appx:///Assets/Thumbs/mp3.png", UriKind.RelativeOrAbsolute),
+                Command = new DelegateCommand(delegate { App.Frame.Navigate(typeof(MotionPathAllCases)); })
             },
              new TileModel()
             {
