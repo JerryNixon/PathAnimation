@@ -1,4 +1,6 @@
 # Extended Path Geometry
+*namespace: CustomControls.ExtendedSegments*
+
 `ExtendedPathGeometry`, extends and provides some missing options for `PathGeometry` windows 10 UWP class.
 
 #### Declaration / Instantiation

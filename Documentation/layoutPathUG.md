@@ -1,11 +1,12 @@
 # Layout Path ![layoutPath](images/layoutPathExample.gif)
+*namespace: CustomControls.Controls*
+
 A control used for placing / animating UIElements along a path.
-
-
 
 It provides some usefull options such as rotation / translation smoothing, start / end behavior and more.
 
 #### Declaration / Instantiation
+
 In order to start using `LayoutPath`, you must instantiate a class and specify the `Path` property.
 `Path` is then analyzed and converted into an [ExtendedPathGeometry](extendedPathGeometryUG.md) for getting point and rotation at a fraction length. 
 ###### C#:
@@ -66,7 +67,7 @@ Properties that you can specify on `LayoutPath` control:
 | `Path` | Geometry that will be used for translating `Children` |
 | `PathVisibility` | Visibility of `Path` |
 | `PathProgress` | Transforms `Children` at fraction length *(value in Percent 0-100)* |
-| `ExtendedGeometry` | The extended  path geometry, mainly used for getting point at fraction length |
+| `ExtendedGeometry` | The [ExtendedPathGeometry](extendedPathGeometryUG.md), mainly used for getting point at fraction length |
 | `Children` | Children that are positioned along `Path` |
 | `ChildrenAlignment` | [ChildAlignment](layoutPathEnumsUG.md#childalignment) of `Children` along `Path` |
 | `ChildrenEasingFunction` | The easing function each child will have when moving along `Path` |

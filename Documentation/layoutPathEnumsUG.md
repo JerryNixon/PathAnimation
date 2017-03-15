@@ -1,6 +1,6 @@
 # LayoutPath enums
 
-*inside CustomControls.Enums namespace*
+*namespace: CustomControls.Enums*
 
 This section contains information about enumerations you can use with `LayoutPath` control.
 

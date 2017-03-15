@@ -1,4 +1,6 @@
 # Motion Path
+*namespace: CustomControls.Controls*
+
 A control used for moving an element by specifying coordinates or a path geometry.
 ![motionPath](images/motionPathExample.gif)
 
@@ -19,7 +21,7 @@ mp.LineAbsoluteEnd = new Point(0, 0);
 </controls:MotionPath>
 ```
 
-**Important note:** All coordinates has a Point with `X = Y = double.NaN` by default. So, specifying `LineAbsoluteEnd=Point(0,0)`
+**Important note:** All coordinates have a Point with `X = Y = double.NaN` by default. So, specifying `LineAbsoluteEnd=Point(0,0)`
 makes MotionPath to move child to 0,0 position. 
 
 If you wish to clear this point, set `LineAbsoluteEnd=Point(double.NaN,double.NaN)`
@@ -30,10 +32,10 @@ Properties of `MotionPath` control:
 
 | Property | Description |
 | :------- | :---------- |
-| `AutoRewind` | Set to true if you wish your animation to auto rewind. |
+| `AutoRewind` | Set true if you wish your animation to auto rewind. |
 | `CurrentPoint` | Gets the current point of element. |
 | `CurrentTime` | Gets current animation time. |
-| `Duration` | The duration of animation. |
+| `Duration` | The duration of the animation. |
 | `EasingFunction` | The easing function of the animation. | 
 | `LineRelativeEnd` | The animation line relative end point. |
 | `LineAbsoluteStart` | The animation absolute start point. |
@@ -66,5 +68,5 @@ The following events are available in `MotionPath`:
 
 #### FAQ
 **ViewBox detected. Please specify control width and height.** <br/>
-Because `ViewBox` causes problems when calculating point coordinates, when you want to have a `MotionPath` element inside a `ViewBox`, 
-you have to explicitly specify MotionPath Width and Height values. This limitation does not apply when you are using a `Path` geometry.
+Because `ViewBox` causes problems when calculating point coordinates, if you wish to place a `MotionPath` element inside a `ViewBox`, 
+you have to explicitly specify `MotionPath` Width and Height values. This limitation does not apply when you are using a `Path` geometry.
