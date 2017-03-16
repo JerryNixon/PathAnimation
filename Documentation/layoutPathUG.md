@@ -14,8 +14,9 @@ In order to start using `LayoutPath`, you must instantiate a class and specify t
 ```cs
 //Default constructor
 public LayoutPath();
-//Overloaded constructor
+//Overloaded constructors
 public LayoutPath(PathGeometry pathGeometry);
+public LayoutPath(string pathMarkup);
 //extension method
 public static LayoutPath ToLayoutPath(this PathGeometry geometry);
 ```
